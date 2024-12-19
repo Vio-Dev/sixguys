@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('users_id');
             $table->dateTime('order_date');
-            $table->decimal('total', 8, 2);
+            $table->decimal('total', 11, 2);
             $table->string('status', 100);
             $table->timestamps();
 
