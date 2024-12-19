@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('status');
             $table->string('thumbnail')->nullable();
-            $table->string('isDeleted')->default(false);
+            $table->boolean('isDeleted')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
