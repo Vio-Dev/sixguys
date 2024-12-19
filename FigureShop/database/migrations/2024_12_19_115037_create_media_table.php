@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->unsignedBigInteger('post_id')->nullable();
+
             $table->string('url_img', 200);
             $table->string('alt_img', 200)->nullable();
             $table->integer('number')->default(0);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('post_id')->references('id')->on('posts');
+
         });
     }
 
