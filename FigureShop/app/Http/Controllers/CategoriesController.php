@@ -83,7 +83,7 @@ class CategoriesController extends Controller
     }
 
     public function destroy(string $id, FlasherInterface $flasher)
-{
+    {
     // Tìm danh mục theo ID
     $category = Category::findOrFail($id);
 

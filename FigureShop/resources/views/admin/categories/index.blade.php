@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Danh sách danh mục</h1>
             <a href="{{ route('admin.categories.create') }}"
-                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Thêm mới</a>
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Tạo mới</a>
         </div>
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full mt-3">
