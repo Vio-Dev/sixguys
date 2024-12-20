@@ -9,81 +9,64 @@
                 class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Thêm mới</a>
         </div>
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-        <table class=" text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full mt-3">
+        <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Product name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Color
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Category
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Price
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
+                    <th scope="col" class="px-6 py-3">Tên danh mục</th>
+                    <th scope="col" class="px-6 py-3">Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">
-                        Silver
-                    </td>
-                    <td class="px-6 py-4">
-                        Laptop
-                    </td>
-                    <td class="px-6 py-4">
-                        $2999
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Microsoft Surface Pro
-                    </th>
-                    <td class="px-6 py-4">
-                        White
-                    </td>
-                    <td class="px-6 py-4">
-                        Laptop PC
-                    </td>
-                    <td class="px-6 py-4">
-                        $1999
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr class="bg-white dark:bg-gray-800">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Magic Mouse 2
-                    </th>
-                    <td class="px-6 py-4">
-                        Black
-                    </td>
-                    <td class="px-6 py-4">
-                        Accessories
-                    </td>
-                    <td class="px-6 py-4">
-                        $99
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    </td>
-                </tr>
+                @forelse ($categories as $category)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $category->name }}
+                        </th>
+                        <td class="flex items-center px-6 py-4">
+                            <a href="{{ route('admin.categories.edit', $category->id) }}"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
+                            <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST"
+                                class="ms-3">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" onclick="confirmDelete(this)"
+                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Xóa</button>
+                                <script>
+                                    function confirmDelete(button) {
+                                        Swal.fire({
+                                            title: 'Bạn có chắc chắn muốn xóa?',
+                                            text: "Hành động này không thể hoàn tác!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Xóa',
+                                            cancelButtonText: 'Hủy'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Nếu người dùng xác nhận, submit form
+                                                button.closest('form').submit();
+                                            }
+                                        });
+                                    }
+                                </script>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="2" class="px-6 py-4 text-center text-gray-500">Không có danh mục nào.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
+
+        <!-- Phân trang -->
+        <div class="mt-4 p-3">
+            {{ $categories->links('pagination::tailwind') }}
+        </div>
     </div>
+
 
 @endsection
