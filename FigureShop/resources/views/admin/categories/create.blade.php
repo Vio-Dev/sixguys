@@ -1,8 +1,8 @@
 @extends('layouts.admin')
-@section('title', 'Thêm danh mục | FigureShop')
+
+@section('title', 'Tạo danh mục | FigureShop')
 
 @section('content')
-
 
     <div>
         <div class="flex justify-between items-center p-4">
@@ -45,5 +45,6 @@
                 Thêm danh mục</button>
         </form>
     </div>
+
 
 @endsection

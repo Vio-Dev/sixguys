@@ -68,11 +68,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-
-
 // user routes
-
-
-
 
 require __DIR__ . '/auth.php';
