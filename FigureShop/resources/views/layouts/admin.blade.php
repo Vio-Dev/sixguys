@@ -15,11 +15,13 @@
         @include('layouts.admin.navigation')
     </div>
     <div class="flex gap-2 h-full">
-        <div class="w-1/7 min-h-[800px] bg-gray-800">
+        <div class="w-[200px] min-h-[800px] bg-gray-800">
             @include('layouts.admin.sidebar')
         </div>
-        <div class="w-6/7 p-1">
-            @yield('content')
+        <div class="w-full p-1">
+            <div class="w-full">
+                @yield('content')
+            </div>
         </div>
     </div>
 </body>
