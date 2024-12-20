@@ -15,7 +15,7 @@
         @include('layouts.admin.navigation')
     </div>
     <div class="flex gap-2 h-full">
-        <div class="w-1/7">
+        <div class="w-1/7 min-h-[800px] bg-gray-800">
             @include('layouts.admin.sidebar')
         </div>
         <div class="w-6/7 p-1">
