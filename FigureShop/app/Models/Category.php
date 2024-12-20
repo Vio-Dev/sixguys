@@ -7,10 +7,13 @@ use App\Models\Product;
 
 class Category extends Model
 {
-    protected $filerable = ['name', 'shortDecription', "description", "status", "isDeleted", "thumbnail", "user_id"];
+    // Danh sách các trường cho phép gán giá trị hàng loạt
+    protected $fillable = ['name', 'isDeleted'];
+
     public function product()
     {
         return $this->hasMany(Product::class);
     }
+
     public $timestamps = false;
 }

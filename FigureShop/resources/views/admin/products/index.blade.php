@@ -1,10 +1,10 @@
-<<<<<<< Updated upstream
-=======
+
 @extends('layouts.admin')
 
 @section('title', 'Danh sách sản phẩm | FigureShop')
 
 @section('content')
+
     <div>
         <div class="py-2 ">
             <h2 class="text-[24px] font-bold">Danh sách sản phẩm</h2>
@@ -22,11 +22,13 @@
             </form>
 
         </div>
+
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
+
                             Tên sản phẩm
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -46,6 +48,7 @@
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Hành động
+
                         </th>
                     </tr>
                 </thead>
@@ -78,7 +81,6 @@
                             <button class="font-medium text-red-600 dark:text-blue-500 hover:underline p-2">Xóa</button>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
@@ -86,4 +88,4 @@
 
     </div>
 @endsection
->>>>>>> Stashed changes
+

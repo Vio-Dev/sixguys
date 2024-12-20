@@ -1,10 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'Cập nhật danh mục | FigureShop')
+
+@section('title', 'Tạo danh mục | FigureShop')
 
 @section('content')
+
     <div>
         <div class="flex justify-between items-center p-4">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Sửa danh mục</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Thêm danh mục</h2>
             <div class="flex gap-2">
                 <a href="{{ Route('admin.categories.list') }}" class="flex items-center gap-2 p-2 ">
                     <div>
@@ -22,26 +24,27 @@
                 </a>
             </div>
         </div>
-        <form class=" max-w-2xl mx-auto" action="{{ route('admin.categories.update', ['id' => $category->id]) }}"
-            method="post">
+        <form class=" max-w-2xl mx-auto" action="{{ route('admin.categories.store') }}" method="post">
             @csrf
-            @method('PUT')
             <div class="mb-5">
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên danh
                     mục</label>
-                <input type="text" name="name" id="name" value="{{ $category->name }}"
+                <input type="text" name="name" id="name"
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                     placeholder="Nhập tên danh mục" />
                 @error('name')
-                    <small class="text-danger">{{ $message }}</small>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
+
             </div>
 
             <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
                 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
                 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Sửa danh mục</button>
+                Thêm danh mục</button>
         </form>
     </div>
+
+
 @endsection

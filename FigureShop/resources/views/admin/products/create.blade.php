@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Tạo mới sản phẩm | FigureShop')
-
 @section('content')
     <div>
         <div class="py-2 ">

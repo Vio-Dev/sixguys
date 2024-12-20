@@ -17,6 +17,7 @@
         @include('components.admin.navigation')
     </div>
     <div class="flex gap-2 h-full">
+
         <div class="w-[140px] min-h-screen bg-gray-800 h-full">
             @include('components.admin.sidebar')
             <div class="w-full p-1">
@@ -32,6 +33,7 @@
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
             });
         </script>
+
 </body>
 
 </html>
