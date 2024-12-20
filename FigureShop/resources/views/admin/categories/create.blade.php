@@ -6,7 +6,7 @@
 
     <div>
         <div class="flex justify-between items-center p-4">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Thêm danh mục</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Tạo danh mục</h2>
             <div class="flex gap-2">
                 <a href="{{ Route('admin.categories.list') }}" class="flex items-center gap-2 p-2 ">
                     <div>
@@ -42,7 +42,7 @@
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
                 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
                 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Thêm danh mục</button>
+                Tạo danh mục</button>
         </form>
     </div>
 
