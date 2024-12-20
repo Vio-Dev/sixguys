@@ -11,7 +11,7 @@ class BinController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.bin');
     }
 
     /**
