@@ -1,3 +1,4 @@
+@extends('layouts.admin')
 @section('title', 'Cập nhật danh mục | FigureShop')
 
 @section('content')

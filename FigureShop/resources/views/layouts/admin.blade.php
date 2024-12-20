@@ -12,11 +12,11 @@
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50 flex flex-col justify-center">
     <div class="w-full bg-gray-800 text-white p-4">
-        @include('layouts.admin.navigation')
+        @include('components.admin.navigation')
     </div>
     <div class="flex gap-2 h-full">
-        <div class="w-1/7 min-h-[800px] bg-gray-800">
-            @include('layouts.admin.sidebar')
+        <div class="w-1/7 min-h-[800px] bg-gray-800 h-full">
+            @include('components.admin.sidebar')
         </div>
         <div class="w-6/7 p-1">
             @yield('content')

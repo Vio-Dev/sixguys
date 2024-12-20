@@ -1,5 +1,6 @@
+@extends('layouts.admin')
 @section('title', 'Danh sách danh mục | FigureShop')
 
 @section('content')
-    <div>Danh</div>
+    <div>Danh </div>
 @endsection
