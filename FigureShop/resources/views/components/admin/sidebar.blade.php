@@ -13,7 +13,7 @@
 
 Trang chủ
 </a>
-<a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
+<a href={{ route('admin.dashboard') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="currentColor" d="M3 4h1v14l5.58-9.67l6.01 3.47l3.62-6.26l.86.5l-4.11 7.13L9.95 9.7L4 20h16v1H3z" />
     </svg>
@@ -38,14 +38,14 @@ Trang chủ
 
     Sản phẩm
 </a>
-<a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
+<a href={{ route('admin.categories.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="currentColor"
             d="M7.885 10.23L12 3.463l4.116 6.769zm9.615 11q-1.567 0-2.649-1.081T13.769 17.5t1.082-2.649t2.649-1.082t2.649 1.082t1.082 2.649t-1.082 2.649t-2.649 1.082m-13.73-.5v-6.462h6.46v6.462zm13.73-.5q1.146 0 1.939-.792t.792-1.939t-.792-1.939t-1.939-.792t-1.939.792t-.792 1.939t.792 1.939t1.939.792m-12.73-.5h4.46v-4.462H4.77zm4.857-10.5h4.746L12 5.427zM17.5 17.5" />
     </svg>
     Danh mục
 </a>
-<a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
+<a href={{ route('admin.blogs.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 2048 2048">
         <path fill="currentColor"
             d="M640 384h1408v1152H640zm1280 1024V512H768v896zM128 1024V896h384v128zM0 768V640h512v128zm256 512v-128h256v128zm1536-640v128H896V640zm-384 640V896h384v384zm128-256v128h128v-128zm-256 128v128H896v-128zm0-256v128H896V896z" />

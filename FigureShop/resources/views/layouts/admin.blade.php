@@ -18,8 +18,10 @@
         <div class="w-1/7 min-h-[800px] bg-gray-800 h-full">
             @include('components.admin.sidebar')
         </div>
-        <div class="w-6/7 p-1">
-            @yield('content')
+        <div class="w-full p-1">
+            <div class="w-full">
+                @yield('content')
+            </div>
         </div>
     </div>
 </body>
