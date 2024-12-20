@@ -14,30 +14,24 @@
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50 flex flex-col justify-center">
     <div class="w-full bg-gray-800 text-white p-4">
-        @include('layouts.admin.navigation')
+        @include('components.admin.navigation')
     </div>
     <div class="flex gap-2 h-full">
-<<<<<<< Updated upstream
-        <div class="w-[200px] min-h-[800px] bg-gray-800">
-            @include('layouts.admin.sidebar')
-=======
         <div class="w-[140px] min-h-screen bg-gray-800 h-full">
             @include('components.admin.sidebar')
->>>>>>> Stashed changes
-        </div>
-        <div class="w-full p-1">
-            <div class="w-full">
-                @yield('content')
+            <div class="w-full p-1">
+                <div class="w-full">
+                    @yield('content')
+                </div>
             </div>
         </div>
-    </div>
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        });
-    </script>
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+        </script>
 </body>
 
 </html>

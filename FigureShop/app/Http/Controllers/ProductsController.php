@@ -71,13 +71,13 @@ class ProductsController extends Controller
             $image->move('uploads/products', $imageName);
             $thumbnail = 'uploads/products/' . $imageName;
 
-            image_features::create([
-                'product_id' => $product->id,
-                'url_img' => $thumbnail,
-                'alt_img' => $imageName,
-                'number' => $number
-            ]);
-            $number++;
+            // image_features::create([
+            //     'product_id' => $product->id,
+            //     'url_img' => $thumbnail,
+            //     'alt_img' => $imageName,
+            //     'number' => $number
+            // ]);
+            // $number++;
         }
         return redirect()->route("admin.products.list")->with('success', 'Thêm mới thành công!');
     }

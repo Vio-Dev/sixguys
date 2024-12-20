@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 @extends('layouts.admin')
 
 @section('title', 'Tạo mới sản phẩm | FigureShop')
@@ -110,4 +108,3 @@
         </form>
     </div>
 @endsection
->>>>>>> Stashed changes
