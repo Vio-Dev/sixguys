@@ -3,11 +3,45 @@
 
 @section('content')
     <div>
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Danh sách danh mục</h1>
-            <a href="{{ route('admin.categories.create') }}"
-                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Tạo mới</a>
+        <div class="py-2 ">
+            <h2 class="text-[24px] font-bold">Danh sách danh mục</h2>
         </div>
+
+        <div class="py-4">
+            <form action="">
+                @csrf
+                <input type="text" placeholder="Tìm kiếm danh mục"
+                    class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
+            </form>
+
+        </div>
+    </div>
+    <div>
+
+        <div class="py-2 ">
+            <h2 class="text-[24px] font-bold">Tạo danh mục</h2>
+        </div>
+
+
+        <form class="flex w-1/2" action="{{ route('admin.categories.store') }}" method="post">
+            @csrf
+            <div class="flex gap-2 w-full items-center">
+                <div class="w-1/2">
+                    <input type="text" name="name" id="name"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                        placeholder="Nhập tên danh mục" />
+                    @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                        Tạo danh mục</button>
+                </div>
+            </div>
+        </form>
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full mt-3">
         <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">

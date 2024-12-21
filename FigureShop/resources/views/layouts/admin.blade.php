@@ -16,16 +16,14 @@
     <div class="w-full bg-gray-800 text-white p-4">
         @include('components.admin.navigation')
     </div>
-    <div class="flex gap-2 h-full">
-
-        <div class="w-[140px] min-h-screen bg-gray-800 h-full">
+    <div class="flex gap-2 h-[initial]">
+        <div class="w-[140px] h-[initial] bg-gray-800 ">
             @include('components.admin.sidebar')
-            <div class="w-full p-1">
-                <div class="w-full">
-                    @yield('content')
-                </div>
-            </div>
         </div>
+        <div class="w-full">
+            @yield('content')
+        </div>
+
         <script>
             tinymce.init({
                 selector: 'textarea',
@@ -33,7 +31,7 @@
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
             });
         </script>
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
