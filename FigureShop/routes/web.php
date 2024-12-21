@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,9 +25,7 @@ Route::middleware('auth')->group(function () {
 //admin routes
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('list', [CategoriesController::class, 'index'])->name('list');
@@ -69,11 +68,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-
-
 // user routes
-
-
-
 
 require __DIR__ . '/auth.php';

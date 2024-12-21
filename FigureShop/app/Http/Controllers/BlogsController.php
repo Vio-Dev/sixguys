@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Post;
 class BlogsController extends Controller
 {
     /**
@@ -11,7 +11,9 @@ class BlogsController extends Controller
      */
     public function index()
     {
-        //
+        $blogs = Post::where('isDeleted', 0)->paginate(5);
+
+        return view('admin.blogs.index', compact('blogs'));
     }
 
     /**
@@ -19,7 +21,7 @@ class BlogsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.blogs.create');
     }
 
     /**

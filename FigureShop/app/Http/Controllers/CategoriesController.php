@@ -3,62 +3,100 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Flasher\Prime\FlasherInterface;
+use App\Models\Category;
 
 class CategoriesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        // Lọc các danh mục có isDeleted = 0 và phân trang
+        $categories = Category::where('isDeleted', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5);
+        return view('admin.categories.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request, FlasherInterface $flasher)
     {
-        //
+        $request->validate(
+            [
+                'name' => "required|min:3|max:100|string",
+            ],
+            [
+                'required' => ':attribute không được để trống.',
+                'min' => ':attribute không ít hơn :min ký tự.',
+                'max' => ':attribute không vượt quá :max ký tự.',
+            ],
+            [
+                'name' => 'Tên danh mục',
+            ]
+        );
+
+        $category = new Category;
+        $category->name = $request->name;
+
+        if ($category->save()) {
+            $flasher->addFlash('success', 'Danh mục đã được thêm thành công!');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi thêm danh mục. Vui lòng thử lại.');
+        }
+
+        return redirect()->route('admin.categories.list');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return view('admin.categories.update', compact('category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id, FlasherInterface $flasher)
     {
-        //
+        $request->validate(
+            [
+                'name' => "required|min:3|max:100|string",
+            ],
+            [
+                'required' => ':attribute không được để trống.',
+                'min' => ':attribute không ít hơn :min ký tự.',
+                'max' => ':attribute không vượt quá :max ký tự.',
+            ],
+            [
+                'name' => 'Tên danh mục',
+            ]
+        );
+
+        $category = Category::findOrFail($id);
+        $category->name = $request->name;
+
+        if ($category->save()) {
+            $flasher->addFlash('success', 'Danh mục đã được sửa thành công!');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi sửa danh mục. Vui lòng thử lại.');
+        }
+
+        return redirect()->route('admin.categories.list');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(string $id, FlasherInterface $flasher)
     {
-        //
+        // Tìm danh mục theo ID
+        $category = Category::findOrFail($id);
+
+        // Cập nhật isDeleted thành 1
+        if ($category->update(['isDeleted' => 1])) {
+            $flasher->addFlash('success', 'Danh mục đã được cập nhật trạng thái xóa thành công!');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật trạng thái xóa. Vui lòng thử lại.');
+        }
+
+        // Chuyển hướng về danh sách danh mục
+        return redirect()->route('admin.categories.list');
     }
 }
