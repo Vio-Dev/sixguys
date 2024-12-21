@@ -1,17 +1,28 @@
-# Mở VS Code, phpMyAdmin
+Dưới đây là các bước chi tiết để cài đặt và cấu hình dự án:
 
-# Tạo một database tên là phu-tung-oto ở Phpmyadmin
+1. Khởi Chạy IDE và mySQL Control Tool
+Sử dụng một trong các công cụ quản lý MySQL như XAMPP, Workbench, Laragon, etc.
+2. Tạo Database/Schema Mới
+Trong công cụ quản lý mySQL, tạo một database/schema mới cho dự án.
+3. Cấu Hình và Cài Đặt Các Thư Viện Cần Thiết
+Mở terminal tại thư mục dự án (figureShop).
+Chạy các lệnh sau theo thứ tự:
+cp .env.example .env
+npm install
+composer install
+4. Cấu Hình File .env
+Mở file .env và cấu hình thông tin kết nối đến database.
+5. Thực Hiện Migration
+Chạy lệnh php artisan migrate.
 
-# Mở terminal(Bấm chuột phải vào thư mục dự án [ FigureShop ] -> Open in Integrated Terminal) chạy lệnh theo thứ tự:
-
-# cp .env.example .env
-# npm i (cài sẵn nodejs và npm) -> cài các file node_modules
-# composer install (cài sẵn composer) -> cài các thư viện laravel
-# php artisan migrate -> tạo database( phải tạo trước database thelonewolf trong phpMyAdmin)
-# Chạy lệnh: php artisan key:generate
-
-# Khởi chạy dự án( mở 2 terminal chạy cùng lúc 2 lệnh dưới)
-
-# npm run dev
-# php artisan serve
-# Vào URL: 127.0.0.1:8000 -> tạo tài khoản mới, vào link Administrator
+6. Tạo Khóa Ứng Dụng
+Chạy lệnh php artisan key:generate.
+7. Khởi Chạy Dự Án
+Mở hai terminal và chạy đồng thời hai lệnh sau:
+npm run dev
+php artisan serve
+Sau khi các lệnh đã chạy xong, bạn có thể truy cập dự án tại địa chỉ: 127.0.0.1:8000.
+8. Tạo và Quản Lý Tài Khoản
+Truy cập vào URL: 127.0.0.1:8000 để tạo tài khoản mới và đăng nhập vào trang Administrator.
+Để truy cập trang admin, sử dụng URL: 127.0.0.1:8000/admin. Nếu bạn cần quyền truy cập, có thể chỉnh sửa thông tin user và role trong database.
+Sau khi hoàn thành các bước trên, dự án của bạn sẽ được cài đặt và cấu hình đầy đủ, và bạn có thể bắt đầu sử dụng và phát triển dự án của mình.
