@@ -2,6 +2,14 @@
 
 @section('title', 'Danh sách sản phẩm | FigureShop')
 
+@php
+    $status = [
+        'public' => ['label' => 'Đã đăng', 'class' => 'bg-green-200 text-gray-600'],
+        'outOfStock' => ['label' => 'Hết Hàng', 'class' => 'bg-red-200 text-gray-600'],
+        'draft' => ['label' => 'Nháp', 'class' => 'bg-gray-200 text-gray-600'],
+    ];
+@endphp
+
 @section('content')
 
     <div>
@@ -64,8 +72,8 @@
                                 <th scope="row"
                                     class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <span>
-
-                                        <img src="{{ asset($product->thumbnail) }}" class="h-20 w-20 object-cover">
+                                        <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}"
+                                            class="h-20 w-20 object-cover">
                                     </span>
                                     <span>
                                         {{ $product->name }}
@@ -81,17 +89,21 @@
                                     {{ $product->hasSold }} {{ $product->unit }}
                                 </td>
                                 <td class="">
-                                    <div
-                                        class="px-2 py-1 w-full font-semibold text-center leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                        {{ $product->status }}
-                                    </div>
+                                    @foreach ($status as $key => $value)
+                                        @if ($product->status == $key)
+                                            <div
+                                                class="{{ $value['class'] }} p-2 w-full font-semibold text-center leading-tight rounded-lg">
+                                                {{ $value['label'] }}</div>
+                                        @endif
+                                    @endforeach
+
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $product->category->name }}
                                 </td>
                                 <td class="px-6 py-4 ">
-                                    <button
-                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</button>
+                                    <a href="{{ route('admin.products.edit', $product->id) }}"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
                                     <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                                         class="inline">
                                         @csrf
