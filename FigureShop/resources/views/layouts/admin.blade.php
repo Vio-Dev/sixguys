@@ -12,12 +12,12 @@
         referrerpolicy="origin"></script>
 </head>
 
-<body class="font-sans antialiased dark:bg-black dark:text-white/50 flex flex-col justify-center">
-    <div class="w-full bg-gray-800 text-white p-4">
+<body class="font-sans antialiased dark:bg-black dark:text-white/50 flex flex-col h-full">
+    <div class="w-full bg-gray-800 text-white p-4 ">
         @include('components.admin.navigation')
     </div>
     <div class="flex gap-2 h-[initial]">
-        <div class="w-[140px] h-[initial] bg-gray-800 ">
+        <div class="w-[140px] h-[initial] bg-gray-800 h-screen">
             @include('components.admin.sidebar')
         </div>
         <div class="w-full">

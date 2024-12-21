@@ -137,17 +137,104 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Category::where('isDeleted', 0)->get();
+        return view('admin.products.update', compact('product', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id, FlasherInterface $flasher)
     {
-        //
-    }
+        // Validate request
+        $request->validate(
+            [
+                'name' => "required|string|max:100",
+                'inStock' => "required|numeric|min:1|max:99999999.99",
+                'unit' => "required|string|min:1|max:20",
+                'price' => "required|numeric|min:1|max:99999999.99",
+                'description' => "required|string|min:1|max:1000",
+                'shortDescription' => "required|string|min:1|max:255",
+                'thumbnail' => "nullable|image|mimes:jpeg,png,jpg,gif",
+                'images' => "nullable|array|max:20000",
+                'images.*' => "image|mimes:jpeg,png,jpg,gif",
+                'discount' => "numeric|min:0|max:100",
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute không ít hơn :min',
+                'max' => ':attribute không vượt quá :max',
+                'mimes' => ':attribute phải có đuôi .jpeg, .png, .jpg, .gif',
+                'numeric' => ':attribute phải là một số',
+            ],
+            [
+                'name' => 'Tên sản phẩm',
+                'inStock' => 'Số lượng sản phẩm',
+                'unit' => 'Đơn vị tính',
+                'price' => 'Giá sản phẩm',
+                'description' => 'Mô tả sản phẩm',
+                'shortDescription' => 'Mô tả ngắn sản phẩm',
+                'thumbnail' => 'Hình ảnh đại diện',
+                'images' => 'Hình ảnh sản phẩm',
+                "discount" => "Giảm giá",
+            ]
+        );
 
+        // Find the product by ID
+        $product = Product::findOrFail($id);
+
+        // Lấy dữ liệu input
+        $input = $request->except(['images', 'thumbnail']);
+
+        // Xử lý đường dẫn thư mục lưu file
+        $productFolder = public_path('uploads/products');
+        if (!file_exists($productFolder)) {
+            mkdir($productFolder, 0777, true); // Tạo thư mục nếu chưa tồn tại
+        }
+
+        // Handle the thumbnail
+        if ($request->hasFile('thumbnail')) {
+            $thumbnail = $request->file('thumbnail');
+            if ($thumbnail->isValid()) {
+                $thumbnailName = time() . '_' . $thumbnail->getClientOriginalName();
+                $thumbnail->move($productFolder, $thumbnailName); // Lưu file vào thư mục sản phẩm
+                $input['thumbnail'] = 'uploads/products/' . $thumbnailName; // Lưu đường dẫn vào cơ sở dữ liệu
+            }
+        }
+
+        // Update the product
+        $product->update($input);
+
+        // Handle the images
+        if ($request->hasFile('images')) {
+            $number = 0;
+            foreach ($request->file('images') as $image) {
+                if ($image->isValid()) {
+                    $imageName = time() . '_' . $image->getClientOriginalName();
+                    $image->move($productFolder, $imageName); // Lưu file vào thư mục sản phẩm
+                    $url = 'uploads/products/' . $input['name'] . '/' . $imageName; // Đường dẫn lưu DB
+
+                    Media::create([
+                        'product_id' => $product->id,
+                        'url_img' => $url,
+                        'alt_img' => $imageName,
+                        'number' => $number,
+                    ]);
+                    $number++;
+                }
+            }
+        }
+
+        // Thông báo kết quả
+        if ($product->wasChanged()) {
+            $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        }
+
+        return redirect()->route("admin.products.list");
+    }
     /**
      * Remove the specified resource from storage.
      */

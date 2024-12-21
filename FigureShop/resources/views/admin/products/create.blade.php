@@ -1,6 +1,14 @@
 @extends('layouts.admin')
 
 @section('title', 'Tạo mới sản phẩm | FigureShop')
+
+@php
+    $status = [
+        'public' => ['label' => 'Công khai', 'class' => 'bg-gray-200 text-gray-600'],
+        'draft' => ['label' => 'Bản nháp', 'class' => 'bg-gray-200 text-gray-600'],
+    ];
+@endphp
+
 @section('content')
     <div>
         <div class="py-2 ">
@@ -114,6 +122,17 @@
 
                             @foreach ($categories as $category)
                                 <option value={{ $category->id }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="w-full">
+                        <label for="name" class="block font-medium">Trạng thái</label>
+                        <select name="status" id="status"
+                            class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                            @foreach ($status as $key => $value)
+                                <option value={{ $key }}>{{ $value['label'] }}</option>
                             @endforeach
                         </select>
                     </div>
