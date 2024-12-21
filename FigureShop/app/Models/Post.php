@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+
     protected $fillable = [
         'name',
         'shortDecription',
@@ -15,9 +16,10 @@ class Post extends Model
         'thumbnail',
         'isDeleted',
     ];
+
     function user()
     {
         return $this->belongsTo(User::class);
     }
-   public $timestamps = true;
+    public $timestamps = true;
 }

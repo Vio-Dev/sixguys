@@ -1,7 +1,14 @@
-
 @extends('layouts.admin')
 
 @section('title', 'Danh sách sản phẩm | FigureShop')
+
+@php
+    $status = [
+        'public' => ['label' => 'Đã đăng', 'class' => 'bg-green-200 text-gray-600'],
+        'outOfStock' => ['label' => 'Hết Hàng', 'class' => 'bg-red-200 text-gray-600'],
+        'draft' => ['label' => 'Nháp', 'class' => 'bg-gray-200 text-gray-600'],
+    ];
+@endphp
 
 @section('content')
 
@@ -53,34 +60,82 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td class="px-6 py-4">
-                            50000000
-                        </td>
-                        <td class="px-6 py-4">
-                            100 Cái
-                        </td>
-                        <td class="px-6 py-4">
-                            100 Cái
-                        </td>
-                        <td class="">
-                            <div
-                                class="px-2 py-1 w-full font-semibold text-center leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                                Active
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            Laptop
-                        </td>
-                        <td class="px-6 py-4 ">
-                            <button class="font-medium text-blue-600 dark:text-blue-500 hover:underline p-2">Sửa</button>
-                            <button class="font-medium text-red-600 dark:text-blue-500 hover:underline p-2">Xóa</button>
-                        </td>
-                    </tr>
+                    @if ($products->isEmpty())
+                        <tr
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td colspan="7" class="px-6 py-4 text-center">Không có sản phẩm nào</td>
+                        </tr>
+                    @else
+                        @foreach ($products as $product)
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row"
+                                    class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <span>
+                                        <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}"
+                                            class="h-20 w-20 object-cover">
+                                    </span>
+                                    <span>
+                                        {{ $product->name }}
+                                    </span>
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ format_currency($product->price) }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $product->inStock }} {{ $product->unit }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $product->hasSold }} {{ $product->unit }}
+                                </td>
+                                <td class="">
+                                    @foreach ($status as $key => $value)
+                                        @if ($product->status == $key)
+                                            <div
+                                                class="{{ $value['class'] }} p-2 w-full font-semibold text-center leading-tight rounded-lg">
+                                                {{ $value['label'] }}</div>
+                                        @endif
+                                    @endforeach
+
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $product->category->name }}
+                                </td>
+                                <td class="px-6 py-4 ">
+                                    <a href="{{ route('admin.products.edit', $product->id) }}"
+                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
+                                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                        class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="confirmDelete(this)"
+                                            class="font-medium text-red-600 dark:text-red-500 hover:underline">Xóa</button>
+                                        <script>
+                                            function confirmDelete(button) {
+                                                Swal.fire({
+                                                    title: 'Bạn có chắc chắn muốn xóa?',
+                                                    text: "Hành động này không thể hoàn tác!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Xóa',
+                                                    cancelButtonText: 'Hủy'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Nếu người dùng xác nhận, submit form
+                                                        button.closest('form').submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+
+
                 </tbody>
             </table>
         </div>
@@ -88,4 +143,3 @@
 
     </div>
 @endsection
-
