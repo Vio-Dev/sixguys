@@ -2,8 +2,8 @@ Dưới đây là các bước chi tiết để cài đặt và cấu hình dự
 
 1. Khởi Chạy IDE và mySQL Control Tool
 Sử dụng một trong các công cụ quản lý MySQL như XAMPP, Workbench, Laragon, etc.
-2. Tạo Database/Schema Mới
-Trong công cụ quản lý mySQL, tạo một database/schema mới cho dự án.
+2. Change direct toi source code
+gõ cd fi rồi nhấn tab
 3. Cấu Hình và Cài Đặt Các Thư Viện Cần Thiết
 Mở terminal tại thư mục dự án (figureShop).
 Chạy các lệnh sau theo thứ tự:
@@ -14,7 +14,6 @@ composer install
 Mở file .env và cấu hình thông tin kết nối đến database.
 5. Thực Hiện Migration
 Chạy lệnh php artisan migrate.
-
 6. Tạo Khóa Ứng Dụng
 Chạy lệnh php artisan key:generate.
 7. Khởi Chạy Dự Án
