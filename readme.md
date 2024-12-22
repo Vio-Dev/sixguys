@@ -7,9 +7,9 @@ gõ cd fi rồi nhấn tab
 3. Cấu Hình và Cài Đặt Các Thư Viện Cần Thiết
 Mở terminal tại thư mục dự án (figureShop).
 Chạy các lệnh sau theo thứ tự:
-cp .env.example .env
-npm install
-composer install
+ 1. cp .env.example .env
+ 2. npm install
+ 3. composer install
 4. Cấu Hình File .env
 Mở file .env và cấu hình thông tin kết nối đến database.
 5. Thực Hiện Migration
@@ -20,7 +20,7 @@ Chạy lệnh php artisan key:generate.
 Mở hai terminal và chạy đồng thời hai lệnh sau:
 npm run dev
 php artisan serve
-Sau khi các lệnh đã chạy xong, bạn có thể truy cập dự án tại địa chỉ: 127.0.0.1:8000.
+Sau khi các lệnh đã chạy xong, bạn có thể truy cập dự án tại địa chỉ: 127.0.0.1:8000/admin
 8. Tạo và Quản Lý Tài Khoản
 Truy cập vào URL: 127.0.0.1:8000 để tạo tài khoản mới và đăng nhập vào trang Administrator.
 Để truy cập trang admin, sử dụng URL: 127.0.0.1:8000/admin. Nếu bạn cần quyền truy cập, có thể chỉnh sửa thông tin user và role trong database.
