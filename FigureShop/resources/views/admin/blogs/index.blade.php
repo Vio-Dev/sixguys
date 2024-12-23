@@ -41,13 +41,16 @@
             <tbody>
                 @forelse ($blogs as $blog)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
-                        <td scope="row"
-                            class=" flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <img src="{{ asset($blog->thumbnail) }}" class=" object-cover w-15 h-15"
-                                alt="{{ $blog->name }}">
-                            {{ $blog->name }}
-
-                        </td>
+                        <th scope="row"
+                            class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <span>
+                                <img src="{{ asset($blog->thumbnail) }}" alt="{{ $blog->name }}"
+                                    class="h-20 w-20 object-cover">
+                            </span>
+                            <span>
+                                {{ $blog->name }}
+                            </span>
+                        </th>
                         <td scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                             {{ $blog->shortDecription }}
