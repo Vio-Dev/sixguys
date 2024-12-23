@@ -11,7 +11,9 @@ class CategoriesController extends Controller
     public function index()
     {
         // Lọc các danh mục có isDeleted = 0 và phân trang
-        $categories = Category::where('isDeleted', 0)->paginate(5);
+        $categories = Category::where('isDeleted', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5);
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -40,9 +42,9 @@ class CategoriesController extends Controller
         $category->name = $request->name;
 
         if ($category->save()) {
-            $flasher->addSuccess('Danh mục đã được thêm thành công!');
+            $flasher->addFlash('success', 'Thêm thành công!', [], 'Thành công');
         } else {
-            $flasher->addError('Đã xảy ra lỗi khi thêm danh mục. Vui lòng thử lại.');
+            $flasher->addFlash('error', 'Đã xảy ra lỗi Vui lòng thử lại.', [], 'Thất bại');
         }
 
         return redirect()->route('admin.categories.list');
@@ -74,9 +76,9 @@ class CategoriesController extends Controller
         $category->name = $request->name;
 
         if ($category->save()) {
-            $flasher->addSuccess('Danh mục đã được sửa thành công!');
+            $flasher->addFlash('success', 'Cập nhật thành công!', [], 'Thành công');
         } else {
-            $flasher->addError('Đã xảy ra lỗi khi sửa danh mục. Vui lòng thử lại.');
+            $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
         }
 
         return redirect()->route('admin.categories.list');
@@ -84,18 +86,17 @@ class CategoriesController extends Controller
 
     public function destroy(string $id, FlasherInterface $flasher)
     {
-    // Tìm danh mục theo ID
-    $category = Category::findOrFail($id);
+        // Tìm danh mục theo ID
+        $category = Category::findOrFail($id);
 
-    // Cập nhật isDeleted thành 1
-    if ($category->update(['isDeleted' => 1])) {
-        $flasher->addSuccess('Danh mục đã được cập nhật trạng thái xóa thành công!');
-    } else {
-        $flasher->addError('Đã xảy ra lỗi khi cập nhật trạng thái xóa. Vui lòng thử lại.');
+        // Cập nhật isDeleted thành 1
+        if ($category->update(['isDeleted' => 1])) {
+            $flasher->addFlash('success', 'Danh mục xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
+        }
+
+        // Chuyển hướng về danh sách danh mục
+        return redirect()->route('admin.categories.list');
     }
-
-    // Chuyển hướng về danh sách danh mục
-    return redirect()->route('admin.categories.list');
-}
-
 }

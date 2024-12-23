@@ -30,14 +30,36 @@ Trang chủ
 
     Đơn hàng
 </a>
-<a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 2048 2048">
-        <path fill="currentColor"
-            d="m1344 2l704 352v785l-128-64V497l-512 256v258l-128 64V753L768 497v227l-128-64V354zm0 640l177-89l-463-265l-211 106zm315-157l182-91l-497-249l-149 75zm-507 654l-128 64v-1l-384 192v455l384-193v144l-448 224L0 1735v-676l576-288l576 288zm-640 710v-455l-384-192v454zm64-566l369-184l-369-185l-369 185zm576-1l448-224l448 224v527l-448 224l-448-224zm384 576v-305l-256-128v305zm384-128v-305l-256 128v305zm-320-288l241-121l-241-120l-241 120z" />
-    </svg>
 
-    Sản phẩm
-</a>
+
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropProduct"
+            class=" text-white font-medium text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 2048 2048">
+                <path fill="currentColor"
+                    d="m1344 2l704 352v785l-128-64V497l-512 256v258l-128 64V753L768 497v227l-128-64V354zm0 640l177-89l-463-265l-211 106zm315-157l182-91l-497-249l-149 75zm-507 654l-128 64v-1l-384 192v455l384-193v144l-448 224L0 1735v-676l576-288l576 288zm-640 710v-455l-384-192v454zm64-566l369-184l-369-185l-369 185zm576-1l448-224l448 224v527l-448 224l-448-224zm384 576v-305l-256-128v305zm384-128v-305l-256 128v305zm-320-288l241-121l-241-120l-241 120z" />
+            </svg>
+
+            Sản phẩm
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700 ">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href={{ route('admin.products.list') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Danh
+                    sách</a>
+                <a href={{ route('admin.products.create') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Tạo
+                    mới</a>
+            </ul>
+        </div>
+    </ul>
+</div>
 <a href={{ route('admin.categories.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="currentColor"
@@ -45,27 +67,101 @@ Trang chủ
     </svg>
     Danh mục
 </a>
-<a href={{ route('admin.blogs.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 2048 2048">
-        <path fill="currentColor"
-            d="M640 384h1408v1152H640zm1280 1024V512H768v896zM128 1024V896h384v128zM0 768V640h512v128zm256 512v-128h256v128zm1536-640v128H896V640zm-384 640V896h384v384zm128-256v128h128v-128zm-256 128v128H896v-128zm0-256v128H896V896z" />
-    </svg>
-    Bài đăng
-</a>
-<a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="currentColor"
-            d="M6.5 13.5h11v-1h-11zm0-3h11v-1h-11zm0-3h11v-1h-11zM21 20.077L17.923 17H4.616q-.691 0-1.154-.462T3 15.385V4.615q0-.69.463-1.153T4.615 3h14.77q.69 0 1.152.462T21 4.615zM4.616 16H18.35L20 17.644V4.616q0-.231-.192-.424T19.385 4H4.615q-.23 0-.423.192T4 4.615v10.77q0 .23.192.423t.423.192M4 16V4z" />
-    </svg>
-    Bình luận
-</a>
-<a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="currentColor"
-            d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z" />
-    </svg>
-    Thùng rác
-</a>
+
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropCategory"
+            class=" text-white font-medium  text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 2048 2048">
+                <path fill="currentColor"
+                    d="M640 384h1408v1152H640zm1280 1024V512H768v896zM128 1024V896h384v128zM0 768V640h512v128zm256 512v-128h256v128zm1536-640v128H896V640zm-384 640V896h384v384zm128-256v128h128v-128zm-256 128v128H896v-128zm0-256v128H896V896z" />
+            </svg>
+            Bài đăng
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href={{ route('admin.blogs.list') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Danh
+                    sách</a>
+                <a href={{ route('admin.blogs.create') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Tạo
+                    mới</a>
+
+            </ul>
+        </div>
+    </ul>
+</div>
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropCategory"
+            class=" text-white font-medium  text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M6.5 13.5h7v-1h-7zm0-3h11v-1h-11zm0-3h11v-1h-11zM3 20.077V4.616q0-.691.463-1.153T4.615 3h14.77q.69 0 1.152.463T21 4.616v10.769q0 .69-.463 1.153T19.385 17H6.077zM5.65 16h13.735q.23 0 .423-.192t.192-.423V4.615q0-.23-.192-.423T19.385 4H4.615q-.23 0-.423.192T4 4.615v13.03zM4 16V4z" />
+            </svg>
+            Bình luận
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href=""
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
+                    phẩm</a>
+                <a href=""
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
+                    đăng</a>
+
+            </ul>
+        </div>
+    </ul>
+</div>
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropCategory"
+            class=" text-white font-medium  text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                        d="m19.262 17.038l1.676-12.575a.6.6 0 0 0-.372-.636L16 2h-5.5l-.682 1.5L5 2L3.21 3.79a.6.6 0 0 0-.17.504l1.698 12.744a4 4 0 0 0 1.98 2.944l.32.183a10 10 0 0 0 9.923 0l.32-.183a4 4 0 0 0 1.98-2.944ZM16 2l-2 5m-5-.5l.818-3" />
+                    <path d="M3 5c2.571 2.667 15.429 2.667 18 0" />
+                </g>
+            </svg>
+            Thùng rác
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href=""
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
+                    Đơn hàng</a>
+                <a href=""
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
+                    phẩm</a>
+                <a href=""
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
+                    đăng</a>
+                <a href=""
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
+                    Danh mục</a>
+
+
+            </ul>
+        </div>
+    </ul>
+</div>
 
 </ul>
 </div>

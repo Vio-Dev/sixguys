@@ -3,7 +3,7 @@
 
 @section('content')
     <div>
-        <div class="flex justify-between items-center p-4">
+        <div class="flex justify-between items-center">
             <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Sửa danh mục</h2>
             <div class="flex gap-2">
                 <a href="{{ Route('admin.categories.list') }}" class="flex items-center gap-2 p-2 ">
@@ -22,8 +22,7 @@
                 </a>
             </div>
         </div>
-        <form class=" max-w-2xl mx-auto" action="{{ route('admin.categories.update', ['id' => $category->id]) }}"
-            method="post">
+        <form class=" mx-auto" action="{{ route('admin.categories.update', ['id' => $category->id]) }}" method="post">
             @csrf
             @method('PUT')
             <div class="mb-5">
@@ -41,6 +40,8 @@
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Sửa danh mục
             </button>
+            <a href={{ route('admin.categories.list') }}
+                class="text-white bg-red-600  h focus:ring-4focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Hủy</a>
         </form>
     </div>
 @endsection
