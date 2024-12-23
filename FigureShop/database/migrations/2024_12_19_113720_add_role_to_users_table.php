@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('address')->nullable()->after('note');
             $table->string('phone')->nullable()->after('address');
             $table->string('avatar')->nullable()->after('phone');
-            $table->boolean('isDeleted')->nullable()->after('phone');
+            $table->boolean('isDeleted')->nullable()->after('phone')->default(0);
         });
     }
 

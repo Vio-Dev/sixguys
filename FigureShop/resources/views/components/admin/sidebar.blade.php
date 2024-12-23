@@ -60,6 +60,36 @@ Trang chủ
         </div>
     </ul>
 </div>
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropProduct"
+            class=" text-white font-medium text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="6" r="4" />
+                    <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z" />
+                </g>
+            </svg>
+
+            Người dùng
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700 ">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href={{ route('admin.users.list') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Danh
+                    sách</a>
+                <a href={{ route('admin.users.create') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Tạo
+                    mới</a>
+            </ul>
+        </div>
+    </ul>
+</div>
 <a href={{ route('admin.categories.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="currentColor"
