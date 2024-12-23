@@ -83,10 +83,10 @@
                                     {{ format_currency($product->price) }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $product->inStock }} {{ $product->unit }}
+                                    {{ $product->inStock }} - {{ $product->unit }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $product->hasSold }} {{ $product->unit }}
+                                    {{ $product->hasSold }} - {{ $product->unit }}
                                 </td>
                                 <td class="">
                                     @foreach ($status as $key => $value)
