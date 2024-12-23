@@ -100,17 +100,28 @@
                 <h3 class="text-[18px] font-medium">Media</h3>
                 <div class="grid grid-cols-1 gap-4">
                     <div class="w-full">
-                        <label for="name" class="block font-medium">Ảnh đại diện</label>
-                        <input type="file" name="thumbnail" id="image"
+                        <label for="thumbnailInput" class="block font-medium">Ảnh đại diện</label>
+                        <input type="file" name="thumbnail" id="thumbnailInput" onchange="previewPostImages()"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <div id="postImagesPreview" class="flex gap-2 mt-2"></div>
+                        <img id="defaultthumbnail" src="{{ asset($product->thumbnail) }}" alt="Default Image"
+                            class="w-20 h-20 object-cover rounded-md border border-gray-300">
                     </div>
                     <div>
-                        <label for="name" class="block font-medium">Ảnh sản phẩm</label>
-                        <input type="file" name="images[]" id="image" multiple
+                        <label for="imagesInput" class="block font-medium">Ảnh sản phẩm</label>
+                        <input type="file" name="images[]" id="imagesInput" multiple onchange="previewProductsImages()"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
-                    </div>
+                        <div id="ProductsImage" class="flex gap-2 mt-2"></div>
+                        <div class="flex gap-2 mt-2">
+                            @foreach ($images as $image)
+                                <img id="defaultProductsImages" src="{{ asset($image->url_img) }}" alt="Product Image"
+                                    class="w-20 h-20 object-cover rounded-md border border-gray-300">
+                            @endforeach
+                        </div>
 
+                    </div>
                 </div>
+
             </div>
             <div class="p-2 shadow-md sm:rounded-lg">
                 <h3 class="text-[18px] font-medium">Danh mục sản phẩm</h3>
@@ -145,4 +156,73 @@
             </div>
         </form>
     </div>
+    <script>
+        function previewPostImages() {
+            const file = document.querySelector('#thumbnailInput').files[0]; // Lấy file đầu tiên
+            const preview = document.getElementById('postImagesPreview'); // Lấy container preview
+            const defaultThumbnail = document.getElementById('defaultthumbnail'); // Lấy ảnh mặc định
+
+            preview.innerHTML = ''; // Xóa nội dung cũ
+
+            if (file && file.type.startsWith('image/')) {
+                // Ẩn ảnh mặc định
+                if (defaultThumbnail) {
+                    defaultThumbnail.style.display = 'none';
+                }
+
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const img = document.createElement('img');
+                    img.src = reader.result; // Gán ảnh mới vào src
+                    img.alt = "New Thumbnail";
+                    img.width = 100; // Đặt chiều rộng cố định
+                    img.classList.add('rounded-md', 'border', 'border-gray-300', 'shadow-sm', 'p-1');
+                    preview.appendChild(img); // Thêm ảnh mới vào preview
+                };
+                reader.readAsDataURL(file); // Đọc file
+            } else {
+                alert('Vui lòng chọn tệp ảnh hợp lệ.');
+            }
+        }
+
+
+
+        function previewProductsImages() {
+            const files = document.querySelector('#imagesInput').files; // Lấy danh sách file
+            const previewContainer = document.getElementById('ProductsImage'); // Container preview
+            const defaultImages = document.getElementById('defaultProductsImages'); // Lấy tất cả ảnh mặc định
+
+            previewContainer.innerHTML = ''; // Xóa nội dung cũ
+
+            // Ẩn tất cả ảnh mặc định
+            defaultImages.forEach(image => {
+                image.style.display = 'none';
+            });
+
+            if (files.length === 0) {
+                alert('Vui lòng chọn ít nhất một ảnh.');
+                return;
+            }
+
+            // Hiển thị từng file ảnh
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!file.type.startsWith('image/')) {
+                    alert(`Tệp "${file.name}" không phải là ảnh hợp lệ.`);
+                    continue;
+                }
+
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const img = document.createElement('img');
+                    img.src = reader.result;
+                    img.alt = `Image ${i + 1}`;
+                    img.width = 100; // Đặt chiều rộng cố định
+                    img.classList.add('rounded-md', 'border', 'border-gray-300', 'shadow-sm', 'p-1');
+                    previewContainer.appendChild(img); // Thêm ảnh mới vào container preview
+                };
+                reader.readAsDataURL(file); // Đọc file
+            }
+        }
+    </script>
 @endsection

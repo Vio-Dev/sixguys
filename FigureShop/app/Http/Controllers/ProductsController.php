@@ -18,7 +18,6 @@ class ProductsController extends Controller
         $products = Product::where('isDeleted', 0)
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
-
         return view('admin.products.index', compact('products'));
     }
 
@@ -100,7 +99,7 @@ class ProductsController extends Controller
                 if ($image->isValid()) {
                     $imageName = time() . '_' . $image->getClientOriginalName();
                     $image->move($productFolder, $imageName); // Lưu file vào thư mục sản phẩm
-                    $url = 'uploads/products/' . $input['name'] . '/' . $imageName; // Đường dẫn lưu DB
+                    $url = 'uploads/products/'  . $imageName; // Đường dẫn lưu DB
 
                     Media::create([
                         'product_id' => $product->id,
@@ -139,7 +138,9 @@ class ProductsController extends Controller
     {
         $product = Product::findOrFail($id);
         $categories = Category::where('isDeleted', 0)->get();
-        return view('admin.products.update', compact('product', 'categories'));
+        $images = Media::where('product_id', $id)->get();
+
+        return view('admin.products.update', compact('product', 'categories', 'images'));
     }
 
     /**
