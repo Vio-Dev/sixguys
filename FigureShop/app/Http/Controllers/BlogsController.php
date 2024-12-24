@@ -197,4 +197,12 @@ class BlogsController extends Controller
         // Chuyển hướng về danh sách danh mục
         return redirect()->route('admin.blogs.list');
     }
+     public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+         $blogs = Post::where('name', 'LIKE', "%{$searchTerm}%")
+                          ->where('isDeleted', 0)
+                          ->paginate(10);
+        return view("admin.blogs.index", compact("blogs"));
+    }
 }

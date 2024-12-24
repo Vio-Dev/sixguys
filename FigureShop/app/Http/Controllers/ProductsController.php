@@ -254,4 +254,13 @@ class ProductsController extends Controller
         // Chuyển hướng về danh sách danh mục
         return redirect()->route('admin.products.list');
     }
+
+     public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+         $products = Product::where('name', 'LIKE', "%{$searchTerm}%")
+                          ->where('isDeleted', 0)
+                          ->paginate(10);
+        return view("admin.products.index", compact("products"));
+    }
 }
