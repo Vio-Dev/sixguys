@@ -175,13 +175,13 @@ Trang chủ
                 <a href=""
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
                     Đơn hàng</a>
-                <a href=""
+                <a href="{{ route('admin.bin.products.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
                     phẩm</a>
-                <a href=""
+                <a href="{{ route('admin.bin.blogs.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
                     đăng</a>
-                <a href=""
+                <a href="{{ route('admin.bin.category.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
                     Danh mục</a>
 

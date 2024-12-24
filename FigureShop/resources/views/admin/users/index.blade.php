@@ -9,9 +9,9 @@
         <a href="{{ route('admin.users.create') }}"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Tạo mới người dùng</a>
     </div>
-    <form action="">
+    <form action="{{ route('admin.users.search') }}" method="POST">
         @csrf
-        @method('GET')
+
         <div class="flex items-center">
             <input type="text" name="search" id="search" placeholder="Tìm kiếm người dùng"
                 class="w-1/3 border border-gray-300 p-2 rounded-lg">
