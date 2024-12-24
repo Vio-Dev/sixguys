@@ -1,14 +1,21 @@
-<swiper-container class="mySwiper" pagination="true" pagination-clickable="true" navigation="true" space-between="30"
-    centered-slides="true" autoplay-delay="2500" autoplay-disable-on-interaction="false">
-    <swiper-slide>Slide 1</swiper-slide>
-    <swiper-slide>Slide 2</swiper-slide>
-    <swiper-slide>Slide 3</swiper-slide>
-    <swiper-slide>Slide 4</swiper-slide>
-    <swiper-slide>Slide 5</swiper-slide>
-    <swiper-slide>Slide 6</swiper-slide>
-    <swiper-slide>Slide 7</swiper-slide>
-    <swiper-slide>Slide 8</swiper-slide>
-    <swiper-slide>Slide 9</swiper-slide>
+<swiper-container class="mySwiper w-full h-[900px]" pagination="true" pagination-clickable="true" navigation="true"
+    space-between="30" centered-slides="true" autoplay-delay="2500" autoplay-disable-on-interaction="false">
+    <swiper-slide>
+        <img class="w-full h-full aspect-video object-fit" src="banner/1.jpg" alt="">
+    </swiper-slide>
+    <swiper-slide>
+        <img class="w-full h-full aspect-video object-fit" src="banner/2.jpg" alt="">
+    </swiper-slide>
+    <swiper-slide>
+        <img class="w-full h-full aspect-video object-fit" src="banner/3.jpg" alt="">
+    </swiper-slide>
+    <swiper-slide>
+        <img class="w-full h-full aspect-video object-fit" src="banner/4.jpg" alt="">
+    </swiper-slide>
+    <swiper-slide>
+        <img class="w-full h-full aspect-video object-fit" src="banner/5.jpg" alt="">
+    </swiper-slide>
+
     <div class="autoplay-progress" slot="container-end">
         <svg viewBox="0 0 48 48">
             <circle cx="24" cy="24" r="20"></circle>

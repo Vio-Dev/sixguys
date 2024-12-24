@@ -23,9 +23,10 @@
     <div>
         @include('components.website.nav')
     </div>
+
     <div class="container">
+        @include('components.website.banner')
         <div>
-            @include('components.website.banner')
             <main>
                 @yield('content')
             </main>
