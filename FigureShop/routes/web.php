@@ -70,4 +70,5 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
 
 // user routes
 
+
 require __DIR__ . '/auth.php';

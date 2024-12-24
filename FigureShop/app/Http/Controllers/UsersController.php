@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
+use Flasher\Laravel\Facade\Flasher;
 use Flasher\Prime\FlasherInterface;
 use Illuminate\Http\Request;
 
@@ -32,15 +33,14 @@ class UsersController extends Controller
      */
     public function store(Request $request, FlasherInterface $flasher)
     {
-
-        $password = $request->input('password');
-        $passwordConfirm = $request->input('passwordConfirm');
+        return $request;
 
         // $request->validate(
         //     [
         //         'name' => 'required|string|max:100',
         //         'email' => 'required|email|unique:users,email',
-        //         'password' => 'required|min:6|',
+        //         'password' => 'required|min:6|confirmed',
+        //         'confirm_password' => 'required|same:password',
         //         'address' => 'nullable|string|max:255',
         //         'phone' => 'required',
         //     ],
@@ -51,6 +51,7 @@ class UsersController extends Controller
         //         'email' => ':attribute không đúng định dạng',
         //         'unique' => ':attribute đã tồn tại',
         //         'in' => ':attribute không hợp lệ',
+        //         'confirmed' => 'Mật khẩu không khớp',
         //     ],
         //     [
         //         'name' => 'Tên người dùng',
@@ -61,9 +62,10 @@ class UsersController extends Controller
         //     ]
         // );
 
-        $input = $request->only(['name', 'email', 'password', 'address', 'phone']);
-        $input['password'] = bcrypt($input['password']);
-        $input['isDeleted'] = 0;
+        // $input = $request->only(['name', 'email', 'password', 'address', 'phone']);
+        // $input['password'] = bcrypt($input['password']);
+        // $input['isDeleted'] = 0;
+        // $input['status'] = "active";
 
         $user = User::create($input);
 
@@ -86,17 +88,71 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id, FlasherInterface $flasher)
     {
-        //
+        $user = User::findOrFail($id);
+        if (!$user) {
+            $flasher->addFlash('error', 'Người dùng không tồn tại', [], 'Thất bại');
+            return redirect()->route('admin.users.list');
+        }
+
+        return view('admin.users.update', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id, FlasherInterface $flasher)
     {
-        //
+        $user = User::findOrFail($id);
+
+        // Determine if the email has changed
+        $emailRule = $request->email === $user->email ? 'required|email' : 'required|email|unique:users,email';
+
+        // Validate request
+        $request->validate(
+            [
+                'name' => 'required|string|max:100',
+                'email' => $emailRule,
+                'password' => 'nullable|min:6|confirmed',
+                'confirm_password' => 'nullable|same:password',
+                'phone' => 'required',
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute không ít hơn :min ký tự',
+                'max' => ':attribute không vượt quá :max ký tự',
+                'email' => ':attribute không đúng định dạng',
+                'unique' => ':attribute đã tồn tại',
+                'in' => ':attribute không hợp lệ',
+                'confirmed' => 'Mật khẩu không khớp',
+            ],
+            [
+                'name' => 'Tên người dùng',
+                'email' => 'Email',
+                'password' => 'Mật khẩu',
+                'phone' => 'Số điện thoại',
+            ]
+        );
+
+        // Get input data
+        $input = $request->only(['name', 'email', 'phone']);
+        if ($request->filled('password')) {
+            $input['password'] = bcrypt($request->password);
+        }
+        $input['isDeleted'] = 0;
+
+        // Update the user
+        $user->update($input);
+
+        // Flash message
+        if ($user->wasChanged()) {
+            $flasher->addFlash('success', 'Cập nhật người dùng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật người dùng. Vui lòng thử lại.', [], 'Thất bại');
+        }
+
+        return redirect()->route('admin.users.list');
     }
 
     /**
