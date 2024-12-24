@@ -33,41 +33,42 @@ class UsersController extends Controller
      */
     public function store(Request $request, FlasherInterface $flasher)
     {
-        return $request;
 
-        // $request->validate(
-        //     [
-        //         'name' => 'required|string|max:100',
-        //         'email' => 'required|email|unique:users,email',
-        //         'password' => 'required|min:6|confirmed',
-        //         'confirm_password' => 'required|same:password',
-        //         'address' => 'nullable|string|max:255',
-        //         'phone' => 'required',
-        //     ],
-        //     [
-        //         'required' => ':attribute không được để trống',
-        //         'min' => ':attribute không ít hơn :min ký tự',
-        //         'max' => ':attribute không vượt quá :max ký tự',
-        //         'email' => ':attribute không đúng định dạng',
-        //         'unique' => ':attribute đã tồn tại',
-        //         'in' => ':attribute không hợp lệ',
-        //         'confirmed' => 'Mật khẩu không khớp',
-        //     ],
-        //     [
-        //         'name' => 'Tên người dùng',
-        //         'email' => 'Email',
-        //         'password' => 'Mật khẩu',
-        //         'address' => 'Địa chỉ',
-        //         'phone' => 'Số điện thoại',
-        //     ]
-        // );
+        $request->validate(
+            [
+                'name' => 'required|string|max:100',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6|confirmed',
+                'password_confirmation' => 'required',
+                'address' => 'nullable|string|max:255',
+                'phone' => 'required',
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute không ít hơn :min ký tự',
+                'max' => ':attribute không vượt quá :max ký tự',
+                'email' => ':attribute không đúng định dạng',
+                'unique' => ':attribute đã tồn tại',
+                'in' => ':attribute không hợp lệ',
+                'confirmed' => 'Mật khẩu không khớp',
+            ],
+            [
+                'name' => 'Tên người dùng',
+                'email' => 'Email',
+                'password' => 'Mật khẩu',
+                'address' => 'Địa chỉ',
+                'phone' => 'Số điện thoại',
+                'password_confirmation' => 'Xác nhận mật khẩu',
+            ]
+        );
 
-        // $input = $request->only(['name', 'email', 'password', 'address', 'phone']);
-        // $input['password'] = bcrypt($input['password']);
-        // $input['isDeleted'] = 0;
-        // $input['status'] = "active";
+        $input = $request->only(['name', 'email', 'password', 'address', 'phone']);
+        $input['password'] = bcrypt($input['password']);
+        $input['isDeleted'] = 1;
+        $input['status'] = "actived";
 
         $user = User::create($input);
+
 
         if ($user) {
             $flasher->addFlash('success', 'Thêm người dùng', [], 'Thành công');
@@ -115,7 +116,7 @@ class UsersController extends Controller
                 'name' => 'required|string|max:100',
                 'email' => $emailRule,
                 'password' => 'nullable|min:6|confirmed',
-                'confirm_password' => 'nullable|same:password',
+                'password_confirmation' => 'nullable|same:password',
                 'phone' => 'required',
             ],
             [
@@ -132,6 +133,7 @@ class UsersController extends Controller
                 'email' => 'Email',
                 'password' => 'Mật khẩu',
                 'phone' => 'Số điện thoại',
+                'password_confirmation' => 'Xác nhận mật khẩu',
             ]
         );
 
@@ -155,6 +157,27 @@ class UsersController extends Controller
         return redirect()->route('admin.users.list');
     }
 
+
+    public function updateStatus(Request $request, $id, FlasherInterface $flasher)
+    {
+        $user = User::findOrFail($id);
+
+        $status = $request->status;
+        $note = $request->note;
+
+        $saveUser = $user->update([
+            'status' => $status,
+            'note' => $note
+        ]);
+
+        if ($saveUser) {
+            $flasher->addFlash('success', 'Cập nhật trạng thái thành công', [], 'Thành công');
+        } else {
+            $flasher->addError('Đã xảy ra lỗi khi cập nhật trạng thái người dùng. Vui lòng thử lại.', [], 'Thất bại');
+        }
+
+        return redirect()->route('admin.users.list');
+    }
     /**
      * Remove the specified resource from storage.
      */

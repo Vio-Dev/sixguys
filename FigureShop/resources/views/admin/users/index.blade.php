@@ -87,18 +87,52 @@
                             </td>
 
 
-                            <td class="px-6 py-4">
-                                @if ($user->status == 0)
-                                    <div
-                                        class="bg-green-200 text-green-600 dark:bg-green-700 dark:text-green-100 rounded-full w-full p-2 text-xs text-center">
-                                        Đang
-                                        hoạt động</div>
-                                @else
-                                    <div
-                                        class="bg-red-200 text-red-600 dark:bg-red-700 dark:text-red-100 rounded-full w-full p-2 text-xs text-center">
-                                        Đã
-                                        khóa</div>
-                                @endif
+                            <td class="px-6 py-4 flex justify-center">
+                                <form action={{ route('admin.users.updateStatus', $user->id) }} method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" id="status" value="{{ $user->status }}"
+                                        onchange="updateStatus(this)">
+                                        <option value="actived" {{ $user->status == 'actived' ? 'selected' : '' }}>Hoạt động
+                                        </option>
+                                        <option value="banned" {{ $user->status == 'banned' ? 'selected' : '' }}>Khóa
+                                        </option>
+                                    </select>
+                                    <input type="hidden" name="note" value="{{ $user->note }}" id="note">
+                                    <script>
+                                        function updateStatus(select) {
+                                            Swal.fire({
+                                                title: 'Bạn có chắc chắn muốn thay đổi trạng thái?',
+                                                text: "Hành động này không thể hoàn tác!",
+                                                icon: 'warning',
+                                                input: "text",
+                                                inputAttributes: {
+                                                    autocapitalize: "off",
+                                                    name: 'noteSelect',
+                                                },
+
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Thay đổi',
+                                                cancelButtonText: 'Hủy'
+
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // Nếu người dùng xác nhận, submit form
+                                                    const form = select.closest('form');
+                                                    const rawNote = result.value;
+                                                    const note = document.getElementById('note');
+                                                    note.value = rawNote;
+                                                    form.submit();
+                                                } else {
+                                                    // Nếu người dùng hủy, reset lại giá trị của select
+                                                    select.value = select.getAttribute('value');
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                </form>
                             </td>
                             <td class="px-6 py-4">
                                 {{ $user->note }}
