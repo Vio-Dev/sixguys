@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
 
 //admin routes
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('categories')->name('categories.')->group(function () {
@@ -54,6 +54,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Route::get('{id}', [UsersController::class, 'show'])->name('show');
         Route::get('{id}/edit', [UsersController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [UsersController::class, 'update'])->name('update');
+        Route::patch('update/{id}', [UsersController::class, 'updateStatus'])->name('updateStatus');
         Route::delete('delete/{id}', [UsersController::class, 'destroy'])->name('destroy');
     });
 
@@ -69,5 +70,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // user routes
+
 
 require __DIR__ . '/auth.php';
