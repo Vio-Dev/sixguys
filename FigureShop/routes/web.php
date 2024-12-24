@@ -54,6 +54,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
         // Route::get('{id}', [UsersController::class, 'show'])->name('show');
         Route::get('{id}/edit', [UsersController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [UsersController::class, 'update'])->name('update');
+        Route::patch('update/{id}', [UsersController::class, 'updateStatus'])->name('updateStatus');
         Route::delete('delete/{id}', [UsersController::class, 'destroy'])->name('destroy');
     });
 
