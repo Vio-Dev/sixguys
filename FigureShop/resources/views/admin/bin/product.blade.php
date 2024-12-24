@@ -13,17 +13,11 @@
 @section('content')
 
     <div>
-        <div class="py-2 ">
-            <h2 class="text-[24px] font-bold">Danh sách sản phẩm</h2>
-        </div>
+
         <div class="py-4">
-            <a href="{{ route('admin.products.create') }}"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Tạo mới sản phẩm</a>
-        </div>
-        <div class="py-4">
-            <form action="{{ route('admin.products.search') }}" method="POST">
+            <form action="">
                 @csrf
-                <input type="text" name="search" placeholder="Tìm kiếm sản phẩm"
+                <input type="text" placeholder="Tìm kiếm sản phẩm"
                     class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
             </form>
@@ -83,10 +77,10 @@
                                     {{ format_currency($product->price) }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $product->inStock }} {{ $product->unit }}
+                                    {{ $product->inStock }} - {{ $product->unit }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $product->hasSold }} {{ $product->unit }}
+                                    {{ $product->hasSold }} - {{ $product->unit }}
                                 </td>
                                 <td class="">
                                     @foreach ($status as $key => $value)
@@ -102,9 +96,34 @@
                                     {{ $product->category->name }}
                                 </td>
                                 <td class="px-6 py-4 ">
-                                    <a href="{{ route('admin.products.edit', $product->id) }}"
-                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
-                                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                    <form action="{{ route('admin.bin.products.update', $product->id) }}" method="POST"
+                                        class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="confirmUpdate(this)"
+                                            class="font-medium text-blue-600 dark:text-red-500 hover:underline">Khôi
+                                            phục</button>
+                                        <script>
+                                            function confirmUpdate(button) {
+                                                Swal.fire({
+                                                    title: 'Bạn có chắc chắn muốn khôi phục?',
+                                                    text: "Hành động này không thể hoàn tác!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Xóa',
+                                                    cancelButtonText: 'Hủy'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Nếu người dùng xác nhận, submit form
+                                                        button.closest('form').submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    </form>
+                                    <form action="{{ route('admin.bin.products.destroy', $product->id) }}" method="POST"
                                         class="inline">
                                         @csrf
                                         @method('DELETE')

@@ -200,4 +200,13 @@ class UsersController extends Controller
 
         return redirect()->route('admin.users.list');
     }
+
+     public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+         $users = User::where('name', 'LIKE', "%{$searchTerm}%")
+                          ->where('isDeleted', 0)
+                          ->paginate(10);
+        return view("admin.users.index", compact("users"));
+    }
 }
