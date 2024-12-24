@@ -6,11 +6,10 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BinController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -24,7 +23,7 @@ Route::middleware('auth')->group(function () {
 
 //admin routes
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('categories')->name('categories.')->group(function () {
@@ -35,6 +34,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('{id}/edit', [CategoriesController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [CategoriesController::class, 'update'])->name('update');
         Route::delete('delete/{id}', [CategoriesController::class, 'destroy'])->name('destroy');
+        Route::post('list', [CategoriesController::class, 'search'])->name('search');
     });
 
     Route::prefix('products')->name('products.')->group(function () {
@@ -45,6 +45,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('{id}/edit', [ProductsController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [ProductsController::class, 'update'])->name('update');
         Route::delete('delete/{id}', [ProductsController::class, 'destroy'])->name('destroy');
+        Route::post('list', [ProductsController::class, 'search'])->name('search');
     });
 
     Route::prefix('users')->name('users.')->group(function () {
@@ -54,7 +55,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Route::get('{id}', [UsersController::class, 'show'])->name('show');
         Route::get('{id}/edit', [UsersController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [UsersController::class, 'update'])->name('update');
+        Route::patch('update/{id}', [UsersController::class, 'updateStatus'])->name('updateStatus');
         Route::delete('delete/{id}', [UsersController::class, 'destroy'])->name('destroy');
+        Route::post('list', [UsersController::class, 'search'])->name('search');
     });
 
     Route::prefix('blogs')->name('blogs.')->group(function () {
@@ -65,9 +68,36 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('{id}/edit', [BlogsController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [BlogsController::class, 'update'])->name('update');
         Route::delete('delete/{id}', [BlogsController::class, 'destroy'])->name('destroy');
+        Route::post('list', [BlogsController::class, 'search'])->name('search');
+    });
+    Route::prefix('bin')->name('bin.')->group(function () {
+        Route::prefix('category')->name('category.')->group(function () {
+            Route::get('list', [BinController::class, 'category'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyCategory'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateCategory'])->name('update');
+        });
+        Route::prefix('blogs')->name('blogs.')->group(function () {
+            Route::get('list', [BinController::class, 'blog'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyBlogs'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateBlogs'])->name('update');
+        });
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('list', [BinController::class, 'product'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyProducts'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
+        });
+
+
     });
 });
 
 // user routes
+Route::get('/', function () {
+    return view('website.index');
+})->name('home');
+
+
+
+
 
 require __DIR__ . '/auth.php';

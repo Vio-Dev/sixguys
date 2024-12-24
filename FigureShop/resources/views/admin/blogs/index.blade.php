@@ -18,9 +18,9 @@
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Tạo mới bài đăng</a>
     </div>
     <div class="py-4">
-        <form action="">
+        <form action="{{ route('admin.blogs.search') }}" method="POST">
             @csrf
-            <input type="text" placeholder="Tìm kiếm bài đăng"
+            <input type="text" name="search" placeholder="Tìm kiếm bài đăng"
                 class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
             <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
         </form>
@@ -41,13 +41,16 @@
             <tbody>
                 @forelse ($blogs as $blog)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
-                        <td scope="row"
-                            class=" flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <img src="{{ asset($blog->thumbnail) }}" class=" object-cover w-15 h-15"
-                                alt="{{ $blog->name }}">
-                            {{ $blog->name }}
-
-                        </td>
+                        <th scope="row"
+                            class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <span>
+                                <img src="{{ asset($blog->thumbnail) }}" alt="{{ $blog->name }}"
+                                    class="h-20 w-20 object-cover">
+                            </span>
+                            <span>
+                                {{ $blog->name }}
+                            </span>
+                        </th>
                         <td scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
                             {{ $blog->shortDecription }}

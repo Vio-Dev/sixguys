@@ -21,9 +21,9 @@
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Tạo mới sản phẩm</a>
         </div>
         <div class="py-4">
-            <form action="">
+            <form action="{{ route('admin.products.search') }}" method="POST">
                 @csrf
-                <input type="text" placeholder="Tìm kiếm sản phẩm"
+                <input type="text" name="search" placeholder="Tìm kiếm sản phẩm"
                     class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
             </form>
