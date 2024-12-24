@@ -64,7 +64,7 @@ class UsersController extends Controller
 
         $input = $request->only(['name', 'email', 'password', 'address', 'phone']);
         $input['password'] = bcrypt($input['password']);
-        $input['isDeleted'] = 1;
+        $input['isDeleted'] = 0;
         $input['status'] = "actived";
 
         $user = User::create($input);
@@ -161,7 +161,6 @@ class UsersController extends Controller
     public function updateStatus(Request $request, $id, FlasherInterface $flasher)
     {
         $user = User::findOrFail($id);
-
         $status = $request->status;
         $note = $request->note;
 
