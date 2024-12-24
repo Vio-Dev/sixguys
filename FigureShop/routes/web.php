@@ -10,8 +10,8 @@ use App\Http\Controllers\BinController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('website.index');
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

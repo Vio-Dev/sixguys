@@ -92,15 +92,15 @@
                                     @csrf
                                     @method('PATCH')
                                     <select name="status" id="status" value="{{ $user->status }}"
-                                        onchange="updateStatus(this)">
+                                        onchange="updateStatus(this,{{ $user->id }})">
                                         <option value="actived" {{ $user->status == 'actived' ? 'selected' : '' }}>Hoạt động
                                         </option>
                                         <option value="banned" {{ $user->status == 'banned' ? 'selected' : '' }}>Khóa
                                         </option>
                                     </select>
-                                    <input type="hidden" name="note" value="{{ $user->note }}" id="note">
+                                    <input type="hidden" name="note" id="note_{{ $user->id }}">
                                     <script>
-                                        function updateStatus(select) {
+                                        function updateStatus(select, userId) {
                                             Swal.fire({
                                                 title: 'Bạn có chắc chắn muốn thay đổi trạng thái?',
                                                 text: "Hành động này không thể hoàn tác!",
@@ -120,10 +120,10 @@
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     // Nếu người dùng xác nhận, submit form
-                                                    const form = select.closest('form');
-                                                    const rawNote = result.value;
-                                                    const note = document.getElementById('note');
-                                                    note.value = rawNote;
+                                                    var form = select.closest('form');
+                                                    var rawNote = result.value;
+                                                    var noteInput = document.getElementById(`note_${userId}`);
+                                                    noteInput.value = rawNote;
                                                     form.submit();
                                                 } else {
                                                     // Nếu người dùng hủy, reset lại giá trị của select
