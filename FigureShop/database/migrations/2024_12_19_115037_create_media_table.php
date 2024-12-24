@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->string('url_img', 200);
+            $table->string('alt_img', 200)->nullable();
+            $table->integer('number')->default(0);
             $table->timestamps();
+
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('inStock');
             $table->integer('unit');
-            $table->interger('discount')->nullable();
-            $table->interger('hasSold')->default(0);
+            $table->integer('discount')->default(0);
+            $table->integer('hasSold')->default(0);
             $table->text('description');
             $table->text('shortDescription');
             $table->string('thumbnail');
