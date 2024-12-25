@@ -48,7 +48,7 @@
             <p class="text-xs">Giỏ hàng</p>
         </a>
 
-        <a href="account-page.html" class="relative flex cursor-pointer flex-col items-center justify-center">
+        <a href="{{ route('ho-so.ho-so') }}" class="relative flex cursor-pointer flex-col items-center justify-center">
             <span class="absolute bottom-[33px] right-1 flex h-2 w-2">
                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
                 <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
