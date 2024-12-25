@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_variant_id')->nullable();
             $table->integer('quantity');
             $table->decimal('price', 11, 2);
             $table->boolean("isDeleted")->default(false);
