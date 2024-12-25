@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BinController;
 use App\Http\Controllers\Website\profileControllers;
 use App\Http\Controllers\Website\CartController;
+use App\Http\Controllers\Website\WebsiteController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -88,15 +90,12 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('delete/{id}', [BinController::class, 'destroyProducts'])->name('destroy');
             Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
         });
-
-
     });
 });
 
 // user routes
-Route::get('/', function () {
-    return view('website.index');
-})->name('home');
+Route::get('/', [WebsiteController::class, 'index'])->name('home');
+Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 
 
 
