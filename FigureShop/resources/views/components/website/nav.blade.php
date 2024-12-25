@@ -23,15 +23,47 @@
                 href="contact-us.html">Liên hệ</a>
         </div>
 
-        <div class="ml-auto flex gap-4 px-5">
-            <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
-                href={{ route('login') }}>Đăng nhập</a>
+        @if (Auth::check())
+            <div class="ml-auto flex gap-4 px-5">
+                <div x-data="{ open: false }" class="relative">
+                    <!-- Button để mở/đóng dropdown -->
+                    <button class="text-white font-bold focus:outline-none" @click="open = !open">
+                        Xin chào, {{ Auth()->user()->name }}
+                    </button>
 
-            <span class="text-white">&#124;</span>
+                    <!-- Dropdown menu -->
+                    <div x-show="open" @click.outside="open = false" x-transition
+                        class="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded shadow-lg z-10">
+                        <a href="{{ route('ho-so.ho-so') }}"
+                            class="block px-4 py-2 text-sm duration-100 hover:bg-gray-700 hover:text-yellow-400">
+                            Hồ sơ
+                        </a>
+                        <a class="block px-4 py-2 text-sm duration-100 hover:bg-gray-700 hover:text-yellow-400">
+                            <form action="{{ route('ho-so.dang-xuat') }}" method="POST">
+                                @csrf
+                                <button class="flex items-center gap-2 font-medium active:text-violet-900">
 
-            <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
-                href={{ route('register') }}>Đăng ký</a>
-        </div>
+                                    Đăng xuất
+                                </button>
+
+                            </form>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        @else
+            <div class="ml-auto flex gap-4 px-5">
+                <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
+                    href={{ route('login') }}>Đăng nhập</a>
+
+                <span class="text-white">&#124;</span>
+
+                <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
+                    href={{ route('register') }}>Đăng ký</a>
+            </div>
+        @endif
+
     </div>
 </nav>
 <!-- /Nav bar -->

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Flasher\Prime\FlasherInterface;
@@ -13,16 +14,19 @@ class profileControllers extends Controller
 {
    public function index()
     {
+
         $user = Auth::user();
         return view('website.profile.index', compact('user'));
     }
     public function order()
     {
+
         $user = Auth::user();
         return view('website.profile.order', compact('user'));
     }
     public function wishlist()
     {
+
         $user = Auth::user();
         return view('website.profile.wishlist', compact('user'));
 
