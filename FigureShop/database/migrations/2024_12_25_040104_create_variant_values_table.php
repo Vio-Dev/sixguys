@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('value');
             $table->timestamps();
 
+            $table->boolean("isDeleted")->default(false);
             $table->foreign('variant_id')->references('id')->on('variants')->onDelete('cascade');
         });
     }
