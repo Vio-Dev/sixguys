@@ -99,4 +99,12 @@ class CategoriesController extends Controller
         // Chuyển hướng về danh sách danh mục
         return redirect()->route('admin.categories.list');
     }
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+         $categories = Category::where('name', 'LIKE', "%{$searchTerm}%")
+                          ->where('isDeleted', 0)
+                          ->paginate(10);
+        return view("admin.categories.index", compact("categories"));
+    }
 }

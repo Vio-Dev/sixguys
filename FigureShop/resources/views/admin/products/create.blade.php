@@ -100,13 +100,15 @@
                 <div class="grid grid-cols-1 gap-4">
                     <div class="w-full">
                         <label for="name" class="block font-medium">Ảnh đại diện</label>
-                        <input type="file" name="thumbnail" id="image"
+                        <input type="file" name="thumbnail" id="image" onchange="previewPostImages()"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <div id="postImagesPreview" class="flex gap-2 mt-2"></div>
                     </div>
                     <div>
                         <label for="name" class="block font-medium">Ảnh sản phẩm</label>
-                        <input type="file" name="images[]" id="image" multiple
+                        <input type="file" name="images[]" id="image" multiple onchange="previewProductsImages()"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <div id="ProductsImage" class="flex gap-2 mt-2"></div>
                     </div>
 
                 </div>
@@ -145,4 +147,82 @@
             </div>
         </form>
     </div>
+    <script>
+        // Preview a single featured image
+        function previewCoverImage() {
+            const file = document.querySelector('input[name="featured_image"]').files[0]; // Get the selected file
+            const previewContainer = document.getElementById('coverImagePreview'); // Get the preview container
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onloadend = function() {
+                    // Create an img element to display the preview
+                    let imgElement = document.createElement('img');
+                    imgElement.src = reader.result; // Set the image source
+                    imgElement.style.width = '150px';
+                    imgElement.style.height = 'auto';
+                    imgElement.style.objectFit = 'cover';
+                    imgElement.classList.add('rounded');
+
+                    previewContainer.innerHTML = ''; // Clear old content
+                    previewContainer.appendChild(imgElement); // Add the image to the preview
+                };
+
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        }
+
+        // Preview multiple post images
+        function previewPostImages() {
+            const files = document.querySelector('input[name="thumbnail"]').files; // Get the selected files
+            const preview = document.getElementById('postImagesPreview'); // Get the preview container
+            preview.innerHTML = ''; // Clear old previews
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onloadend = function() {
+                    // Create an img element to display each preview
+                    const img = document.createElement('img');
+                    img.src = reader.result;
+                    img.alt = "Preview Post Image";
+                    img.width = 100; // Set a fixed width for each preview
+                    img.classList.add('rounded-md', 'border', 'border-gray-300', 'shadow-sm', 'p-1');
+                    preview.appendChild(img); // Add the image to the preview
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file); // Read the file as a data URL
+                }
+            }
+        }
+
+        function previewProductsImages() {
+            const files = document.querySelector('input[name="images[]"]').files; // Lấy danh sách file
+            const previewContainer = document.getElementById('ProductsImage'); // Container preview
+            previewContainer.innerHTML = ''; // Xóa nội dung cũ
+
+            // Duyệt qua từng file
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onloadend = function() {
+                    // Tạo phần tử img để hiển thị preview
+                    const img = document.createElement('img');
+                    img.src = reader.result; // Set src từ file đã đọc
+                    img.alt = "Preview Image";
+                    img.width = 100; // Đặt chiều rộng cố định
+                    img.classList.add('rounded-md', 'border', 'border-gray-300', 'shadow-sm', 'p-1');
+                    previewContainer.appendChild(img); // Thêm vào container
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file); // Đọc file
+                }
+            }
+        }
+    </script>
 @endsection
