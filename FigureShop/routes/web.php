@@ -8,6 +8,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BinController;
 use App\Http\Controllers\Website\profileControllers;
+use App\Http\Controllers\Website\CartController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -101,7 +102,7 @@ Route::get('/', function () {
 
 
 
-
+  Route::get('/cart', [CartController::class, 'index'])->name('cart');
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
@@ -109,5 +110,6 @@ Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () 
     Route::get('/yeu-thich', [ProfileControllers::class, 'wishlist'])->name('yeu-thich');
     Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
 });
+
 
 require __DIR__ . '/auth.php';

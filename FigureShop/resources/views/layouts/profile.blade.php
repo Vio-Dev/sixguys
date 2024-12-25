@@ -25,7 +25,7 @@
     </div>
     <section class="container mx-auto w-full flex-grow max-w-[1200px] border-b py-5 lg:flex lg:flex-row lg:py-10">
         <!-- sidebar  -->
-        @include('components.website.sidebar')
+        @include('components.website.sidebar', ['user' => $user])
         <div class="container">
 
             <main>

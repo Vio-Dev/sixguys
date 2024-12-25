@@ -1,11 +1,11 @@
   <section class="hidden w-[300px] flex-shrink-0 px-4 lg:block">
       <div class="border-b py-5">
           <div class="flex items-center">
-              <img width="40px" height="40px" class="rounded-full object-cover" src="./assets/images/avatar-photo.png"
-                  alt="Red woman portrait" />
-              <div class="ml-5">
-                  <p class="font-medium text-gray-500">Hello,</p>
-                  <p class="font-bold">Sarah Johnson</p>
+
+              <div>
+                  <p class="font-medium text-gray-500">Xin chào,</p>
+                  {{-- <p class="font-medium text-gray-500">{{ $user->email }}</p> --}}
+                  <p class="font-bold">{{ $user->name }}</p>
               </div>
           </div>
       </div>
