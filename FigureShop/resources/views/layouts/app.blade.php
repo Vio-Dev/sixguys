@@ -26,15 +26,16 @@
     </div>
 
     <div class="container">
+
+        <main>
+            @yield('content')
+        </main>
         <div>
-            <main>
-                @yield('content')
-            </main>
-            <div>
-                @include('components.website.footer')
-            </div>
+            @include('components.website.footer')
         </div>
-        src
+
+
+    </div>
 </body>
 
 </html>
