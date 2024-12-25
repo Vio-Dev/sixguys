@@ -10,6 +10,7 @@ use App\Http\Controllers\BinController;
 use App\Http\Controllers\Website\profileControllers;
 use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\WebsiteController;
+use App\Http\Controllers\Website\checkoutController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -103,6 +104,10 @@ Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name(
 
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
+
+  Route::get('/gio-hang', [CartController::class, 'index'])->middleware(['auth'])->name('cart');
+  Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
+
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
