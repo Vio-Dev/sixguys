@@ -16,16 +16,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-data="{ desktopMenuOpen: false, mobileMenuOpen: false }">
     <div>
         @include('components.website.header')
     </div>
     <div>
-        @include('components.website.nav')
+
+        @include('components.website.nav', ['categories' => $categories])
     </div>
 
     <div class="container">
-        @include('components.website.banner')
         <div>
             <main>
                 @yield('content')

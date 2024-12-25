@@ -3,8 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
-
-
+    @include('components.website.banner')
     <section class="container mx-auto my-8 flex flex-col justify-center gap-3 lg:flex-row">
         <!-- 1 -->
 
