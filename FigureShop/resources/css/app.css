@@ -52,3 +52,37 @@ swiper-slide img {
     stroke-dasharray: 125.6;
     transform: rotate(-90deg);
 }
+
+.detailSwiper_1 {
+    width: 100%;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.swiper__slide {
+    background-size: cover;
+    background-position: center;
+}
+
+.detailSwiper_2 {
+    height: 20%;
+    box-sizing: border-box;
+    padding: 10px 0;
+}
+
+.detailSwiper_2 swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4;
+}
+
+.detailSwiper_2 .swiper-slide-thumb-active {
+    opacity: 1;
+}
+
+.swiper__slide .swiper__slide--img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -26,6 +26,13 @@ class WebsiteController extends Controller
         return view('website.products', compact('categories', 'products'));
     }
 
+    public function productDetail($id)
+    {
+        $categories = Category::where('isDeleted', 0)->get();
+        $product = Product::find($id);
+        return view('website.detail', compact('categories', 'product'));
+    }
+
     // public function about()
     // {
     //     return view('website.about');
