@@ -21,7 +21,6 @@
         @include('components.website.header')
     </div>
     <div>
-
         @include('components.website.nav', ['categories' => $categories])
     </div>
 
@@ -34,8 +33,8 @@
             @include('components.website.footer')
         </div>
 
-
     </div>
+
 </body>
 
 </html>

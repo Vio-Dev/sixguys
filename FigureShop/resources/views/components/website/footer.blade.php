@@ -8,17 +8,7 @@
             Chuyên cung cấp Decor Gaming <br />
 
         </p>
-        <div class="mt-10 flex gap-3">
-            <a href="https://github.com/bbulakh">
-                <img class="h-5 w-5 cursor-pointer" src="./assets/images/github.svg" alt="github icon" />
-            </a>
-            <a href="https://t.me/b_bulakh">
-                <img class="h-5 w-5 cursor-pointer" src="./assets/images/telegram.svg" alt="telegram icon" />
-            </a>
-            <a href="https://www.linkedin.com/in/bogdan-bulakh-393284190/">
-                <img class="h-5 w-5 cursor-pointer" src="./assets/images/linkedin.svg" alt="twitter icon" />
-            </a>
-        </div>
+
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">

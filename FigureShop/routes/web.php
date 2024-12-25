@@ -97,13 +97,17 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
 // user routes
 Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
+Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
 
 
 
 
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
 
   Route::get('/gio-hang', [CartController::class, 'index'])->middleware(['auth'])->name('cart');
   Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
+
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
