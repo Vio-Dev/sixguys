@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('product_id'); // Liên kết sản phẩm
+            $table->unsignedBigInteger('variant_value_id'); // Liên kết giá trị biến thể
+            $table->integer('price'); // Giá cho biến thể
+            $table->integer('inStock'); // Tồn kho
+            $table->integer('hasSold')->default(0);
+            $table->string("status")->default("active");
+            $table->boolean("isDeleted")->default(false);
             $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('variant_value_id')->references('id')->on('variant_values')->onDelete('cascade');
         });
     }
 
