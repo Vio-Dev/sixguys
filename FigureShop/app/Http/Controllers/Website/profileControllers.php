@@ -23,8 +23,8 @@ class profileControllers extends Controller
     }
     public function wishlist()
     {
-
-        return view('website.profile.wishlist');
+        $user = Auth::user();
+        return view('website.profile.wishlist', compact('user'));
 
     }
     public function logout(Request $request, FlasherInterface $flasher): RedirectResponse
