@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dateTime('order_date');
             $table->decimal('total', 11, 2);
             $table->string('status', 100);
+            $table->string('payment_method', 100);
             $table->boolean("isDeleted")->default(false);
             $table->timestamps();
 
