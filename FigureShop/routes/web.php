@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BinController;
+use App\Http\Controllers\VariantController;
 use App\Http\Controllers\Website\profileControllers;
 use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\WebsiteController;
@@ -92,6 +93,16 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
         });
     });
+    Route::prefix('variants')->name('variants.')->group(function () {
+        Route::get('list', [VariantController::class, 'index'])->name('list');
+        Route::get('create', [VariantController::class, 'create'])->name('create');
+        Route::post('/', [VariantController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [VariantController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [VariantController::class, 'update'])->name('update');
+        Route::delete('delete/{id}', [VariantController::class, 'destroy'])->name('destroy');
+        Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
+        Route::post('list', [VariantController::class, 'search'])->name('search');
+    });
 });
 
 // user routes
@@ -105,8 +116,8 @@ Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name(
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 
-  Route::get('/gio-hang', [CartController::class, 'index'])->middleware(['auth'])->name('cart');
-  Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
+Route::get('/gio-hang', [CartController::class, 'index'])->middleware(['auth'])->name('cart');
+Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
 
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
