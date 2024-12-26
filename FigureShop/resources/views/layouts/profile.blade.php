@@ -21,7 +21,7 @@
         @include('components.website.header')
     </div>
     <div>
-        @include('components.website.nav', ['categories' => $categories])
+        @include('components.website.nav')
     </div>
     <section class="container mx-auto w-full flex-grow max-w-[1200px] border-b py-5 lg:flex lg:flex-row lg:py-10">
         <!-- sidebar  -->

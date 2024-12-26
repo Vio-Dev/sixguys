@@ -28,10 +28,3 @@ if (!function_exists('format_currency')) {
         }
     }
 }
-
-if (!function_exists('cartService')) {
-    function cartService()
-    {
-        return app('CartService');
-    }
-}

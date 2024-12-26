@@ -120,6 +120,7 @@ Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function (
     Route::post('/remove', [CartController::class, 'remove'])->name('remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('clear');
 });
+
 Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
 
 
