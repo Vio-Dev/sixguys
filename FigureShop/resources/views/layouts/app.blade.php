@@ -21,7 +21,7 @@
         @include('components.website.header')
     </div>
     <div>
-        @include('components.website.nav', ['categories' => $categories])
+        @include('components.website.nav')
     </div>
 
     <div class="container">

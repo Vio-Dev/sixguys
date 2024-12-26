@@ -1,24 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Website;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Services\CartService;
 use Illuminate\Http\Request;
-
-
 
 class CartController extends Controller
 {
+
     public function index()
     {
-
-        return view('website.cart.index');
+        return view('website.cart');
     }
 
-    public function add(Request $request)
-    {
-        dd($request->all());
-    }
+    public function add(Request $request) {}
 
     public function update(Request $request) {}
 
