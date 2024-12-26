@@ -19,18 +19,14 @@ class WebsiteController extends Controller
     }
     public function product()
     {
-
-        $categories = Category::where('isDeleted', 0)->get();
-        $products = Product::where('isDeleted', 0)->get();
-
-        return view('website.products', compact('categories', 'products'));
+        $products = Product::where('isDeleted', 0)->where('status', 'public')->get();
+        return view('website.product.index', compact('products'));
     }
 
     public function productDetail($id)
     {
-        $categories = Category::where('isDeleted', 0)->get();
-        $product = Product::find($id);
-        return view('website.detail', compact('categories', 'product'));
+        $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->first();
+        return view('website.product.detail', compact('product'));
     }
 
     // public function about()

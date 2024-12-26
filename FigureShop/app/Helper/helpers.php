@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Session;
+
 if (!function_exists('format_currency')) {
     /**
      * Format a number into currency format.
@@ -24,5 +26,12 @@ if (!function_exists('format_currency')) {
             default:
                 return $formatted . ' ₫'; // Default to VND
         }
+    }
+}
+
+if (!function_exists('cartService')) {
+    function cartService()
+    {
+        return app('CartService');
     }
 }
