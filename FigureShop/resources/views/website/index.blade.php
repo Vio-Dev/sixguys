@@ -3,8 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
-
-
+    @include('components.website.banner')
     <section class="container mx-auto my-8 flex flex-col justify-center gap-3 lg:flex-row">
         <!-- 1 -->
 
@@ -18,9 +17,9 @@
             </div>
 
             <div class="ml-6 flex flex-col justify-center">
-                <h3 class="text-left text-xs font-bold lg:text-sm">Free Delivery</h3>
+                <h3 class="text-left text-xs font-bold lg:text-sm">Giao hàng miễn phí</h3>
                 <p class="text-light text-center text-xs lg:text-left lg:text-sm">
-                    Orders from $200
+                    Đơn hàng từ $200
                 </p>
             </div>
         </div>
@@ -37,9 +36,9 @@
             </div>
 
             <div class="ml-6 flex flex-col justify-center">
-                <h3 class="text-left text-xs font-bold lg:text-sm">Money returns</h3>
+                <h3 class="text-left text-xs font-bold lg:text-sm">Trả lại tiền</h3>
                 <p class="text-light text-left text-xs lg:text-sm">
-                    30 Days guarantee
+                    Bảo hành 30 ngày
                 </p>
             </div>
         </div>
@@ -56,9 +55,9 @@
             </div>
 
             <div class="ml-6 flex flex-col justify-center">
-                <h3 class="text-left text-xs font-bold lg:text-sm">24/7 Supports</h3>
+                <h3 class="text-left text-xs font-bold lg:text-sm">Hỗ trợ 24/7</h3>
                 <p class="text-light text-left text-xs lg:text-sm">
-                    Consumer support
+                    Hỗ trợ người tiêu dùng
                 </p>
             </div>
         </div>

@@ -8,16 +8,17 @@ use App\Models\Post;
 use App\Models\Product;
 use App\Models\Media;
 use Flasher\Prime\FlasherInterface;
+
 class BinController extends Controller
 {
     // category
 
     public function category()
     {
-          $categories = Category::where('isDeleted', 1)
+        $binCategories = Category::where('isDeleted', 1)
             ->orderBy('created_at', 'DESC')
             ->paginate(5);
-        return view('admin.bin.category', compact('categories'));
+        return view('admin.bin.category', compact('binCategories'));
     }
 
     public function destroyCategory(string $id, FlasherInterface $flasher)
@@ -27,8 +28,7 @@ class BinController extends Controller
 
         // xóa danh mục
         if ($category->delete()) {
-             $flasher->addFlash('success', 'Danh mục xóa thành công!', [], 'Thành công');
-
+            $flasher->addFlash('success', 'Danh mục xóa thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
         }
@@ -37,7 +37,7 @@ class BinController extends Controller
 
     public function updateCategory(string $id, FlasherInterface $flasher)
     {
-         // Tìm danh mục theo ID
+        // Tìm danh mục theo ID
         $category = Category::findOrFail($id);
 
         // Cập nhật isDeleted thành 1
@@ -60,15 +60,14 @@ class BinController extends Controller
             ->paginate(5);
         return view('admin.bin.blog', compact('blogs'));
     }
-     public function destroyBlogs(string $id, FlasherInterface $flasher)
+    public function destroyBlogs(string $id, FlasherInterface $flasher)
     {
         // Tìm danh mục theo ID
         $category = Post::findOrFail($id);
 
         // xóa danh mục
         if ($category->delete()) {
-             $flasher->addFlash('success', 'Bài đăng xóa thành công!', [], 'Thành công');
-
+            $flasher->addFlash('success', 'Bài đăng xóa thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
         }
@@ -77,7 +76,7 @@ class BinController extends Controller
 
     public function updateBlogs(string $id, FlasherInterface $flasher)
     {
-         // Tìm danh mục theo ID
+        // Tìm danh mục theo ID
         $category = Post::findOrFail($id);
 
         // Cập nhật isDeleted thành 1
@@ -98,7 +97,7 @@ class BinController extends Controller
             ->paginate(5);
         return view('admin.bin.product', compact('products'));
     }
-     public function destroyProducts(string $id, FlasherInterface $flasher)
+    public function destroyProducts(string $id, FlasherInterface $flasher)
     {
         // Tìm danh mục theo ID
         $product = Product::findOrFail($id);
@@ -109,8 +108,7 @@ class BinController extends Controller
             $item->delete();
         }
         if ($product->delete()) {
-             $flasher->addFlash('success', 'Sản phẩm xóa thành công!', [], 'Thành công');
-
+            $flasher->addFlash('success', 'Sản phẩm xóa thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
         }
@@ -119,7 +117,7 @@ class BinController extends Controller
 
     public function updateProducts(string $id, FlasherInterface $flasher)
     {
-         // Tìm danh mục theo ID
+        // Tìm danh mục theo ID
         $category = Product::findOrFail($id);
 
         // Cập nhật isDeleted thành 1

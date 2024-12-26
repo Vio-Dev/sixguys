@@ -7,6 +7,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BinController;
+use App\Http\Controllers\VariantController;
+use App\Http\Controllers\Website\profileControllers;
+use App\Http\Controllers\Website\CartController;
+use App\Http\Controllers\Website\WebsiteController;
+use App\Http\Controllers\Website\checkoutController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -86,18 +92,44 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('delete/{id}', [BinController::class, 'destroyProducts'])->name('destroy');
             Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
         });
-
-
+    });
+    Route::prefix('variants')->name('variants.')->group(function () {
+        Route::get('list', [VariantController::class, 'index'])->name('list');
+        Route::get('create', [VariantController::class, 'create'])->name('create');
+        Route::post('/', [VariantController::class, 'store'])->name('store');
+        Route::get('{id}/edit', [VariantController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [VariantController::class, 'update'])->name('update');
+        Route::delete('delete/{id}', [VariantController::class, 'destroy'])->name('destroy');
+        Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
+        Route::post('list', [VariantController::class, 'search'])->name('search');
     });
 });
 
 // user routes
-Route::get('/', function () {
-    return view('website.index');
-})->name('home');
+Route::get('/', [WebsiteController::class, 'index'])->name('home');
+Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
+Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
 
 
 
+
+Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/update', [CartController::class, 'update'])->name('update');
+    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
+    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+});
+
+Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
+
+
+Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
+    Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
+    Route::get('/don-hang', [ProfileControllers::class, 'order'])->name('don-hang');
+    Route::get('/yeu-thich', [ProfileControllers::class, 'wishlist'])->name('yeu-thich');
+    Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
+});
 
 
 require __DIR__ . '/auth.php';

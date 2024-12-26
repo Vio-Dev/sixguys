@@ -16,7 +16,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-data="{ desktopMenuOpen: false, mobileMenuOpen: false }">
     <div>
         @include('components.website.header')
     </div>
@@ -25,16 +25,16 @@
     </div>
 
     <div class="container">
-        @include('components.website.banner')
+
+        <main>
+            @yield('content')
+        </main>
         <div>
-            <main>
-                @yield('content')
-            </main>
-            <div>
-                @include('components.website.footer')
-            </div>
+            @include('components.website.footer')
         </div>
-        src
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

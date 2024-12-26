@@ -14,7 +14,6 @@
                     class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
             </form>
-
         </div>
     </div>
     <div>
@@ -32,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($categories as $category)
+                @forelse ($binCategories as $category)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $category->name }}
@@ -102,7 +101,7 @@
 
         <!-- Phân trang -->
         <div class="mt-4 p-3">
-            {{ $categories->links('pagination::tailwind') }}
+            {{ $binCategories->links('pagination::tailwind') }}
         </div>
     </div>
 

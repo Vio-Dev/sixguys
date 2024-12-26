@@ -17,6 +17,10 @@ export default {
             container: {
                 center: true,
             },
+            backgroundColor: {
+                "custom-purple": "#4c1c94",
+                "custom-purple-light": "#6c48b1",
+            },
         },
     },
 
