@@ -11,15 +11,18 @@ class CategoriesController extends Controller
     public function index()
     {
         // Lọc các danh mục có isDeleted = 0 và phân trang
-        $categories = Category::where('isDeleted', 0)
+        $adminCategories = Category::where('isDeleted', 0)
             ->orderBy('created_at', 'DESC')
-            ->paginate(5);
-        return view('admin.categories.index', compact('categories'));
+            ->paginate(10);
+        return view('admin.categories.index', compact('adminCategories'));
     }
 
     public function create()
     {
-        return view('admin.categories.create');
+        $subCategories = Category::where('isDeleted', 0)
+            ->whereNull('parent_id')
+            ->get();
+        return view('admin.categories.create', compact('subCategories'));
     }
 
     public function store(Request $request, FlasherInterface $flasher)
@@ -38,10 +41,11 @@ class CategoriesController extends Controller
             ]
         );
 
-        $category = new Category;
-        $category->name = $request->name;
+        $input = $request->all();
 
-        if ($category->save()) {
+        $category = Category::create($input);
+
+        if ($category) {
             $flasher->addFlash('success', 'Thêm thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi Vui lòng thử lại.', [], 'Thất bại');
@@ -53,7 +57,10 @@ class CategoriesController extends Controller
     public function edit(string $id)
     {
         $category = Category::findOrFail($id);
-        return view('admin.categories.update', compact('category'));
+        $subCategories = Category::where('isDeleted', 0)
+            ->whereNull('parent_id')
+            ->get();
+        return view('admin.categories.update', compact('category', "subCategories"));
     }
 
     public function update(Request $request, string $id, FlasherInterface $flasher)
@@ -74,7 +81,7 @@ class CategoriesController extends Controller
 
         $category = Category::findOrFail($id);
         $category->name = $request->name;
-
+        $category->parent_id = $request->parent_id;
         if ($category->save()) {
             $flasher->addFlash('success', 'Cập nhật thành công!', [], 'Thành công');
         } else {
@@ -102,9 +109,9 @@ class CategoriesController extends Controller
     public function search(Request $request)
     {
         $searchTerm = $request->input('search');
-         $categories = Category::where('name', 'LIKE', "%{$searchTerm}%")
-                          ->where('isDeleted', 0)
-                          ->paginate(10);
+        $categories = Category::where('name', 'LIKE', "%{$searchTerm}%")
+            ->where('isDeleted', 0)
+            ->paginate(10);
         return view("admin.categories.index", compact("categories"));
     }
 }
