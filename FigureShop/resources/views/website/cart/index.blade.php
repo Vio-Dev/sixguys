@@ -51,7 +51,7 @@
                                         <button
                                             @click="quantity = Math.max(1, quantity - 1); total = quantity * {{ $item->product->price * (1 - $item->product->discount / 100) }}; updateTotal(quantity, {{ $item->product->price }}, {{ $item->product->discount }}, {{ $index }})"
                                             class="px-3 py-2 hover:bg-gray-200">−</button>
-                                        <input type="number" x-model="quantity" class="px-4 py-2 w-20" min="1"
+                                        <input type="text" x-model="quantity" class="px-4 py-2 w-20" min="1"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, ''); total = quantity * {{ $item->product->price * (1 - $item->product->discount / 100) }}; updateTotal(quantity, {{ $item->product->price }}, {{ $item->product->discount }}, {{ $index }})" />
                                         <button
                                             @click="quantity++; total = quantity * {{ $item->product->price * (1 - $item->product->discount / 100) }}; updateTotal(quantity, {{ $item->product->price }}, {{ $item->product->discount }}, {{ $index }})"
