@@ -4,46 +4,23 @@
 @section('content')
     <div>
         <div class="py-2 ">
-            <h2 class="text-[24px] font-bold">Danh sách danh mục</h2>
+            <h2 class="text-[24px] font-bold">Quản lý danh mục</h2>
         </div>
-
         <div class="py-4">
-            <form action="">
+            <form action="{{ route('admin.categories.search') }}" method="POST">
                 @csrf
-                <input type="text" placeholder="Tìm kiếm danh mục"
+                <input type="text" name="search" placeholder="Tìm kiếm danh mục"
                     class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
             </form>
-
         </div>
-    </div>
-    <div>
-
-        <div class="py-2 ">
-            <h2 class="text-[24px] font-bold">Tạo danh mục</h2>
-        </div>
-
-
-        <form class="flex w-1/2" action="{{ route('admin.categories.store') }}" method="post">
-            @csrf
-            <div class="flex gap-2 w-full items-center">
-                <div class="w-1/2">
-                    <input type="text" name="name" id="name"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                        placeholder="Nhập tên danh mục" />
-                    @error('name')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-                        Tạo danh mục</button>
-                </div>
-            </div>
-        </form>
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full mt-3">
+        <div class="py-2 flex gap-2 items-center">
+            <h2 class="text-[24px] font-bold">Danh sách danh mục</h2>
+            <a href="{{ route('admin.categories.create') }}"
+                class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mt-2">Tạo danh mục</a>
+        </div>
         <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -52,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($categories as $category)
+                @forelse ($adminCategories as $category)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $category->name }}
@@ -97,9 +74,12 @@
         </table>
 
         <!-- Phân trang -->
-        <div class="mt-4 p-3">
-            {{ $categories->links('pagination::tailwind') }}
-        </div>
+
+        @if ($adminCategories->count())
+            <div class="mt-4 p-3">
+                {{ $adminCategories->links() }}
+            </div>
+        @endif
     </div>
 
 

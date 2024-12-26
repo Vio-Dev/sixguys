@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tạo bài đăng | FigureShop</title>
-    <script src="https://cdn.tiny.cloud/1/rw1556z5vgoik9fmr5u44kck2kqrsou9fmbylvglsyjovwur/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        });
-    </script>
-</head>
-
-<body>
-    @extends('layouts.admin')
-    @section('name', 'Sửa bài đăng | FigureShop')
-    @section('content')
+@extends('layouts.admin')
+@section('name', 'Sửa bài đăng | FigureShop')
+@section('content')
+    <div>
         <div class="flex justify-between items-center p-4">
             <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Sửa bài đăng</h2>
             <a href="{{ Route('admin.blogs.list') }}" class="flex items-center gap-2 p-2">
@@ -109,50 +90,46 @@
                 </a>
             </div>
         </form>
-    @endsection
+    </div>
     <script>
         function previewPostImages() {
-            const files = document.querySelector('input[name="thumbnail"]').files; // Get selected files
-            const preview = document.getElementById('postImagesPreview'); // Preview container
-            const defaultImage = document.getElementById('defaultImage'); // Default image element
+            const files = document.querySelector('input[name="thumbnail"]').files;
+            const preview = document.getElementById('postImagesPreview');
+            const defaultImage = document.getElementById('defaultImage');
 
             if (files.length === 0) {
-                // Nếu không có hình được chọn, hiển thị hình mặc định
+
                 if (!defaultImage) {
                     const img = document.createElement('img');
                     img.id = 'defaultImage';
-                    img.src = '{{ asset($post->thumbnail) }}'; // Đường dẫn ảnh mặc định
+                    img.src = '{{ asset($post->thumbnail) }}';
                     img.alt = 'Default Image';
                     img.classList.add('w-20', 'h-20', 'object-cover', 'rounded-md', 'border', 'border-gray-300');
-                    preview.innerHTML = ''; // Clear old previews
-                    preview.appendChild(img); // Append default image
+                    preview.innerHTML = '';
+                    preview.appendChild(img);
                 }
                 return;
             }
 
-            // Nếu có hình, xóa hình mặc định và hiển thị các hình được chọn
-            preview.innerHTML = ''; // Clear old previews
+
+            preview.innerHTML = '';
             Array.from(files).forEach((file) => {
-                if (file.type.startsWith('image/')) { // Check if the file is an image
+                if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
 
                     reader.onloadend = function() {
                         const img = document.createElement('img');
                         img.src = reader.result;
                         img.alt = "Preview Post Image";
-                        img.width = 100; // Set fixed width for preview images
+                        img.width = 100;
                         img.classList.add('rounded-md', 'border', 'border-gray-300', 'shadow-sm',
-                            'p-1'); // Styling
+                            'p-1');
                         preview.appendChild(img);
                     };
 
-                    reader.readAsDataURL(file); // Read the file as a data URL
+                    reader.readAsDataURL(file);
                 }
             });
         }
     </script>
-
-
-</body>
-
-</html>
+@endsection

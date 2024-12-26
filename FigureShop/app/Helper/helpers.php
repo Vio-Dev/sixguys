@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Session;
+
 if (!function_exists('format_currency')) {
     /**
      * Format a number into currency format.
