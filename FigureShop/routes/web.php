@@ -110,9 +110,6 @@ Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
 
-
-
-
 Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
