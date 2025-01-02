@@ -7,7 +7,9 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\Media;
+use App\Models\Variant;
 use Flasher\Prime\FlasherInterface;
+use App\Models\VariantValue;
 
 class BinController extends Controller
 {
@@ -129,5 +131,66 @@ class BinController extends Controller
 
         // Chuyển hướng về danh sách danh mục
         return redirect()->route('admin.bin.products.list');
+    }
+
+
+     // variants
+    public function variant()
+    {
+        $adminVariants = Variant::where('isDeleted', 1)
+            ->with('deletedValues')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
+
+            // dd($adminVariants);
+        return view('admin.bin.variant', compact('adminVariants'));
+    }
+    public function destroyVariants(string $id, FlasherInterface $flasher)
+    {
+       $adminVariants = Variant::findOrFail($id);
+
+        if ($adminVariants->delete()) {
+            $flasher->addFlash('success', 'Biến thể đã được xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa biến thể. Vui lòng thử lại.', [], 'Thất bại');
+        }
+        return redirect()->route('admin.bin.variants.list');
+    }
+
+    public function updatevariants(string $id, FlasherInterface $flasher)
+    {
+        $adminVariants = Variant::findOrFail($id);
+
+        if ($adminVariants->update(['isDeleted' => 0])) {
+            $flasher->addFlash('success', 'Khôi phục biến thể thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi khôi phục biến thể. Vui lòng thử lại.', [], 'Thất bại');
+        }
+
+        return redirect()->route('admin.bin.variants.list');
+    }
+     public function destroyValue(string $id, FlasherInterface $flasher)
+    {
+       $adminVariants = VariantValue::findOrFail($id);
+
+        if ($adminVariants->delete()) {
+            $flasher->addFlash('success', 'Biến thể đã được xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa biến thể. Vui lòng thử lại.', [], 'Thất bại');
+        }
+        return redirect()->route('admin.bin.variants.list');
+    }
+
+    public function updateValue(string $id, FlasherInterface $flasher)
+    {
+        $adminVariants = VariantValue::findOrFail($id);
+
+        if ($adminVariants->update(['isDeleted' => 0])) {
+            $flasher->addFlash('success', 'Khôi phục biến thể thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi khôi phục biến thể. Vui lòng thử lại.', [], 'Thất bại');
+        }
+
+        return redirect()->route('admin.bin.variants.list');
     }
 }
