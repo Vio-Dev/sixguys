@@ -119,13 +119,14 @@ Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
 
+Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/update', [CartController::class, 'update'])->name('update');
+    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
+    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+});
 
-
-
-
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-
-Route::get('/gio-hang', [CartController::class, 'index'])->middleware(['auth'])->name('cart');
 Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
 
 

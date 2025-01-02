@@ -86,7 +86,7 @@
                     <div class="w-full">
                         <label for="name" class="block font-medium">Mô tả ngắn
                         </label>
-                        <textarea name="shortDescription">
+                        <textarea name="shortDescription" class="min-h-[700px]">
                         Mô tả ngắn
                         </textarea>
                         @error('shortDescription')
@@ -95,7 +95,7 @@
                     </div>
                     <div>
                         <label for="name" class="block font-medium">Mô tả sản phẩm</label>
-                        <textarea name="description">
+                        <textarea name="description" class="min-h-[700px]">
                         Mô tả sản phẩm
                         </textarea>
                         @error('description')

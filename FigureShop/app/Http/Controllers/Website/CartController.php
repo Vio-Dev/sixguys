@@ -3,15 +3,94 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\Product;
+use Flasher\Prime\FlasherInterface;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-     public function index()
+    public function index()
     {
+        $userId = Auth::id(); // Lấy ID người dùng hiện tại
 
-        return view('website.cart.index');
+        $cart = Cart::with(['items.product', 'items.productVariant.variantValue'])
+            ->where('user_id', $userId)
+            ->where('status', 'active')
+            ->first();
+
+        return view('website.cart.index', compact('cart'));
     }
+
+    public function add(Request $request, FlasherInterface $flasher)
+    {
+        $productId = $request->input('product_id');
+        $variantId = $request->input('variant_id');
+        $quantity = $request->input('quantity');
+        $productPrice = $request->input('price');
+
+        $userId = Auth::id(); // Lấy ID người dùng hiện tại
+
+        // Lấy hoặc tạo giỏ hàng cho người dùng
+        $cart = Cart::firstOrCreate([
+            'user_id' => $userId,
+            'status' => 'active',
+        ]);
+
+        // Kiểm tra sản phẩm tồn tại
+        $product = Product::find($productId);
+        if (!$product || $product->inStock < $quantity) {
+            $flasher->addFlash('error', 'Số lượng hàng vượt quá mức. Vui long liên hệ admin', [], 'Thất bại');
+        }
+
+        // Thêm hoặc cập nhật CartItem
+        $cartItem = CartItem::where('cart_id', $cart->id)
+            ->where('product_id', $productId)
+            ->where('product_variant_id', $variantId)
+            ->first();
+
+        if ($cartItem) {
+            $cartItem->quantity += $quantity;
+        } else {
+            $cartItem = new CartItem([
+                'cart_id' => $cart->id,
+                'product_id' => $productId,
+                'product_variant_id' => $variantId,
+                'quantity' => $quantity,
+                'price' => $productPrice,
+            ]);
+        }
+
+        if ($cartItem->save()) {
+            $flasher->addFlash('success', 'Thêm vào giỏ hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
+        }
+
+        // Cập nhật tồn kho
+        $product->decrement('inStock', $quantity);
+
+        return back();
+    }
+
+    public function update(Request $request, FlasherInterface $flasher)
+    {
+        dd($request->all());
+        // $cartItemId = $request->input('cart_item_id');
+        // $quantity = $request->input('quantity');
+
+        // $cartItem = CartItem::find($cartItemId);
+        // if ($cartItem) {
+        //     $cartItem->quantity = $quantity;
+        //     $cartItem->save();
+        // }
+
+        return back();
+    }
+
+    public function remove(Request $request) {}
+
+    public function clear() {}
 }

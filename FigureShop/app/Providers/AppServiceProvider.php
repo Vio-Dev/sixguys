@@ -22,9 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-         View::composer('*', function ($view) {
-        $categories = Category::where('isDeleted', 0)->get();
-        $view->with('categories', $categories);
+        View::composer('*', function ($view) {
+            $renderCategories = Category::where('isDeleted', 0)->whereNull('parent_id')->get();
+            $renderSubCategories = Category::where('isDeleted', 0)->whereNotNull('parent_id')->get();
+
+            $view->with('renderCategories', $renderCategories);
+            $view->with('renderSubCategories', $renderSubCategories);
         });
     }
 }

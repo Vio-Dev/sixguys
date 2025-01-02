@@ -74,7 +74,7 @@
     <div class="mx-auto flex max-w-[1200px] py-10">
         <div class="w-[300px] border-r">
             <ul class="px-5">
-                @foreach ($categories as $category)
+                @foreach ($renderCategories as $category)
                     <li class="active:blue-900 flex items-center gap-2  py-2 px-3 hover:bg-amber-400 hover:text-white">
                         {{ $category->name }}
                         <span class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

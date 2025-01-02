@@ -50,8 +50,8 @@ class ProductsController extends Controller
                 'inStock' => "required|numeric|min:1|max:99999999.99",
                 'unit' => "required|string|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
-                'description' => "required|string|min:1|max:1000",
-                'shortDescription' => "required|string|min:1|max:255",
+                'description' => "required|string|min:1",
+                'shortDescription' => "required|string|min:1|max:1000",
                 'thumbnail' => "required|image|mimes:jpeg,png,jpg,gif",
                 'images' => "required|array|max:20000",
                 'images.*' => "image|mimes:jpeg,png,jpg,gif",
@@ -180,8 +180,8 @@ class ProductsController extends Controller
                 'inStock' => "required|numeric|min:1|max:99999999.99",
                 'unit' => "required|string|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
-                'description' => "required|string|min:1|max:1000",
-                'shortDescription' => "required|string|min:1|max:255",
+                'description' => "required|string|min:1",
+                'shortDescription' => "required|string|min:1|max:1000",
                 'thumbnail' => "nullable|image|mimes:jpeg,png,jpg,gif",
                 'images' => "nullable|array|max:20000",
                 'images.*' => "image|mimes:jpeg,png,jpg,gif",
@@ -280,12 +280,12 @@ class ProductsController extends Controller
         return redirect()->route('admin.products.list');
     }
 
-     public function search(Request $request)
+    public function search(Request $request)
     {
         $searchTerm = $request->input('search');
-         $products = Product::where('name', 'LIKE', "%{$searchTerm}%")
-                          ->where('isDeleted', 0)
-                          ->paginate(10);
+        $products = Product::where('name', 'LIKE', "%{$searchTerm}%")
+            ->where('isDeleted', 0)
+            ->paginate(10);
         return view("admin.products.index", compact("products"));
     }
 }
