@@ -77,20 +77,59 @@ class CartController extends Controller
 
     public function update(Request $request, FlasherInterface $flasher)
     {
-        dd($request->all());
-        // $cartItemId = $request->input('cart_item_id');
-        // $quantity = $request->input('quantity');
+        $userId = Auth::id(); // Lấy ID người dùng hiện tại
 
-        // $cartItem = CartItem::find($cartItemId);
-        // if ($cartItem) {
-        //     $cartItem->quantity = $quantity;
-        //     $cartItem->save();
-        // }
+        // Lấy hoặc tạo giỏ hàng cho người dùng
+        $cart = Cart::where('user_id', $userId)
+            ->where('status', 'active')
+            ->first();
 
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity');
+
+        $cartItem = CartItem::where('cart_id', $cart->id)
+            ->where('product_id', $productId)
+            ->first();
+
+        $product = Product::find($productId);
+
+        $inStock = $product->inStock;
+
+        if ($quantity > $inStock) {
+            $flasher->addFlash('error', 'Số lượng hàng vượt quá mức. Vui long liên hệ admin', [], 'Thất bại');
+            return back();
+        }
+
+        if ($cartItem) {
+            $cartItem->quantity = $quantity;
+            $cartItem->save();
+            $flasher->addFlash('success', 'Cập nhật giỏ hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
+        }
         return back();
     }
 
-    public function remove(Request $request) {}
+
+    public function remove(Request $request, FlasherInterface $flasher)
+    {
+        $productId = $request->input('product_id');
+        $userId = Auth::id();
+        $cart = Cart::where('user_id', $userId)
+            ->where('status', 'active')
+            ->first();
+
+        $cartItem = CartItem::where('cart_id', $cart->id)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($cartItem->delete()) {
+            $flasher->addFlash('success', 'Xóa sản phẩm khỏi giỏ hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
+        }
+        return back();
+    }
 
     public function clear() {}
 }
