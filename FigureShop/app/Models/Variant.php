@@ -11,8 +11,18 @@ class Variant extends Model
 
     protected $fillable = ['name', 'isDeleted'];
 
-    public function values()
+public function values()
+{
+    return $this->hasMany(VariantValue::class)->where('isDeleted', 0);
+}
+
+public function deletedValues()
+{
+    return $this->hasMany(VariantValue::class)->where('isDeleted', 1);
+}
+   public function variantValue()
     {
-        return $this->hasMany(VariantValue::class);
+        return $this->belongsTo(VariantValue::class);
     }
+
 }
