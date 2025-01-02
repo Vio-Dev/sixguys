@@ -28,3 +28,24 @@ if (!function_exists('format_currency')) {
         }
     }
 }
+
+// status 0: 'published', draft
+if (!function_exists('format_posts_status')) {
+    /**
+     * Format an order status into a human-readable string.
+     *
+     * @param int $status
+     * @return string
+     */
+    function format_posts_status($status)
+    {
+        switch ($status) {
+            case 'published':
+                return 'Đã xuất bản';
+            case draft:
+                return 'bản nháp';
+            default:
+                return 'Unknown';
+        }
+    }
+}
