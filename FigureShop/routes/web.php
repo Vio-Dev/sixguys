@@ -92,6 +92,15 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('delete/{id}', [BinController::class, 'destroyProducts'])->name('destroy');
             Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
         });
+        Route::prefix('variants')->name('variants.')->group(function () {
+            Route::get('list', [BinController::class, 'variant'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyVariants'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updatevariants'])->name('update');
+            Route::post('list', [BinController::class, 'search'])->name('search');
+            Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
+            Route::delete('updateValue/{id}', [BinController::class, 'updateValue'])->name('updateValue');
+
+        });
     });
     Route::prefix('variants')->name('variants.')->group(function () {
         Route::get('list', [VariantController::class, 'index'])->name('list');
@@ -109,9 +118,6 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
 Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
-
-
-
 
 Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');

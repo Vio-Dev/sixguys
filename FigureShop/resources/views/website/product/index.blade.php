@@ -204,12 +204,16 @@
                                 </svg>
                                 <p class="text-sm text-gray-400">(38)</p>
                             </div>
-
-                            <div>
-                                <button class="my-5 h-10 w-full bg-violet-900 text-white">
+                            <form action="{{ route('cart.add') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <input type="hidden" name="price"
+                                    value="{{ $product->price * (1 - $product->discount / 100) }}">
+                                <button type="submit" class="my-5 h-10 w-full bg-violet-900 text-white">
                                     Thêm vào giỏ hàng
                                 </button>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 @endforeach

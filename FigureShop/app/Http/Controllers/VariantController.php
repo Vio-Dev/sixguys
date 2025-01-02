@@ -74,36 +74,49 @@ class VariantController extends Controller
      */
     public function edit(string $id)
     {
-        $variant = Variant::findOrFail($id);
-
-        return view('admin.variants.update ', compact('variant'));
+         $variant = Variant::with('values')->findOrFail($id);
+    return view('admin.variants.update', compact('variant'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, FlasherInterface $flasher)
-    {
-        //
+   public function update(Request $request, string $id, FlasherInterface $flasher)
+{
+    // Validate dữ liệu đầu vào
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'values' => 'array',
+        'values.*' => 'string|max:255',
+    ]);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+    // Lấy biến thể từ database
+    $variant = Variant::findOrFail($id);
 
-        $input = $request->except('_token');
+    // Cập nhật tên biến thể
+    $variant->update(['name' => $request->name]);
 
-        $variant = Variant::findOrFail($id);
+    // Kiểm tra nếu có `values` được gửi lên
+    if ($request->has('values')) {
+        // Xóa tất cả giá trị cũ
+        $variant->values()->delete();
 
-        $variant->update($input);
-
-        if ($variant->wasChanged()) {
-            $flasher->addFlash('success', 'Cập nhật biến thể thành công!', [], 'Thành công');
-        } else {
-            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật biến thể. Vui lòng thử lại.', [], 'Thất bại');
+        // Thêm giá trị mới
+        foreach ($request->values as $value) {
+            $variant->values()->create(['value' => $value]);
         }
-
-        return redirect()->route('admin.variants.list');
     }
+
+    // Kiểm tra thay đổi
+    if ($variant->wasChanged() || $variant->values()->count() > 0) {
+        $flasher->addFlash('success', 'Cập nhật biến thể thành công!', [], 'Thành công');
+    } else {
+        $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật biến thể. Vui lòng thử lại.', [], 'Thất bại');
+    }
+
+    return redirect()->route('admin.variants.list');
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -125,16 +138,17 @@ class VariantController extends Controller
     public function destroyValue(string $id, FlasherInterface $flasher)
     {
 
-        // $value = VariantValue::findOrFail($id);
+        $value = VariantValue::findOrFail($id);
+        // dd($value);
 
-        // $value->isDeleted = 1;
-        // $value->save();
+        $value->isDeleted = 1;
+        $value->save();
 
-        // if ($value->isDeleted) {
-        //     $flasher->addFlash('success', 'Sản phẩm đã được xóa thành công!', [], 'Thành công');
-        // } else {
-        //     $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
-        // }
-        // return back();
+        if ($value->isDeleted) {
+            $flasher->addFlash('success', 'Sản phẩm đã được xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        }
+        return redirect()->route('admin.variants.list');
     }
 }
