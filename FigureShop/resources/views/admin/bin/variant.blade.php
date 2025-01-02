@@ -33,8 +33,8 @@
 
                         <td class=" flex gap-2 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             <div x-show="!expanded">
-                                @if ($variant->values->count())
-                                    {{ $variant->values->pluck('value')->implode(', ') }}
+                                @if ($variant->deletedValues->count())
+                                    {{ $variant->deletedValues->pluck('value')->implode(', ') }}
                                 @else
                                     <p>Không có giá trị nào</p>
                                 @endif
@@ -47,9 +47,15 @@
 
                         <!-- Hành động -->
                         <td class="px-6 py-4">
-                            <a href="{{ route('admin.variants.edit', $variant->id) }}"
-                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
-                            <form action="{{ route('admin.variants.destroy', $variant->id) }}" method="POST"
+                            <form action="{{ route('admin.bin.variants.update', $variant->id) }}" method="POST"
+                                class="inline">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="button" onclick="confirmUpdateVariant(this)"
+                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Khôi phục</button>
+                            </form>
+                            <form action="{{ route('admin.bin.variants.destroy', $variant->id) }}" method="POST"
                                 class="inline">
                                 @csrf
                                 @method('DELETE')
@@ -61,12 +67,19 @@
                     <!-- Hàng mở rộng -->
                     <tr id="details-{{ $variant->id }}" class="hidden bg-gray-50 dark:bg-gray-700">
                         <td colspan="2" class="px-6 py-4">
-                            @if ($variant->values->count())
+                            @if ($variant->deletedValues->count())
                                 <ul class="list-disc pl-4">
-                                    @foreach ($variant->values as $value)
+                                    @foreach ($variant->deletedValues as $value)
                                         <li class="flex justify-between items-center">
                                             <span>{{ $value->value }}</span>
-                                            <form action="{{ route('admin.variants.destroyValue', $value->id) }}"
+                                            <form action="{{ route('admin.bin.variants.updateValue', $value->id) }}"
+                                                method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="confirmUpdateVariantValue(this)"
+                                                    class="text-blue-500 hover:underline">Khôi phục</button>
+                                            </form>
+                                            <form action="{{ route('admin.bin.variants.destroyValue', $value->id) }}"
                                                 method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -139,6 +152,40 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.closest('form').submit();
+                }
+            });
+        }
+
+        function confirmUpdateVariant(button) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn khôi phục biến thể?',
+                text: "Tất cả các giá trị liên quan cũng sẽ bị khôi phục!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Khôi phục',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.closest('form').submit();
+                }
+            });
+        }
+
+        function confirmUpdateVariantValue(button) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn khôi phục biến thể?',
+                text: "Tất cả các giá trị liên quan cũng sẽ bị khôi phục!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Khôi phục',
                 cancelButtonText: 'Hủy'
             }).then((result) => {
                 if (result.isConfirmed) {

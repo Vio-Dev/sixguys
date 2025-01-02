@@ -15,4 +15,5 @@ class VariantValue extends Model
     {
         return $this->belongsTo(Variant::class);
     }
+
 }

@@ -227,6 +227,9 @@ Trang chủ
                 <a href="{{ route('admin.bin.products.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
                     phẩm</a>
+                <a href="{{ route('admin.bin.variants.list') }}"
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
+                    Biến thể</a>
                 <a href="{{ route('admin.bin.blogs.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
                     đăng</a>
