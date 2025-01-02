@@ -7,6 +7,16 @@
 
     <form action="" method="POST">
         @csrf
+        @php
+            $grandTotal = 0;
+        @endphp
+        @foreach ($cart->items as $index => $item)
+            @php
+                $itemTotal = $item->quantity * $item->product->price * (1 - $item->product->discount / 100);
+                $grandTotal += $itemTotal;
+            @endphp
+        @endforeach
+
         <div class="my-10 flex flex-col lg:flex-row gap-10 px-4">
             <div class="w-full lg:w-3/4">
                 <div class="flex justify-between items-center">
@@ -24,8 +34,9 @@
 
                 </div>
                 <div class="bg-white shadow-md p-6 mt-4">
-                    <form action="#" method="POST">
-
+                    <form action="{{ route('checkout.store') }}" method="POST">
+                        @csrf
+                        @method('POST')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700">Họ và tên</label>
@@ -34,6 +45,11 @@
                                     class="mt-1 focus
                             focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
                             shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <p>
+                                    @error('name')
+                                        <span class="text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </p>
                             </div>
 
                             <div>
@@ -43,20 +59,77 @@
                                     class="mt-1 focus
                                     focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
                                     shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <p>
+                                    @error('email')
+                                        <span class="text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </p>
                             </div>
-                            <div>
-                                <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
-                                <input type="text" name="address" id="address" autocomplete="address"
-                                    class="mt-1 focus
-                        focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
-                        shadow-sm sm:text-sm border-gray-300 rounded-md">
 
-                            </div>
+                            @if ($user->address)
+                                <div>
+                                    <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+                                    <input type="text" name="address" id="address" autocomplete="address"
+                                        value="{{ $user->address }}"
+                                        class="mt-1 focus
+                                    focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
+                                    shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <p>
+                                        @error('address')
+                                            <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </p>
+                                </div>
+                            @else
+                                <div>
+                                    <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+                                    <input type="text" name="address" id="address" autocomplete="address"
+                                        class="mt-1 focus
+                                    focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
+                                    shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <p>
+                                        @error('address')
+                                            <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </p>
+                                </div>
+                            @endif
+                            @if ($user->phone)
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+                                    <input type="text" name="phone" id="phone" autocomplete="address"
+                                        value="{{ $user->phone }}"
+                                        class="mt-1 focus
+                                    focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
+                                    shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <p>
+                                        @error('phone')
+                                            <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </p>
+                                </div>
+                            @else
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Số điện
+                                        thoại</label>
+                                    <input type="text" name="phone" id="phone"
+                                        class="mt-1 focus
+                                    focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full
+                                    shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <p>
+                                        @error('phone')
+                                            <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </p>
+                                </div>
+                            @endif
+
+
                             <!-- đặt hàng khi thanh toán-->
                             <div>
                                 <label for="payment" class="block text-sm font-medium text-gray-700">Phương thức thanh
                                     toán</label>
-                                <select id="payment" name="payment"
+                                <select id="payment" name="payment_method"
                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     <option value="cod">Thanh toán khi nhận hàng</option>
                                     <option value="vnpay">Thanh toán qua VnPay</option>
@@ -64,13 +137,22 @@
                             </div>
                         </div>
 
-
-
-
                         <div class="mt-6">
                             <label for="note" class="block text-sm font-medium text-gray-700">Ghi chú</label>
                             <textarea id="note" name="note" rows="3"
                                 class="mt-1 focus focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+                        </div>
+                        <div>
+                            @foreach ($cart->items as $index => $item)
+                                <input type="hidden" name="products[{{ $index }}][product_id]"
+                                    value="{{ $item->product->id }}">
+                                <input type="hidden" name="products[{{ $index }}][quantity]"
+                                    value="{{ $item->quantity }}">
+                                <input type="hidden" name="products[{{ $index }}][price]"
+                                    value="{{ $item->product->price }}">
+                            @endforeach
+                            <input type="hidden" name="grand_total" value="{{ $grandTotal }}">
+
                         </div>
 
                         <div class="mt-6">
@@ -88,7 +170,7 @@
                     <h2 class="text-lg font-bold mb-4">TÓM TẮT ĐƠN HÀNG</h2>
                     <div class="flex justify-between mb-4">
                         <p>TỘNG PHỤ</p>
-                        <p>$1280</p>
+                        <p>{{ format_currency($grandTotal) }}</p>
                     </div>
                     <div class="flex justify-between mb-4">
                         <p>VẬN CHUYỂN</p>
@@ -96,9 +178,24 @@
                     </div>
                     <div class="flex justify-between font-bold text-lg mb-4">
                         <p>TỘNG CỘNG</p>
-                        <p>$1280</p>
+                        <p>{{ format_currency($grandTotal) }}</p>
                     </div>
+                    <div class="flex justify-between item-center mt-4">
 
+                        <form action="">
+                            <label for="coupon" class="block text-sm font-medium text-gray-700 mb-2">Mã giảm giá</label>
+                            <div class="flex">
+                                <input type="text">
+                                <button class=" bg-purple-900 text-white p-2 text-center hover:bg-purple-800">
+                                    Áp dụng
+                                </button>
+                            </div>
+                        </form>
+
+                        <div>
+
+                        </div>
+                    </div>
                 </div>
             </section>
 

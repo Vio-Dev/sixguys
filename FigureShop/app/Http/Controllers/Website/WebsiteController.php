@@ -44,6 +44,4 @@ class WebsiteController extends Controller
     //     return view('website.blog');
     // }
 
-
-
 }

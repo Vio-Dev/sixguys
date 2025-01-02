@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -99,7 +99,6 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::post('list', [BinController::class, 'search'])->name('search');
             Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
             Route::delete('updateValue/{id}', [BinController::class, 'updateValue'])->name('updateValue');
-
         });
     });
     Route::prefix('variants')->name('variants.')->group(function () {
@@ -122,13 +121,14 @@ Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name(
 Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
-    Route::post('/update', [CartController::class, 'update'])->name('update');
-    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
-    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::put('/update/{id}', [CartController::class, 'update'])->name('update');
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
 });
 
-Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
-
+Route::prefix('thanh-toan')->middleware(['auth'])->name('checkout.')->group(function () {
+    Route::get('/', [checkoutController::class, 'index'])->name('index');
+    Route::post('/', [checkoutController::class, 'store'])->name('store');
+});
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
@@ -137,5 +137,8 @@ Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () 
     Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
 });
 
+Route::get('/mail', function () {
+    return view('mail.invoice');
+});
 
 require __DIR__ . '/auth.php';
