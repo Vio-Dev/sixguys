@@ -65,10 +65,10 @@ class BinController extends Controller
     public function destroyBlogs(string $id, FlasherInterface $flasher)
     {
         // Tìm danh mục theo ID
-        $category = Post::findOrFail($id);
+        $blogs = Post::findOrFail($id);
 
         // xóa danh mục
-        if ($category->delete()) {
+        if ($blogs->delete()) {
             $flasher->addFlash('success', 'Bài đăng xóa thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
@@ -79,10 +79,10 @@ class BinController extends Controller
     public function updateBlogs(string $id, FlasherInterface $flasher)
     {
         // Tìm danh mục theo ID
-        $category = Post::findOrFail($id);
+        $blogs = Post::findOrFail($id);
 
         // Cập nhật isDeleted thành 1
-        if ($category->update(['isDeleted' => 0])) {
+        if ($blogs->update(['isDeleted' => 0])) {
             $flasher->addFlash('success', 'Khôi phục thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi khi Khôi phục. Vui lòng thử lại', [], 'Thất bại');
@@ -120,10 +120,10 @@ class BinController extends Controller
     public function updateProducts(string $id, FlasherInterface $flasher)
     {
         // Tìm danh mục theo ID
-        $category = Product::findOrFail($id);
+        $product = Product::findOrFail($id);
 
         // Cập nhật isDeleted thành 1
-        if ($category->update(['isDeleted' => 0])) {
+        if ($product->update(['isDeleted' => 0])) {
             $flasher->addFlash('success', 'Khôi phục thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi khi Khôi phục. Vui lòng thử lại', [], 'Thất bại');
