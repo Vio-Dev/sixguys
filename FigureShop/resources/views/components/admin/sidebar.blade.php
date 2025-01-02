@@ -1,6 +1,6 @@
 <div class=text-white ">
     <ul>
-        <a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700 ">
+        <a href="{{ route('home') }}" class="flex p-2 gap-1 hover:underline hover:bg-gray-700 ">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill="currentColor"
                     d=" M6 19h3.692v-5.077q0-.343.233-.575q.232-.233.575-.233h3q.343 0
@@ -66,6 +66,33 @@ Trang chủ
             class=" text-white font-medium text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
             type="button">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M10.73 14.97c.27.11.36.41.24.66s-.41.37-.66.24h-.01c-.46-.21-.89-.51-1.27-.9a4.49 4.49 0 0 1 0-6.36l3.53-3.53a4.49 4.49 0 0 1 6.36 0a4.49 4.49 0 0 1 0 6.36l-1.63 1.63l-.15-1.26l1.08-1.08a3.513 3.513 0 0 0 0-4.95a3.513 3.513 0 0 0-4.95 0L9.73 9.32a3.513 3.513 0 0 0 0 4.95c.3.3.64.53 1 .7m-6.65 4.95a4.49 4.49 0 0 1 0-6.36l1.63-1.63l.15 1.26l-1.08 1.08a3.513 3.513 0 0 0 0 4.95a3.513 3.513 0 0 0 4.95 0l3.54-3.54a3.513 3.513 0 0 0 0-4.95c-.3-.3-.64-.53-1-.7v.01a.49.49 0 0 1-.24-.67c.12-.25.41-.37.66-.24h.01c.46.21.89.51 1.27.9a4.49 4.49 0 0 1 0 6.36l-3.53 3.53a4.49 4.49 0 0 1-6.36 0" />
+            </svg>
+            Biến thể
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700 ">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href={{ route('admin.variants.list') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Danh
+                    sách</a>
+                <a href={{ route('admin.variants.create') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Tạo
+                    mới</a>
+            </ul>
+        </div>
+    </ul>
+</div>
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropProduct"
+            class=" text-white font-medium text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-width="1.5">
                     <circle cx="12" cy="6" r="4" />
                     <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z" />
@@ -88,13 +115,35 @@ Trang chủ
         </div>
     </ul>
 </div>
-<a href={{ route('admin.categories.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="currentColor"
-            d="M7.885 10.23L12 3.463l4.116 6.769zm9.615 11q-1.567 0-2.649-1.081T13.769 17.5t1.082-2.649t2.649-1.082t2.649 1.082t1.082 2.649t-1.082 2.649t-2.649 1.082m-13.73-.5v-6.462h6.46v6.462zm13.73-.5q1.146 0 1.939-.792t.792-1.939t-.792-1.939t-1.939-.792t-1.939.792t-.792 1.939t.792 1.939t1.939.792m-12.73-.5h4.46v-4.462H4.77zm4.857-10.5h4.746L12 5.427zM17.5 17.5" />
-    </svg>
-    Danh mục
-</a>
+<div x-data="{ open: false }" class="text-white">
+    <ul>
+        <!-- Dropdown button -->
+        <button @click="open = !open" id="dropProduct"
+            class=" text-white font-medium text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+                <rect width="24.017" height="24.017" x="5.5" y="5.5" fill="none" stroke="currentColor"
+                    stroke-linecap="round" stroke-linejoin="round" rx="4" ry="4" />
+                <circle cx="29.517" cy="29.517" r="12.982" fill="none" stroke="currentColor"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Danh mục
+        </button>
+
+        <!-- Dropdown menu -->
+        <div x-show="open" @click.outside="open = false" id="dropdown"
+            class=" divide-gray-100  shadow  dark:bg-gray-700 ">
+            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
+                <a href={{ route('admin.categories.list') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Danh
+                    sách</a>
+                <a href={{ route('admin.categories.create') }}
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Tạo
+                    mới</a>
+            </ul>
+        </div>
+    </ul>
+</div>
 
 <div x-data="{ open: false }" class="text-white">
     <ul>
@@ -141,10 +190,10 @@ Trang chủ
         <div x-show="open" @click.outside="open = false" id="dropdown"
             class=" divide-gray-100  shadow  dark:bg-gray-700">
             <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
-                <a href=""
+                <a href="{{ route('admin.comments.product') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
                     phẩm</a>
-                <a href=""
+                <a href="{{ route('admin.comments.post') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
                     đăng</a>
 
@@ -178,6 +227,9 @@ Trang chủ
                 <a href="{{ route('admin.bin.products.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
                     phẩm</a>
+                <a href="{{ route('admin.bin.variants.list') }}"
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
+                    Biến thể</a>
                 <a href="{{ route('admin.bin.blogs.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
                     đăng</a>

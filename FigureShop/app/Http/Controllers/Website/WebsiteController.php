@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Rating;
+use Flasher\Prime\FlasherInterface;
 
 class WebsiteController extends Controller
 {
@@ -12,12 +16,48 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        return view('website.index');
+        $categories = Category::where('isDeleted', 0)->get();
+        return view('website.index', compact('categories'));
     }
-    public function catalog()
+    public function product()
     {
-        return view('website.product');
+        $products = Product::where('isDeleted', 0)->where('status', 'public')->get();
+        return view('website.product.index', compact('products'));
     }
+
+    public function productDetail($id)
+    {
+         $comments = Rating::with('user')->where('product_id', $id)->where('isHidden', 0)->get();
+        $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->first();
+        return view('website.product.detail', compact('product', 'comments'));
+    }
+
+    public function productComment(Request $request ,FlasherInterface $flasher)
+    {
+
+        $request->validate([
+            'comment' => 'required',
+            'product_id' => 'required',
+        ]);
+
+        $comments = new Rating();
+        $comments->comment = $request->comment;
+        $comments->product_id = $request->product_id;
+        $comments->rating = $request->rating;
+        $comments->user_id = auth()->user()->id;
+        $comments->save();
+        $flasher->addSuccess('Bình luận của bạn đã được gửi');
+        return back();
+    }
+    public function productDelete(Request $request ,FlasherInterface $flasher)
+    {
+        $comment = Rating::find($request->id);
+        $comment->isHidden = 1;
+        $comment->save();
+        $flasher->addSuccess('Bình luận của bạn đã được xóa');
+        return back();
+    }
+
 
     // public function about()
     // {
@@ -34,53 +74,4 @@ class WebsiteController extends Controller
     //     return view('website.blog');
     // }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

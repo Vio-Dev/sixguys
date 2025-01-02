@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers\Website;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\Rating;
+use Flasher\Prime\FlasherInterface;
+
+class postsContoller extends Controller
+{
+    public function index()
+    {
+
+        // return view('website.posts.index');
+    }
+    public function show($id)
+    {
+        $post = Post::with('user')->find($id);
+         $comments = Rating::with('user')->where('post_id', $id)->where('isHidden', 0)->get();
+
+
+        return view('website.post.detail',compact('post','comments'));
+    }
+    public function postComments(Request $request, FlasherInterface $flasher)
+    {
+        $request->validate([
+            'comment' => 'required',
+            'post_id' => 'required',
+        ]);
+        $comment = new Rating();
+        $comment->comment = $request->comment;
+        $comment->post_id = $request->post_id;
+        $comment->rating = $request->rating;
+        $comment->user_id = auth()->user()->id;
+        $comment->save();
+        $flasher->addSuccess('Bình luận của bạn đã được gửi');
+        return back();
+    }
+    public function postsCommentsDelete(Request $request,FlasherInterface $flasher)
+    {
+        $id = $request->post_id;
+        $comment = Rating::findOrFail($id);
+        $comment->isHidden = true;
+        $comment->save();
+        $flasher->addSuccess('Bình luận của bạn đã được xóa');
+        return back();
+    }
+}
