@@ -53,6 +53,7 @@
                         <th scope="col" class="px-6 py-3">
                             Danh mục
                         </th>
+                        <th class="px-6 py-3">Biến thể</th>
                         <th scope="col" class="px-6 py-3">
                             Hành động
 
@@ -100,6 +101,22 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ $product->category->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if ($product->variants->count())
+                                        <ul>
+                                            @foreach ($product->variants as $variant)
+                                                <li>
+                                                    {{ $variant->variantValue->variant->name }}:
+                                                    {{ $variant->variantValue->value }} -
+                                                    {{ number_format($variant->price, 0, ',', '.') }} VND
+                                                    -{{ $variant->inStock }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p>Không có biến thể</p>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 ">
                                     <a href="{{ route('admin.products.edit', $product->id) }}"

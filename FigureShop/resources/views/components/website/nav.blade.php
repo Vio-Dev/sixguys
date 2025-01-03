@@ -21,6 +21,10 @@
                 chúng tôi</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
                 href="contact-us.html">Liên hệ</a>
+            @if (Auth::check() && Auth::user()->role == 'admin')
+                <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
+                    href={{ route('admin.dashboard') }}>Admin</a>
+            @endif
         </div>
 
         @if (Auth::check())

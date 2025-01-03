@@ -1,6 +1,6 @@
 <div class=text-white ">
     <ul>
-        <a href="" class="flex p-2 gap-1 hover:underline hover:bg-gray-700 ">
+        <a href="{{ route('home') }}" class="flex p-2 gap-1 hover:underline hover:bg-gray-700 ">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill="currentColor"
                     d=" M6 19h3.692v-5.077q0-.343.233-.575q.232-.233.575-.233h3q.343 0
@@ -190,10 +190,10 @@ Trang chủ
         <div x-show="open" @click.outside="open = false" id="dropdown"
             class=" divide-gray-100  shadow  dark:bg-gray-700">
             <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
-                <a href=""
+                <a href="{{ route('admin.comments.product') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
                     phẩm</a>
-                <a href=""
+                <a href="{{ route('admin.comments.post') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
                     đăng</a>
 
@@ -227,6 +227,9 @@ Trang chủ
                 <a href="{{ route('admin.bin.products.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Sản
                     phẩm</a>
+                <a href="{{ route('admin.bin.variants.list') }}"
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
+                    Biến thể</a>
                 <a href="{{ route('admin.bin.blogs.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Bài
                     đăng</a>

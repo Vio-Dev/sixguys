@@ -7,7 +7,8 @@ use App\Models\Media;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Flasher\Prime\FlasherInterface;
-
+use App\Models\Variant;
+use App\Models\ProductVariant;
 class ProductsController extends Controller
 {
     /**
@@ -15,9 +16,12 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::where('isDeleted', 0)
+     $products = Product::where('isDeleted', 0)
+            ->with( 'variants.variantValue.variant')
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
+
+
         return view('admin.products.index', compact('products'));
     }
 
@@ -28,8 +32,10 @@ class ProductsController extends Controller
     {
 
         $categories = Category::where('isDeleted', 0)->get();
+        $adminVariants = Variant::with('values')->where('isDeleted', 0)->get();
 
-        return view('admin.products.create', compact('categories'));
+
+        return view('admin.products.create', compact('categories','adminVariants'));
     }
 
     /**
@@ -112,6 +118,22 @@ class ProductsController extends Controller
             }
         }
 
+
+                if ($request->has('variant_name')) {
+                foreach ($request->variant_name as $index => $variantName) {
+                    if ($variantName) {
+                        ProductVariant::create([
+                            'product_id' => $product->id,
+                            'variant_value_id' => $request->variant_values[$index] ?? null,
+                            'price' => $request->variant_price[$index] ?? null,
+                            'inStock' => $request->variant_inStock[$index] ?? null,
+                            'hasSold' => 0,
+                            'status' => 'public',
+                            'isDeleted' => 0,
+                        ]);
+                    }
+                }
+            }
         // Thông báo kết quả
         if ($product->wasRecentlyCreated) {
             $flasher->addFlash('success', 'Sản phẩm đã được thêm thành công!', [], 'Thành công');
@@ -136,11 +158,14 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with(['images', 'variants.variantValue.variant'])->findOrFail($id);
+
         $categories = Category::where('isDeleted', 0)->get();
         $images = Media::where('product_id', $id)->get();
+        $adminVariants = Variant::with('values')->where('isDeleted', 0)->get();
+        $ProductVariant = ProductVariant::where('product_id', $id)->get();
 
-        return view('admin.products.update', compact('product', 'categories', 'images'));
+        return view('admin.products.update', compact('product', 'categories', 'images', 'adminVariants', 'ProductVariant'));
     }
 
     /**
@@ -226,13 +251,34 @@ class ProductsController extends Controller
                 }
             }
         }
+          if ($request->has('variant_name')) {
+    // Delete existing variants
+    ProductVariant::where('product_id', $product->id)->delete();
+
+    // Create new variants
+    foreach ($request->variant_name as $index => $variantName) {
+        if ($variantName) {
+            ProductVariant::create([
+                'product_id' => $product->id,
+                'variant_value_id' => $request->variant_values[$index] ?? null,
+                'price' => $request->variant_price[$index] ?? null,
+                'inStock' => $request->variant_inStock[$index] ?? null,
+                'hasSold' => 0,
+                'status' => 'public',
+                'isDeleted' => 0,
+            ]);
+        }
+    }
+}
+
 
         // Thông báo kết quả
-        if ($product->wasChanged()) {
-            $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
-        } else {
-            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
-        }
+      if ($product) {
+    $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
+} else {
+    $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+}
+
 
         return redirect()->route("admin.products.list");
     }
