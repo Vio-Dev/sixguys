@@ -19,9 +19,29 @@ class WebsiteController extends Controller
         $categories = Category::where('isDeleted', 0)->get();
         return view('website.index', compact('categories'));
     }
-    public function product()
+    public function product( Request $request)
     {
-        $products = Product::where('isDeleted', 0)->where('status', 'public')->get();
+         $query = Product::where('isDeleted', 0)->where('status', 'public');
+
+    // Filter by categories
+    if ($request->filled('categories')) {
+        $categoryIds = $request->categories;
+        $subCategoryIds = Category::whereIn('parent_id', $categoryIds)->pluck('id')->toArray();
+        $allCategoryIds = array_merge($categoryIds, $subCategoryIds);
+        $query->whereIn('category_id', $allCategoryIds);
+    }
+    if($request->filled('subcategories')){
+        $query->whereIn('category_id', $request->subcategories);
+    }
+
+    if ($request->filled('minPrice') || $request->filled('maxPrice')) {
+        $minPrice = $request->get('minPrice', 0);
+        $maxPrice = $request->get('maxPrice', PHP_INT_MAX);
+        $query->whereBetween('price', [$minPrice, $maxPrice]);
+    }
+
+    // Get the filtered products with pagination
+    $products = $query->paginate(12);
         return view('website.product.index', compact('products'));
     }
 
