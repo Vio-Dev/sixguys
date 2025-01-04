@@ -3,11 +3,8 @@
 @section('title', 'Giỏ hàng')
 
 @section('content')
-
-
     @php
         $grandTotal = 0;
-
         if ($cart && $cart->items->count() > 0) {
             foreach ($cart->items as $index => $item) {
                 $itemTotal = $item->quantity * $item->product->price * (1 - $item->product->discount / 100);
@@ -21,7 +18,6 @@
             <div class="w-full lg:w-3/4">
                 <div class="flex justify-between items-center">
                     <h2 class="text-lg font-bold">Thông tin giao hàng</h2>
-
                     <a class="flex items-center gap-2" href="{{ route('cart.index') }}"
                         class="text-primary-600 hover:underline">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
@@ -31,7 +27,6 @@
                         </svg>
                         Quay lại giỏ hàng
                     </a>
-
                 </div>
                 <div class="bg-white shadow-md p-6 mt-4">
                     <form action="{{ route('checkout.store') }}" method="POST">

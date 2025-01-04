@@ -31,9 +31,8 @@ class Product extends Model
         return $this->hasMany(Media::class);
     }
 
-     public function variants()
+    public function variants()
     {
         return $this->hasMany(ProductVariant::class);
     }
-
 }
