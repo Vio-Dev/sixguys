@@ -156,6 +156,7 @@ Route::get('/fail', function () {
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
     Route::get('/don-hang', [ProfileControllers::class, 'order'])->name('don-hang');
+    Route::post('/don-hang/{id}', [ProfileControllers::class, 'orderDetail'])->name('don-hang-chi-tiet');
     Route::get('/yeu-thich', [ProfileControllers::class, 'wishlist'])->name('yeu-thich');
     Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
 });

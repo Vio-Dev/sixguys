@@ -4,98 +4,73 @@
 
 @section('content')
     <!-- Mobile order table  -->
+
+    @php
+        $classOrder = [
+            'pending' => 'border-blue-800 text-blue-800',
+            'processing' => 'border-orange-800 text-orange-800',
+            'confirmed' => 'border-green-800 text-green-800',
+            'shipping' => 'border-purple-800 text-purple-800',
+            'completed' => 'border-green-800 text-green-800',
+            'canceled' => 'border-red-800 text-red-800',
+            'refunded' => 'border-blue-800 text-blue-800',
+            'failed' => 'border-red-800 text-red-800',
+        ];
+        $vietSubStatusOrder = [
+            'pending' => 'Đợi xác thực',
+            'processing' => 'Đang xử lý',
+            'confirmed' => 'Đã xác thực',
+            'shipping' => 'Đang giao hàng',
+            'completed' => 'Hoàn thành',
+            'canceled' => 'Hủy đơn',
+            'refunded' => 'Hoàn tiền',
+            'failed' => 'Thất bại',
+        ];
+    @endphp
+
     <section class="container mx-auto my-3 flex w-full flex-col gap-3 px-4 md:hidden">
         <!-- 1 -->
-
-        <div class="flex w-full border px-4 py-4">
-            <div class="ml-3 flex w-full flex-col justify-center">
-                <div class="flex items-center justify-between">
-                    <p class="text-xl font-bold">Order &numero; 1245</p>
-                    <div class="border border-green-500 px-2 py-1 text-green-500">
-                        Delivered
+        @foreach ($orders as $order)
+            <div class="flex w-full border px-4 py-4">
+                <div class="ml-3 flex w-full flex-col justify-center">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xl font-bold">{{ $order->id }}</p>
+                        <div class="border{{ $classOrder[$order->status] }} px-2 py-1 ">
+                            {{ $vietSubStatusOrder[$order->status] }}
+                        </div>
                     </div>
-                </div>
-                <p class="text-sm text-gray-400">22/06/2023</p>
-                <p class="py-3 text-xl font-bold text-violet-900">$620</p>
-                <div class="mt-2 flex w-full items-center justify-between">
-                    <div class="flex items-center justify-center">
-                        <a href="order-overview.html"
-                            class="flex cursor-text items-center justify-center bg-amber-500 px-2 py-2 active:ring-gray-500">
-                            View order
-                        </a>
+                    <p class="text-sm text-gray-400">{{ $order->order_date }}</p>
+                    <p class="py-3 text-xl font-bold text-violet-900">{{ format_currency($order->total) }}</p>
+                    <div class="mt-2 flex w-full items-center justify-between">
+                        <div class="flex items-center justify-center">
+                            <button href="#" title="Xem chi tiết"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" viewBox="0 0 24 24">
+                                    <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+                                        <path
+                                            d="M12 8.25a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0" />
+                                        <path
+                                            d="M12 3.25c-4.514 0-7.555 2.704-9.32 4.997l-.031.041c-.4.519-.767.996-1.016 1.56c-.267.605-.383 1.264-.383 2.152s.116 1.547.383 2.152c.25.564.617 1.042 1.016 1.56l.032.041C4.445 18.046 7.486 20.75 12 20.75s7.555-2.704 9.32-4.997l.031-.041c.4-.518.767-.996 1.016-1.56c.267-.605.383-1.264.383-2.152s-.116-1.547-.383-2.152c-.25-.564-.617-1.041-1.016-1.56l-.032-.041C19.555 5.954 16.514 3.25 12 3.25M3.87 9.162C5.498 7.045 8.15 4.75 12 4.75s6.501 2.295 8.13 4.412c.44.57.696.91.865 1.292c.158.358.255.795.255 1.546s-.097 1.188-.255 1.546c-.169.382-.426.722-.864 1.292C18.5 16.955 15.85 19.25 12 19.25s-6.501-2.295-8.13-4.412c-.44-.57-.696-.91-.865-1.292c-.158-.358-.255-.795-.255-1.546s.097-1.188.255-1.546c.169-.382.426-.722.864-1.292" />
+                                    </g>
+                                </svg>
+                            </button>
+
+                            @if ($order->status != 'processing')
+                                <a href="#" title="Hủy đơn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 48 48">
+                                        <path fill="#d50000"
+                                            d="M24 6C14.1 6 6 14.1 6 24s8.1 18 18 18s18-8.1 18-18S33.9 6 24 6m0 4c3.1 0 6 1.1 8.4 2.8L12.8 32.4C11.1 30 10 27.1 10 24c0-7.7 6.3-14 14-14m0 28c-3.1 0-6-1.1-8.4-2.8l19.6-19.6C36.9 18 38 20.9 38 24c0 7.7-6.3 14-14 14" />
+                                    </svg>
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
 
         <!-- 2 -->
 
-        <div class="flex w-full border px-4 py-4">
-            <div class="ml-3 flex w-full flex-col justify-center">
-                <div class="flex items-center justify-between">
-                    <p class="text-xl font-bold">Order &numero; 1232</p>
-                    <div class="border border-orange-500 px-2 py-1 text-orange-500">
-                        Progress
-                    </div>
-                </div>
-                <p class="text-sm text-gray-400">20/05/2023</p>
-                <p class="py-3 text-xl font-bold text-violet-900">$320</p>
-                <div class="mt-2 flex w-full items-center justify-between">
-                    <div class="flex items-center justify-center">
-                        <a href="order-overview.html"
-                            class="flex cursor-text items-center justify-center bg-amber-500 px-2 py-2 active:ring-gray-500">
-                            View order
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3 -->
-
-        <div class="flex w-full border px-4 py-4">
-            <div class="ml-3 flex w-full flex-col justify-center">
-                <div class="flex items-center justify-between">
-                    <p class="text-xl font-bold">Order &numero; 3246</p>
-                    <div class="border border-red-500 px-2 py-1 text-red-500">
-                        Declined
-                    </div>
-                </div>
-                <p class="text-sm text-gray-400">03/03/2022</p>
-                <p class="py-3 text-xl font-bold text-violet-900">$2500</p>
-                <div class="mt-2 flex w-full items-center justify-between">
-                    <div class="flex items-center justify-center">
-                        <a href="order-overview.html"
-                            class="flex cursor-text items-center justify-center bg-amber-500 px-2 py-2 active:ring-gray-500">
-                            View order
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4 -->
-
-        <div class="flex w-full border px-4 py-4">
-            <div class="ml-3 flex w-full flex-col justify-center">
-                <div class="flex items-center justify-between">
-                    <p class="text-xl font-bold">Order &numero; 9827</p>
-                    <div class="border border-blue-500 px-2 py-1 text-blue-500">
-                        Need Payment
-                    </div>
-                </div>
-                <p class="text-sm text-gray-400">31/01/20</p>
-                <p class="py-3 text-xl font-bold text-violet-900">$1700</p>
-                <div class="mt-2 flex w-full items-center justify-between">
-                    <div class="flex items-center justify-center">
-                        <a href="order-overview.html"
-                            class="flex cursor-text items-center justify-center bg-amber-500 px-2 py-2 active:ring-gray-500">
-                            View order
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
     <!-- /Mobile order table  -->
 
@@ -108,75 +83,68 @@
                     <th>NGÀY</th>
                     <th>TỔNG CỘNG</th>
                     <th>TRẠNG THÁI</th>
-                    <th>TRẠNG THÁI</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- 1 -->
+                @foreach ($orders as $order)
+                    <tr class="h-[100px] border-b">
+                        <td class="text-center align-middle">{{ $order->id }}</td>
+                        <td class="mx-auto text-center">{{ $order->order_date }}</td>
+                        <td class="text-center align-middle">{{ format_currency($order->total) }}</td>
 
-                <tr class="h-[100px] border-b">
-                    <td class="text-center align-middle">&#8470; 1245</td>
-                    <td class="mx-auto text-center">22/06/2023</td>
-                    <td class="text-center align-middle">&#36;620</td>
+                        <td class="mx-auto text-center">
+                            <span class="border-2  py-1 px-3 {{ $classOrder[$order->status] }}">
+                                {{ $vietSubStatusOrder[$order->status] }}
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <div x-data="{ modalIsOpen: false }">
+                                <div class=" flex justify-center items-center">
+                                    <a href="#" class="mr-3" title="Xem chi tiết">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24">
+                                            <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+                                                <path
+                                                    d="M12 8.25a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0" />
+                                                <path
+                                                    d="M12 3.25c-4.514 0-7.555 2.704-9.32 4.997l-.031.041c-.4.519-.767.996-1.016 1.56c-.267.605-.383 1.264-.383 2.152s.116 1.547.383 2.152c.25.564.617 1.042 1.016 1.56l.032.041C4.445 18.046 7.486 20.75 12 20.75s7.555-2.704 9.32-4.997l.031-.041c.4-.518.767-.996 1.016-1.56c.267-.605.383-1.264.383-2.152s-.116-1.547-.383-2.152c-.25-.564-.617-1.041-1.016-1.56l-.032-.041C19.555 5.954 16.514 3.25 12 3.25M3.87 9.162C5.498 7.045 8.15 4.75 12 4.75s6.501 2.295 8.13 4.412c.44.57.696.91.865 1.292c.158.358.255.795.255 1.546s-.097 1.188-.255 1.546c-.169.382-.426.722-.864 1.292C18.5 16.955 15.85 19.25 12 19.25s-6.501-2.295-8.13-4.412c-.44-.57-.696-.91-.865-1.292c-.158-.358-.255-.795-.255-1.546s.097-1.188.255-1.546c.169-.382.426-.722.864-1.292" />
+                                            </g>
+                                        </svg>
+                                    </a>
 
-                    <td class="mx-auto text-center">
-                        <span class="border-2 border-green-500 py-1 px-3 text-green-500">Đã giao hàng</span>
-                    </td>
-                    <td class="text-center align-middle">
-                        <a href="order-overview.html" class="bg-amber-400 px-4 py-2"><button
-                                class="text-center">View</button></a>
-                    </td>
-                </tr>
+                                    @if ($order->status == 'pending' || $order->status == 'confirmed')
+                                        <a href="#" title="Hủy đơn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 48 48">
+                                                <path fill="#d50000"
+                                                    d="M24 6C14.1 6 6 14.1 6 24s8.1 18 18 18s18-8.1 18-18S33.9 6 24 6m0 4c3.1 0 6 1.1 8.4 2.8L12.8 32.4C11.1 30 10 27.1 10 24c0-7.7 6.3-14 14-14m0 28c-3.1 0-6-1.1-8.4-2.8l19.6-19.6C36.9 18 38 20.9 38 24c0 7.7-6.3 14-14 14" />
+                                            </svg>
+                                        </a>
+                                    @endif
+                                    @if ($order->status == 'completed')
+                                        <a href="#" title="Mua lại">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24">
+                                                <path fill="currentColor" fill-rule="evenodd"
+                                                    d="M3.25 4A.75.75 0 0 1 4 3.25h2a.75.75 0 0 1 .738.616L8.626 14.25h8.788l1.858-7.432a.75.75 0 0 1 1.455.364l-2 8a.75.75 0 0 1-.727.568H8a.75.75 0 0 1-.738-.616L5.374 4.75H4A.75.75 0 0 1 3.25 4m5 14.25c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5m6.5 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5M13.75 5a.75.75 0 0 0-1.5 0v3.19l-.72-.72a.75.75 0 1 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l2-2a.75.75 0 0 0-1.06-1.06l-.72.72z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    @endif
 
-                <!-- 2 -->
+                                </div>
 
-                <tr class="h-[100px] border-b">
-                    <td class="text-center align-middle">&#8470; 1232</td>
-                    <td class="mx-auto text-center">20/05/2023</td>
-                    <td class="text-center align-middle">&#36;3200</td>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
 
-                    <td class="mx-auto text-center">
-                        <span class="border-2 border-orange-500 py-1 px-3 text-orange-500">Đang tiến hành</span>
-                    </td>
-                    <td class="text-center align-middle">
-                        <a href="order-overview.html" class="bg-amber-400 px-4 py-2"><button
-                                class="text-center">View</button></a>
-                    </td>
-                </tr>
-
-                <!-- 3 -->
-
-                <tr class="h-[100px] border-b">
-                    <td class="text-center align-middle">&#8470; 3246</td>
-                    <td class="mx-auto text-center">03/03/2022</td>
-                    <td class="text-center align-middle">&#36;2500</td>
-
-                    <td class="mx-auto text-center">
-                        <span class="border-2 border-red-500 py-1 px-3 text-red-500">Bị từ chối</span>
-                    </td>
-                    <td class="text-center align-middle">
-                        <a href="order-overview.html" class="bg-amber-400 px-4 py-2"><button
-                                class="text-center">View</button></a>
-                    </td>
-                </tr>
-
-                <!-- 4 -->
-
-                <tr class="h-[100px] border-b">
-                    <td class="text-center align-middle">&#8470; 9827</td>
-                    <td class="mx-auto text-center">31/01/2020</td>
-                    <td class="text-center align-middle">&#36;1700</td>
-
-                    <td class="mx-auto text-center">
-                        <span class="border-2 border-blue-500 py-1 px-3 text-blue-500">Cần thanh toán</span>
-                    </td>
-                    <td class="text-center align-middle">
-                        <a href="order-overview.html" class="bg-amber-400 px-4 py-2"><button
-                                class="text-center">View</button></a>
-                    </td>
-                </tr>
             </tbody>
+
         </table>
+
     </section>
 
 @endsection

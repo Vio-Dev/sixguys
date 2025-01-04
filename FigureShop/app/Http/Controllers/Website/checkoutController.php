@@ -61,11 +61,10 @@ class checkoutController extends Controller
             ->where('status', 'active')
             ->first();
 
-
-        // dd($request->all());
         $orderDate = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
         $orderDate->toDateTimeString();
         $user = User::find($userId);
+
 
         if ($input['payment_method'] == 'cod') {
             if ($user->address == null) {
@@ -98,6 +97,12 @@ class checkoutController extends Controller
                     'quantity' => $item->quantity,
                     'price' => $item->price,
                 ]);
+
+                $product = $item->product;
+
+                $product->inStock = $product->inStock - $item->quantity;
+                $product->hasSold = $product->hasSold + $item->quantity;
+                $product->save();
             }
 
             CartItem::whereHas('cart', function ($query) use ($userId) {
