@@ -17,6 +17,8 @@
                 href={{ route('home') }}>Trang chủ</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
                 href={{ route('products') }}>Sản phẩm</a>
+            <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
+                href={{ route('blogs') }}>Bài đăng</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline" href="about-us.html">Về
                 chúng tôi</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"

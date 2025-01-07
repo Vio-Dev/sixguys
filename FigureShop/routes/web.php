@@ -164,7 +164,7 @@ Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () 
 
     Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
 });
-
+Route::get('/bai-viet', [WebsiteController::class, 'blog'])->name('blogs');
 Route::get('/bai-viet/{id}', [postsContoller::class, 'show'])->name('postDetail');
 Route::post('bai-viet/{id}', [postsContoller::class, 'postComments'])->name('postsComments');
 Route::delete('bai-viet/{id}', [postsContoller::class, 'postsCommentsDelete'])->name('postsCommentsDelete');

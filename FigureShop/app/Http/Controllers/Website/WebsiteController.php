@@ -8,6 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Rating;
 use Flasher\Prime\FlasherInterface;
+use App\Models\Post;
+use App\Models\User;
 
 class WebsiteController extends Controller
 {
@@ -16,8 +18,9 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('isDeleted', 0)->get();
-        return view('website.index', compact('categories'));
+        $products = Product::where('status', 'public')->where('isDeleted', 0)->orderBy('created_at', 'desc')->get();
+          $renderPosts = Post::with('user')->where('isDeleted', 0)->get();
+        return view('website.index', compact('products', 'renderPosts'));
     }
     public function product( Request $request)
     {
@@ -89,9 +92,10 @@ class WebsiteController extends Controller
     //     return view('website.contact');
     // }
 
-    // public function blog()
-    // {
-    //     return view('website.blog');
-    // }
+    public function blog()
+    {
+         $renderPosts = Post::with('user')->where('isDeleted', 0)->get();
+        return view('website.post.index', compact('renderPosts'));
+    }
 
 }
