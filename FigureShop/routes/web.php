@@ -143,7 +143,10 @@ Route::prefix('thanh-toan')->middleware(['auth'])->name('checkout.')->group(func
     Route::post('/', [checkoutController::class, 'store'])->name('store');
 });
 
-Route::get('/orders/confirm/{order}/{user}', [OrderController::class, 'confirm'])->name('orders.confirm');
+Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('confirm/{order}/{user}', [OrderController::class, 'confirm'])->name('confirm');
+    Route::post('cancel/{orderId}', [OrderController::class, 'cancel'])->name('cancel');
+});
 
 Route::get('/success', function () {
     return view('website.order.confirm-success');
@@ -158,6 +161,7 @@ Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () 
     Route::get('/don-hang', [ProfileControllers::class, 'order'])->name('don-hang');
     Route::post('/don-hang/{id}', [ProfileControllers::class, 'orderDetail'])->name('don-hang-chi-tiet');
     Route::get('/yeu-thich', [ProfileControllers::class, 'wishlist'])->name('yeu-thich');
+
     Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
 });
 

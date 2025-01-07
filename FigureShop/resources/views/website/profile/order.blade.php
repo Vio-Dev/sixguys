@@ -12,7 +12,7 @@
             'confirmed' => 'border-green-800 text-green-800',
             'shipping' => 'border-purple-800 text-purple-800',
             'completed' => 'border-green-800 text-green-800',
-            'canceled' => 'border-red-800 text-red-800',
+            'cancelled' => 'border-red-800 text-red-800',
             'refunded' => 'border-blue-800 text-blue-800',
             'failed' => 'border-red-800 text-red-800',
         ];
@@ -22,7 +22,7 @@
             'confirmed' => 'Đã xác thực',
             'shipping' => 'Đang giao hàng',
             'completed' => 'Hoàn thành',
-            'canceled' => 'Hủy đơn',
+            'cancelled' => 'Đã hủy đơn',
             'refunded' => 'Hoàn tiền',
             'failed' => 'Thất bại',
         ];
@@ -113,15 +113,52 @@
                                             </g>
                                         </svg>
                                     </a>
-
                                     @if ($order->status == 'pending' || $order->status == 'confirmed')
-                                        <a href="#" title="Hủy đơn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 48 48">
-                                                <path fill="#d50000"
-                                                    d="M24 6C14.1 6 6 14.1 6 24s8.1 18 18 18s18-8.1 18-18S33.9 6 24 6m0 4c3.1 0 6 1.1 8.4 2.8L12.8 32.4C11.1 30 10 27.1 10 24c0-7.7 6.3-14 14-14m0 28c-3.1 0-6-1.1-8.4-2.8l19.6-19.6C36.9 18 38 20.9 38 24c0 7.7-6.3 14-14 14" />
-                                            </svg>
-                                        </a>
+                                        <form action="{{ route('orders.cancel', ['orderId' => $order->id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="button" title="Hủy đơn" onclick="cancelOrder(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 48 48">
+                                                    <path fill="#d50000"
+                                                        d="M24 6C14.1 6 6 14.1 6 24s8.1 18 18 18s18-8.1 18-18S33.9 6 24 6m0 4c3.1 0 6 1.1 8.4 2.8L12.8 32.4C11.1 30 10 27.1 10 24c0-7.7 6.3-14 14-14m0 28c-3.1 0-6-1.1-8.4-2.8l19.6-19.6C36.9 18 38 20.9 38 24c0 7.7-6.3 14-14 14" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                        <script>
+                                            function cancelOrder(button) {
+                                                Swal.fire({
+                                                    title: 'Bạn có chắc chắn muốn hủy đơn hàng không?',
+                                                    text: "Bạn hãy cho chúng tôi biết lý do bạn muốn hủy đơn",
+                                                    icon: 'warning',
+                                                    input: "text",
+                                                    inputAttributes: {
+                                                        autocapitalize: "off",
+                                                        name: 'noteSelect',
+                                                    },
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#d33',
+                                                    cancelButtonColor: '#3085d6',
+                                                    confirmButtonText: 'Xác nhận',
+                                                    cancelButtonText: 'Hủy'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        if (!result.value) {
+                                                            alert('Lý do hủy đơn không được để trống');
+                                                            return false;
+                                                        }
+                                                        const form = button.closest('form');
+                                                        const noteInput = document.createElement('input');
+                                                        noteInput.type = 'hidden';
+                                                        noteInput.name = 'note';
+                                                        noteInput.value = result.value;
+                                                        form.appendChild(noteInput);
+                                                        form.submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
                                     @endif
                                     @if ($order->status == 'completed')
                                         <a href="#" title="Mua lại">
