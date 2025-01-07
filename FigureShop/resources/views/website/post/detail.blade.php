@@ -12,7 +12,7 @@
             </div>
 
             <div class="mx-auto my-10 px-5">
-                <p class="text-sm text-gray-500">{!! $post->description !!}</p>
+                {!! $post->description !!}
 
             </div>
             <div>

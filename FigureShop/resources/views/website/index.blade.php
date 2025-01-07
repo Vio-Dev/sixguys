@@ -490,7 +490,7 @@
         </section>
         <!-- /bài đăng -->
         <section class="my-5">
-            <h2 class="text-2xl font-semibold">Bài đăng</h2>
+            <h2 class="text-2xl font-semibold">Bài đăng mới nhất </h2>
             <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" slides-per-view="3"
                 space-between="30" free-mode="true">
                 @forelse ($renderPosts as $item)
