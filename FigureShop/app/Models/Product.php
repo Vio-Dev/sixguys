@@ -26,4 +26,13 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function images()
+    {
+        return $this->hasMany(Media::class);
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 }

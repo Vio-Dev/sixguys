@@ -21,9 +21,9 @@
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Tạo mới sản phẩm</a>
         </div>
         <div class="py-4">
-            <form action="">
+            <form action="{{ route('admin.products.search') }}" method="POST">
                 @csrf
-                <input type="text" placeholder="Tìm kiếm sản phẩm"
+                <input type="text" name="search" placeholder="Tìm kiếm sản phẩm"
                     class="p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Tìm kiếm</button>
             </form>
@@ -53,6 +53,7 @@
                         <th scope="col" class="px-6 py-3">
                             Danh mục
                         </th>
+                        <th class="px-6 py-3">Biến thể</th>
                         <th scope="col" class="px-6 py-3">
                             Hành động
 
@@ -101,6 +102,22 @@
                                 <td class="px-6 py-4">
                                     {{ $product->category->name }}
                                 </td>
+                                <td class="px-6 py-4">
+                                    @if ($product->variants->count())
+                                        <ul>
+                                            @foreach ($product->variants as $variant)
+                                                <li>
+                                                    {{ $variant->variantValue->variant->name }}:
+                                                    {{ $variant->variantValue->value }} -
+                                                    {{ number_format($variant->price, 0, ',', '.') }} VND
+                                                    -{{ $variant->inStock }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p>Không có biến thể</p>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 ">
                                     <a href="{{ route('admin.products.edit', $product->id) }}"
                                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Sửa</a>
@@ -138,6 +155,9 @@
 
                 </tbody>
             </table>
+            <div class="p-5">
+                {{ $products->links() }}
+            </div>
         </div>
 
 
