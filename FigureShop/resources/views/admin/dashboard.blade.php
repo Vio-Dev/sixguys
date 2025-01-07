@@ -119,7 +119,6 @@
         const weeklyData = @json($weekly);
         const monthlyData = @json($monthly);
         const yearlyData = @json($yearly);
-
         // Biểu đồ ban đầu với dữ liệu theo tuần
         const ctx = document.getElementById('mainChart').getContext('2d');
         const chart = new Chart(ctx, {
