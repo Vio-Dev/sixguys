@@ -42,7 +42,7 @@ if (!function_exists('format_posts_status')) {
         switch ($status) {
             case 'published':
                 return 'Đã xuất bản';
-            case draft:
+            case 'draft':
                 return 'bản nháp';
             default:
                 return 'Unknown';
