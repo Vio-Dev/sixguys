@@ -48,12 +48,12 @@
                                     class="h-20 w-20 object-cover">
                             </span>
                             <span>
-                                {{ $blog->name }}
+                                {{ Str::limit($blog->name, 30) }}
                             </span>
                         </th>
                         <td scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                            {{ $blog->shortDecription }}
+                            {{ Str::limit($blog->shortDecription, 30) }}
                         </td>
                         <td scope="row" class="">
                             <div
