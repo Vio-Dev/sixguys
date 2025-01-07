@@ -155,6 +155,9 @@
 
                 </tbody>
             </table>
+            <div class="p-5">
+                {{ $products->links() }}
+            </div>
         </div>
 
 
