@@ -233,7 +233,7 @@
             </div>
             <div class="">
                 <button type="submit" class="bg-blue-500 p-2 rounded-md text-white">Tạo sản phẩm</button>
-                <a href={{ route('admin.products.list') }} class="bg-blue-500 p-2 rounded-md text-white">Hủy</a>
+                <a href={{ route('admin.products.list') }} class="bg-red-500 p-2 rounded-md text-white">Hủy</a>
             </div>
 
         </form>

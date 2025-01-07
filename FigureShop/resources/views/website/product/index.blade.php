@@ -6,129 +6,115 @@
     <section class="container mx-auto flex-grow max-w-[1200px] border-b py-5 lg:flex lg:flex-row lg:py-10">
         <!-- sidebar  -->
         <section class="hidden w-[300px] flex-shrink-0 px-4 lg:block">
-            <div class="flex border-b pb-5">
-                <div class="w-full">
-                    <p class="mb-3 font-medium">Danh mục</p>
-                    @foreach ($renderCategories as $category)
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">{{ $category->name }}</p>
+            <form action="{{ route('products') }}" method="GET">
+                @csrf
+                <!-- Lọc theo danh mục -->
+                <div class="flex border-b pb-5">
+                    <div class="w-full">
+                        <p class="mb-3 font-medium">Danh mục</p>
+                        @foreach ($renderCategories as $category)
+                            <div class="flex w-full justify-between">
+                                <div class="flex justify-center items-center">
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                        {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }} />
+                                    <p class="ml-4">{{ $category->name }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Lọc theo nhu cầu -->
+                <div class="flex border-b py-5">
+                    <div class="w-full">
+                        <p class="mb-3 font-medium">Lọc theo nhu cầu</p>
+                        @foreach ($renderSubCategories as $subCategory)
+                            <div class="flex w-full justify-between">
+                                <div class="flex justify-center items-center">
+                                    <input type="checkbox" name="subCategories[]" value="{{ $subCategory->id }}"
+                                        {{ in_array($subCategory->id, request('subCategories', [])) ? 'checked' : '' }} />
+                                    <p class="ml-4">{{ $subCategory->name }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Lọc theo giá -->
+                <div class="flex border-b py-5">
+                    <div class="w-full">
+                        <p class="mb-3 font-medium">PRICE</p>
+                        <div class="flex w-full">
+                            <div class="flex justify-between">
+                                <input type="number" name="minPrice" class="h-8 w-[90px] border pl-2"
+                                    value="{{ request('minPrice', 50) }}" placeholder="50" />
+                                <span class="px-3">-</span>
+                                <input type="number" name="maxPrice" class="h-8 w-[90px] border pl-2"
+                                    value="{{ request('maxPrice', 99999) }}" placeholder="99999" />
                             </div>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
-            </div>
+                <div class="flex border-b py-5">
+                    <div class="w-full">
+                        <p class="mb-3 font-medium">SIZE</p>
 
-            <div class="flex border-b py-5">
-                <div class="w-full">
-                    <p class="mb-3 font-medium">Lọc theo nhu cầu</p>
+                        <div class="flex gap-2">
+                            <div
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                                XS
+                            </div>
+                            <div
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                                S
+                            </div>
+                            <div
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                                M
+                            </div>
 
-                    @foreach ($renderSubCategories as $subCategory)
-                        <div class="flex w-full justify-between">
-                            <div class="flex justify-center items-center">
-                                <input type="checkbox" />
-                                <p class="ml-4">{{ $subCategory->name }}</p>
+                            <div
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                                L
+                            </div>
+
+                            <div
+                                class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                                XL
                             </div>
                         </div>
-                    @endforeach
-
-
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex border-b py-5">
-                <div class="w-full">
-                    <p class="mb-3 font-medium">PRICE</p>
+                <div class="flex py-5">
+                    <div class="w-full">
+                        <p class="mb-3 font-medium">COLOR</p>
 
-                    <div class="flex w-full">
-                        <div class="flex justify-between">
-                            <input x-mask="99999" min="50" type="number" class="h-8 w-[90px] border pl-2"
-                                placeholder="50" />
-                            <span class="px-3">-</span>
-                            <input x-mask="999999" type="number" max="999999" class="h-8 w-[90px] border pl-2"
-                                placeholder="99999" />
+                        <div class="flex gap-2">
+                            <div
+                                class="h-8 w-8 cursor-pointer border border-white bg-gray-600 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                            </div>
+                            <div
+                                class="h-8 w-8 cursor-pointer border border-white bg-violet-900 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                            </div>
+                            <div
+                                class="h-8 w-8 cursor-pointer border border-white bg-red-900 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="flex border-b py-5">
-                <div class="w-full">
-                    <p class="mb-3 font-medium">SIZE</p>
-
-                    <div class="flex gap-2">
-                        <div
-                            class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                            XS
-                        </div>
-                        <div
-                            class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                            S
-                        </div>
-                        <div
-                            class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                            M
-                        </div>
-
-                        <div
-                            class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                            L
-                        </div>
-
-                        <div
-                            class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                            XL
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex py-5">
-                <div class="w-full">
-                    <p class="mb-3 font-medium">COLOR</p>
-
-                    <div class="flex gap-2">
-                        <div
-                            class="h-8 w-8 cursor-pointer border border-white bg-gray-600 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                        </div>
-                        <div
-                            class="h-8 w-8 cursor-pointer border border-white bg-violet-900 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                        </div>
-                        <div
-                            class="h-8 w-8 cursor-pointer border border-white bg-red-900 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <!-- Các phần khác như SIZE, COLOR giữ nguyên -->
+                <button type="submit" class="my-5 h-10 w-full bg-violet-900 text-white">
+                    Lọc
+                </button>
+            </form>
         </section>
+
         <!-- /sidebar  -->
 
         <div>
-            <div class="mb-5 flex items-center justify-between px-5">
-                <div class="flex gap-3">
-                    <button class="flex items-center justify-center border px-6 py-2">
-                        Sort by
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="mx-2 h-4 w-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
-
-                    <button class="flex items-center justify-center border px-6 py-2 md:hidden">
-                        Filters
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="mx-2 h-4 w-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
-                </div>
-
-
-            </div>
-
-            <section class="mx-auto grid max-w-[1200px] grid-cols-2 gap-3 px-5 pb-10 lg:grid-cols-3">
-                @foreach ($products as $product)
+            <section class="mx-auto grid max-w-[1200px] grid-cols-2 gap-3 px-5 pb-10 lg:grid-cols-3 mt-4">
+                @forelse ($products as $product)
                     <div class="flex flex-col">
                         <div class="relative flex">
                             <img class="" src="{{ asset($product->thumbnail) }}" alt="sofa image" />
@@ -216,12 +202,17 @@
                             </form>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <p>Không có sản phẩm nào</p>
+                @endforelse
 
                 <!-- 2 -->
 
 
             </section>
+            <div class="flex justify-center">
+                {{ $products->links() }}
+            </div>
         </div>
     </section>
 @endsection

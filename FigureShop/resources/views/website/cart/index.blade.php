@@ -9,16 +9,19 @@
         <section class="w-full lg:w-3/4">
             <table class="table-auto w-full border-collapse">
                 <thead class="bg-neutral-100 text-left">
-                    <tr class="text-sm text-gray-600 w-full">
-                        <th class="min-w-[120px]">TÊN SẢN PHẨM</th>
-                        <th class="min-w-[120px]">GIÁ</th>
-                        <th class="min-w-[120px]">GIÁ GIẢM</th>
-                        <th class="min-w-[120px]">SỐ LƯỢNG</th>
-                        <th class="min-w-[120px]">TỘNG CỘNG</th>
-                        <th class="min-w-[120px]">Hành động</th>
+                    <tr class="text-sm text-gray-600 w-full p-2">
+                        <th class="min-w-[120px] p-2">TÊN SẢN PHẨM</th>
+                        <th class="min-w-[120px] p-2">GIÁ</th>
+                        <th class="min-w-[120px] p-2">GIÁ GIẢM</th>
+                        <th class="min-w-[120px] p-2">SỐ LƯỢNG</th>
+                        <th class="min-w-[120px] p-2">TỘNG CỘNG</th>
+
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $grandTotal = 0;
+                    @endphp
                     @if ($cart && $cart->items->isEmpty())
                         <tr>
                             <td colspan="6" class="py-4 px-4 text-center">
@@ -28,6 +31,11 @@
                         </tr>
                     @elseif ($cart)
                         @foreach ($cart->items as $index => $item)
+                            @php
+                                $itemTotal =
+                                    $item->quantity * $item->product->price * (1 - $item->product->discount / 100);
+                                $grandTotal += $itemTotal;
+                            @endphp
                             <tr class="border-b">
                                 <td class="py-2 px-2 flex items-center gap-4">
                                     <img src="{{ asset($item->product->thumbnail) }}" alt="{{ $item->product->name }}"
@@ -47,26 +55,29 @@
                                     {{ $item->product->discount }} %
                                 </td>
                                 <td class="py-2 px-2">
-                                    <div x-data="{ quantity: {{ $item->quantity }}, total: {{ $item->quantity * $item->product->price * (1 - $item->product->discount / 100) }} }" class="flex items-center">
+                                    <div x-data="{ quantity: {{ $item->quantity }}, total: {{ $itemTotal }} }" class="flex items-center">
                                         <button
                                             @click="quantity = Math.max(1, quantity - 1); total = quantity * {{ $item->product->price * (1 - $item->product->discount / 100) }}; updateTotal(quantity, {{ $item->product->price }}, {{ $item->product->discount }}, {{ $index }})"
                                             class="px-3 py-2 hover:bg-gray-200">−</button>
                                         <input type="text" x-model="quantity" class="px-4 py-2 w-20" min="1"
+                                            id="quantity-{{ $index }}"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, ''); total = quantity * {{ $item->product->price * (1 - $item->product->discount / 100) }}; updateTotal(quantity, {{ $item->product->price }}, {{ $item->product->discount }}, {{ $index }})" />
                                         <button
                                             @click="quantity++; total = quantity * {{ $item->product->price * (1 - $item->product->discount / 100) }}; updateTotal(quantity, {{ $item->product->price }}, {{ $item->product->discount }}, {{ $index }})"
                                             class="px-3 py-2 hover:bg-gray-200">+</button>
                                     </div>
                                 </td>
-                                <td class="py-2 px-2 text-gray-700" x-data="{ total: {{ $item->quantity * $item->product->price * (1 - $item->product->discount / 100) }} }">
+                                <td class="py-2 px-2 text-gray-700" x-data="{ total: {{ $itemTotal }} }">
                                     <span x-text="formatCurrency(total)" id="total-{{ $index }}"></span>
                                 </td>
+
                                 <td class="py-2 px-2 text-gray-500">
-                                    <form action="" method="post"
+                                    <form action="{{ route('cart.remove', $item->product->id) }}" method="POST"
                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa không?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="hover:text-red-500" type="button" onclick="confirmUpdate(this)">
+                                        <input type="hidden" name="product_id" value="{{ $item->product->id }}">
+                                        <button class="hover:text-red-500" type="button" onclick="confirmUpdate(this, )">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                                 class="h-5 w-5">
                                                 <path fill-rule="evenodd"
@@ -88,7 +99,7 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         // Nếu người dùng xác nhận, submit form
-                                                        button.closest('form').submit();
+                                                        // button.closest('form').submit();
                                                     }
                                                 });
                                             }
@@ -108,12 +119,41 @@
                                         </script>
                                     </form>
                                 </td>
+                                <td class="py-2 px-2 text-gray-500">
+                                    <form action="{{ route('cart.update', $item->product->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="product_id" value="{{ $item->product->id }}">
+                                        <input type="hidden" name="quantity" id="quantitySending-{{ $index }}"
+                                            class="w-16 text-center">
+                                        <button class="hover:text-red-500" type="button"
+                                            onClick = "getQuantity({{ $index }})">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 16 16">
+                                                <path fill="currentColor"
+                                                    d="M7.46 2a5.52 5.52 0 0 0-3.91 1.61a5.44 5.44 0 0 0-1.54 2.97a.503.503 0 0 1-.992-.166a6.514 6.514 0 0 1 6.44-5.41a6.55 6.55 0 0 1 4.65 1.93l1.89 2.21v-2.64a.502.502 0 0 1 1.006 0v4a.5.5 0 0 1-.503.5h-3.99a.5.5 0 0 1-.503-.5c0-.275.225-.5.503-.5h2.91l-2.06-2.4a5.53 5.53 0 0 0-3.9-1.6zm1.09 12a5.52 5.52 0 0 0 3.91-1.61A5.44 5.44 0 0 0 14 9.42a.504.504 0 0 1 .992.166a6.514 6.514 0 0 1-6.44 5.41a6.55 6.55 0 0 1-4.65-1.93l-1.89-2.21v2.64a.501.501 0 0 1-.858.353a.5.5 0 0 1-.148-.354v-4c0-.276.225-.5.503-.5H5.5c.278 0 .503.224.503.5s-.225.5-.503.5H2.59l2.06 2.4a5.53 5.53 0 0 0 3.9 1.6z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                    <script>
+                                        function getQuantity(index) {
+                                            const quantity = document.getElementById('quantity-' + index).value;
+                                            var quantitySending = document.getElementById('quantitySending-' + index);
+
+                                            quantitySending.value = quantity;
+                                            quantitySending.closest('form').submit();
+                                        }
+                                    </script>
+                                </td>
                             </tr>
                         @endforeach
+
                     @endif
                     <!-- Repeat ends -->
                 </tbody>
             </table>
+
+
         </section>
         <!-- Order Summary -->
         <section class="w-full lg:w-1/4">
@@ -121,7 +161,7 @@
                 <h2 class="text-lg font-bold mb-4">TÓM TẮT ĐƠN HÀNG</h2>
                 <div class="flex justify-between mb-4">
                     <p>TỘNG PHỤ</p>
-                    <p>$1280</p>
+                    <p>{{ format_currency($grandTotal) }}</p>
                 </div>
                 <div class="flex justify-between mb-4">
                     <p>VẬN CHUYỂN</p>
@@ -129,9 +169,9 @@
                 </div>
                 <div class="flex justify-between font-bold text-lg mb-4">
                     <p>TỘNG CỘNG</p>
-                    <p>$1280</p>
+                    <p>{{ format_currency($grandTotal) }}</p>
                 </div>
-                <a href="{{ route('checkout') }}" class="block">
+                <a href="{{ route('checkout.index') }}" class="block">
                     <button class="w-full bg-purple-900 text-white py-3 text-center hover:bg-purple-800">
                         Tiến hành thanh toán
                     </button>

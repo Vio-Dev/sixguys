@@ -8,18 +8,21 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BinController;
 use App\Http\Controllers\VariantController;
+use App\Http\Controllers\commentController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Website\profileControllers;
 use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\WebsiteController;
 use App\Http\Controllers\Website\checkoutController;
+use App\Http\Controllers\Website\postsContoller;
 
 use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -99,7 +102,6 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::post('list', [BinController::class, 'search'])->name('search');
             Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
             Route::delete('updateValue/{id}', [BinController::class, 'updateValue'])->name('updateValue');
-
         });
     });
     Route::prefix('variants')->name('variants.')->group(function () {
@@ -112,30 +114,59 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
         Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
         Route::post('list', [VariantController::class, 'search'])->name('search');
     });
+    Route::prefix('comments')->name('comments.')->group(function () {
+        Route::get('list-post', [commentController::class, 'post'])->name('post');
+        route::put('update/post/{id}', [commentController::class, 'updatePost'])->name('edit');
+        route::delete('delete/post/{id}', [commentController::class, 'deletePost'])->name('destroy');
+        Route::get('list-product', [commentController::class, 'product'])->name('product');
+        route::put('update/{id}', [commentController::class, 'updateProduct'])->name('updateProduct');
+        route::delete('delete/{id}', [commentController::class, 'deleteProduct'])->name('deleteProduct');
+    });
 });
 
 // user routes
 Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
+Route::post('/san-pham/{id}', [WebsiteController::class, 'productComment'])->name('productComments');
+Route::delete('/san-pham/{id}', [WebsiteController::class, 'productDelete'])->name('productDelete');
 
 Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
-    Route::post('/update', [CartController::class, 'update'])->name('update');
-    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
-    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::put('/update/{id}', [CartController::class, 'update'])->name('update');
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
 });
 
-Route::get('/thanh-toan', [checkoutController::class, 'index'])->middleware(['auth'])->name('checkout');
+Route::prefix('thanh-toan')->middleware(['auth'])->name('checkout.')->group(function () {
+    Route::get('/', [checkoutController::class, 'index'])->name('index');
+    Route::post('/', [checkoutController::class, 'store'])->name('store');
+});
+
+Route::get('/orders/confirm/{order}/{user}', [OrderController::class, 'confirm'])->name('orders.confirm');
+
+Route::get('/success', function () {
+    return view('website.order.confirm-success');
+})->name('success');
+Route::get('/fail', function () {
+    return view('website.order.confirm-fail');
+})->name('failed');
 
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
     Route::get('/don-hang', [ProfileControllers::class, 'order'])->name('don-hang');
+    Route::post('/don-hang/{id}', [ProfileControllers::class, 'orderDetail'])->name('don-hang-chi-tiet');
     Route::get('/yeu-thich', [ProfileControllers::class, 'wishlist'])->name('yeu-thich');
     Route::post('/dang-xuat', [ProfileControllers::class, 'logout'])->name('dang-xuat');
 });
 
+Route::get('/bai-viet/{id}', [postsContoller::class, 'show'])->name('postDetail');
+Route::post('bai-viet/{id}', [postsContoller::class, 'postComments'])->name('postsComments');
+Route::delete('bai-viet/{id}', [postsContoller::class, 'postsCommentsDelete'])->name('postsCommentsDelete');
+
+Route::get('/mail', function () {
+    return view('mail.invoice');
+});
 
 require __DIR__ . '/auth.php';
