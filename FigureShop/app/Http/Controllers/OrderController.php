@@ -13,7 +13,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        return view('admin.orders.index', ['orders' => $orders]);
     }
 
     /**
@@ -94,13 +95,12 @@ class OrderController extends Controller
         $order->load(['orderDetails.product', 'orderDetails.productVariant']);
 
 
-
         if (!$order) {
             return abort(404, 'Không tìm thấy đơn hàng');
         }
 
         if ($order->status !== 'pending' && $order->status !== 'confirmed') {
-            $flasher->addError('Đơn hàng đã được xác nhận, không thể hủy');
+            $flasher->addFlash('error', 'Đơn hàng không thể hủy!', [], 'Thất bại');
             return back();
         }
 
@@ -125,9 +125,9 @@ class OrderController extends Controller
         $order->note = $orderNote;
 
         if ($order->save()) {
-            $flasher->addSuccess('Đơn hàng đã được hủy');
+            $flasher->addFlash('success', 'Đơn hàng đã được xác nhận!', [], 'Thành công');
         } else {
-            $flasher->addError('Đã có lỗi xảy ra');
+            $flasher->addFlash('error', 'Đã có lỗi xảy ra!', [], 'Thất bại');
         }
 
         return back();

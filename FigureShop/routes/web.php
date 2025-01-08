@@ -104,6 +104,14 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('updateValue/{id}', [BinController::class, 'updateValue'])->name('updateValue');
         });
     });
+    Route::prefix('don-hang')->name('don-hang.')->group(function () {
+        Route::get('list', [OrderController::class, 'index'])->name('list');
+        Route::get('create', [OrderController::class, 'create'])->name('create');
+        Route::post('/', [OrderController::class, 'store'])->name('store');
+        Route::get('show/{id}', [OrderController::class, 'show'])->name('show');
+        Route::delete('delete/{id}', [OrderController::class, 'destroyOrder'])->name('destroy');
+        Route::delete('update/{id}', [OrderController::class, 'updateOrder'])->name('update');
+    });
     Route::prefix('variants')->name('variants.')->group(function () {
         Route::get('list', [VariantController::class, 'index'])->name('list');
         Route::get('create', [VariantController::class, 'create'])->name('create');
