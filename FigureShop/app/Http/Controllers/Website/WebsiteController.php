@@ -19,7 +19,7 @@ class WebsiteController extends Controller
     public function index()
     {
         $products = Product::where('status', 'public')->where('isDeleted', 0)->orderBy('created_at', 'desc')->get();
-          $renderPosts = Post::with('user')->where('isDeleted', 0)->get();
+          $renderPosts = Post::with('user')->where('status', 'published')->where('isDeleted', 0)->orderBy('created_at', 'desc')->paginate(12);
         return view('website.index', compact('products', 'renderPosts'));
     }
     public function product( Request $request)
@@ -94,7 +94,7 @@ class WebsiteController extends Controller
 
     public function blog()
     {
-         $renderPosts = Post::with('user')->where('isDeleted', 0)->get();
+       $renderPosts = Post::with('user')->where('status', 'published')->orderBy('created_at', 'desc')->where('isDeleted', 0)->paginate(12);
         return view('website.post.index', compact('renderPosts'));
     }
 
