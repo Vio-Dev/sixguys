@@ -110,7 +110,8 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
         Route::post('/', [OrderController::class, 'store'])->name('store');
         Route::get('show/{id}', [OrderController::class, 'show'])->name('show');
         Route::delete('delete/{id}', [OrderController::class, 'destroyOrder'])->name('destroy');
-        Route::delete('update/{id}', [OrderController::class, 'updateOrder'])->name('update');
+        Route::put('update/{id}', [OrderController::class, 'update'])->name('update');
+        Route::patch('updateStatus/{orderId}', [OrderController::class, 'updateStatus'])->name('updateStatus');
     });
     Route::prefix('variants')->name('variants.')->group(function () {
         Route::get('list', [VariantController::class, 'index'])->name('list');

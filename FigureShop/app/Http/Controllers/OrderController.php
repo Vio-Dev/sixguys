@@ -38,28 +38,58 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('id', $id)->first();
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+        $products = $order->orderDetails->map(function ($item) {
+            return [
+                'id' => $item->product->id,
+                'name' => $item->product->name,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'thumbnail' => $item->product->thumbnail,
+                'variant' => $item->productVariant ? $item->productVariant->variantValue->value : null,
+                'discount' => $item->product->discount,
+                'total' => $item->price * $item->quantity - $item->price * $item->quantity * $item->product->discount / 100,
+            ];
+        });
+
+        return response()->json($products);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    public function update(Request $request, string $id) {}
 
     /**
      * Remove the specified resource from storage.
      */
+    public function updateStatus(Request $request, FlasherInterface $flasher, string $id)
+    {
+
+        $status = $request->input('status');
+        $note = $request->input('note');
+        $order = Order::find($id);
+
+        if (!$order) {
+            $flasher->addFlash('error', 'Không tìm thấy đơn hàng!', [], 'Thất bại');
+            return back();
+        }
+
+        $order->status = $status;
+        $order->note = $note;
+
+        if ($order->save()) {
+            $flasher->addFlash('success', 'Cập nhật trạng thái đơn hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Có lỗi xảy ra!', [], 'Thất bại');
+        }
+
+        return back();
+    }
+
     public function destroy(string $id)
     {
         //
