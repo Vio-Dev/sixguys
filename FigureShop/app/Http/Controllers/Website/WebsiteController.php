@@ -51,7 +51,7 @@ class WebsiteController extends Controller
     public function productDetail($id)
     {
          $comments = Rating::with('user')->where('product_id', $id)->where('isHidden', 0)->get();
-        $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->first();
+        $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->with('variants.variantValue.variant')->first();
         return view('website.product.detail', compact('product', 'comments'));
     }
 
