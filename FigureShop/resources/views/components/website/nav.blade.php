@@ -17,6 +17,8 @@
                 href={{ route('home') }}>Trang chủ</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
                 href={{ route('products') }}>Sản phẩm</a>
+            <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
+                href={{ route('blogs') }}>Bài đăng</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline" href="about-us.html">Về
                 chúng tôi</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
@@ -76,12 +78,13 @@
 <section x-show="desktopMenuOpen" @click.outside="desktopMenuOpen = false"
     class="absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white" style="display: none">
     <div class="mx-auto flex max-w-[1200px] py-10">
-        <div class="w-[300px] border-r">
+        {{-- <div class="w-[300px] border-r">
             <ul class="px-5">
                 @foreach ($renderCategories as $category)
-                    <li class="active:blue-900 flex items-center gap-2  py-2 px-3 hover:bg-amber-400 hover:text-white">
+                    <li class="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-amber-400 hover:text-white">
                         {{ $category->name }}
-                        <span class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        <span class="ml-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                             </svg>
@@ -89,54 +92,29 @@
                     </li>
                 @endforeach
             </ul>
-        </div>
+        </div> --}}
 
-        <div class="flex w-full justify-between">
-            <div class="flex gap-6">
-                <div class="mx-5">
-                    <p class="font-medium text-gray-500">BEDS</p>
-                    <ul class="text-sm leading-8">
-                        <li><a href="product-overview.html">Italian bed</a></li>
-                        <li><a href="product-overview.html">Queen-size bed</a></li>
-                        <li>
-                            <a href="product-overview.html">Wooden craft bed</a>
-                        </li>
-                        <li><a href="product-overview.html">King-size bed</a></li>
-                    </ul>
-                </div>
+        <div class=" flex max-w-[1200px] py-10">
 
-                <div class="mx-5">
-                    <p class="font-medium text-gray-500">LAMPS</p>
-                    <ul class="text-sm leading-8">
-                        <li>
-                            <a href="product-overview.html">Italian Purple Lamp</a>
-                        </li>
-                        <li><a href="product-overview.html">APEX Lamp</a></li>
-                        <li><a href="product-overview.html">PIXAR lamp</a></li>
-                        <li>
-                            <a href="product-overview.html">Ambient Nightlamp</a>
-                        </li>
-                    </ul>
-                </div>
 
-                <div class="mx-5">
-                    <p class="font-medium text-gray-500">BEDSIDE TABLES</p>
-                    <ul class="text-sm leading-8">
-                        <li><a href="product-overview.html">Purple Table</a></li>
-                        <li><a href="product-overview.html">Easy Bedside</a></li>
-                        <li><a href="product-overview.html">Soft Table</a></li>
-                        <li><a href="product-overview.html">Craft Table</a></li>
-                    </ul>
-                </div>
-
-                <div class="mx-5">
-                    <p class="font-medium text-gray-500">SPECIAL</p>
-                    <ul class="text-sm leading-8">
-                        <li><a href="product-overview.html">Humidifier</a></li>
-                        <li><a href="product-overview.html">Bed Cleaner</a></li>
-                        <li><a href="product-overview.html">Vacuum Cleaner</a></li>
-                        <li><a href="product-overview.html">Pillow</a></li>
-                    </ul>
+            <div class="flex w-full justify-between">
+                <div class="flex gap-6">
+                    @foreach ($renderCategories as $category)
+                        <div class="mx-5">
+                            <a href="{{ route('products') }}"
+                                class="font-medium text-gray-500">{{ $category->name }}</a>
+                            <ul class="text-sm leading-8">
+                                @foreach ($renderSubCategories->where('parent_id', $category->id) as $subCategory)
+                                    <li class="hover:text-amber-400">
+                                        <a
+                                            href="{{ route('products', ['category' => $category->slug, 'subCategory' => $subCategory->slug]) }}">
+                                            {{ $subCategory->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

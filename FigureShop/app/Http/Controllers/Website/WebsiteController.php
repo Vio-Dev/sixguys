@@ -8,6 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Rating;
 use Flasher\Prime\FlasherInterface;
+use App\Models\Post;
+use App\Models\User;
 
 class WebsiteController extends Controller
 {
@@ -16,12 +18,33 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('isDeleted', 0)->get();
-        return view('website.index', compact('categories'));
+        $products = Product::where('status', 'public')->where('isDeleted', 0)->orderBy('created_at', 'desc')->get();
+          $renderPosts = Post::with('user')->where('status', 'published')->where('isDeleted', 0)->orderBy('created_at', 'desc')->paginate(12);
+        return view('website.index', compact('products', 'renderPosts'));
     }
-    public function product()
+    public function product( Request $request)
     {
-        $products = Product::where('isDeleted', 0)->where('status', 'public')->get();
+         $query = Product::where('isDeleted', 0)->where('status', 'public');
+
+    // Filter by categories
+    if ($request->filled('categories')) {
+        $categoryIds = $request->categories;
+        $subCategoryIds = Category::whereIn('parent_id', $categoryIds)->pluck('id')->toArray();
+        $allCategoryIds = array_merge($categoryIds, $subCategoryIds);
+        $query->whereIn('category_id', $allCategoryIds);
+    }
+    if($request->filled('subcategories')){
+        $query->whereIn('category_id', $request->subcategories);
+    }
+
+    if ($request->filled('minPrice') || $request->filled('maxPrice')) {
+        $minPrice = $request->get('minPrice', 0);
+        $maxPrice = $request->get('maxPrice', PHP_INT_MAX);
+        $query->whereBetween('price', [$minPrice, $maxPrice]);
+    }
+
+    // Get the filtered products with pagination
+    $products = $query->paginate(12);
         return view('website.product.index', compact('products'));
     }
 
@@ -69,9 +92,10 @@ class WebsiteController extends Controller
     //     return view('website.contact');
     // }
 
-    // public function blog()
-    // {
-    //     return view('website.blog');
-    // }
+    public function blog()
+    {
+       $renderPosts = Post::with('user')->where('status', 'published')->orderBy('created_at', 'desc')->where('isDeleted', 0)->paginate(12);
+        return view('website.post.index', compact('renderPosts'));
+    }
 
 }
