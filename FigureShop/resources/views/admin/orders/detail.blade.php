@@ -3,6 +3,6 @@
 
 @section('content')
     <div>
-        trang orders
+        Chi tiết đơn hàng
     </div>
 @endsection

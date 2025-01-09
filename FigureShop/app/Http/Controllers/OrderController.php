@@ -13,7 +13,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        return view('admin.orders.index', ['orders' => $orders]);
     }
 
     /**
@@ -37,28 +38,58 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('id', $id)->first();
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+        $products = $order->orderDetails->map(function ($item) {
+            return [
+                'id' => $item->product->id,
+                'name' => $item->product->name,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'thumbnail' => $item->product->thumbnail,
+                'variant' => $item->productVariant ? $item->productVariant->variantValue->value : null,
+                'discount' => $item->product->discount,
+                'total' => $item->price * $item->quantity - $item->price * $item->quantity * $item->product->discount / 100,
+            ];
+        });
+
+        return response()->json($products);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    public function update(Request $request, string $id) {}
 
     /**
      * Remove the specified resource from storage.
      */
+    public function updateStatus(Request $request, FlasherInterface $flasher, string $id)
+    {
+
+        $status = $request->input('status');
+        $note = $request->input('note');
+        $order = Order::find($id);
+
+        if (!$order) {
+            $flasher->addFlash('error', 'Không tìm thấy đơn hàng!', [], 'Thất bại');
+            return back();
+        }
+
+        $order->status = $status;
+        $order->note = $note;
+
+        if ($order->save()) {
+            $flasher->addFlash('success', 'Cập nhật trạng thái đơn hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Có lỗi xảy ra!', [], 'Thất bại');
+        }
+
+        return back();
+    }
+
     public function destroy(string $id)
     {
         //
@@ -94,13 +125,12 @@ class OrderController extends Controller
         $order->load(['orderDetails.product', 'orderDetails.productVariant']);
 
 
-
         if (!$order) {
             return abort(404, 'Không tìm thấy đơn hàng');
         }
 
         if ($order->status !== 'pending' && $order->status !== 'confirmed') {
-            $flasher->addError('Đơn hàng đã được xác nhận, không thể hủy');
+            $flasher->addFlash('error', 'Đơn hàng không thể hủy!', [], 'Thất bại');
             return back();
         }
 
@@ -125,9 +155,9 @@ class OrderController extends Controller
         $order->note = $orderNote;
 
         if ($order->save()) {
-            $flasher->addSuccess('Đơn hàng đã được hủy');
+            $flasher->addFlash('success', 'Đơn hàng đã được xác nhận!', [], 'Thành công');
         } else {
-            $flasher->addError('Đã có lỗi xảy ra');
+            $flasher->addFlash('error', 'Đã có lỗi xảy ra!', [], 'Thất bại');
         }
 
         return back();
