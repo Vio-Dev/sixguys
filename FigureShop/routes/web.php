@@ -154,6 +154,8 @@ Route::prefix('thanh-toan')->middleware(['auth'])->name('checkout.')->group(func
 });
 
 Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('detailOrder/{orderId}', [OrderController::class, 'detailOrder'])->name('detailOrder')->middleware('auth');
+    Route::post('rebuy/{orderId}', [OrderController::class, 'rebuy'])->name('rebuy');
     Route::get('confirm/{order}/{user}', [OrderController::class, 'confirm'])->name('confirm');
     Route::post('cancel/{orderId}', [OrderController::class, 'cancel'])->name('cancel');
 });

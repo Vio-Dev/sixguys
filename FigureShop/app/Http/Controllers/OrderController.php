@@ -205,4 +205,33 @@ class OrderController extends Controller
 
         return back();
     }
+
+    public function detailOrder(Request $request, $orderId)
+    {
+
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('id', $orderId)->first();
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+        $products = $order->orderDetails->map(function ($item) {
+            return [
+                'id' => $item->product->id,
+                'name' => $item->product->name,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'thumbnail' => $item->product->thumbnail,
+                'variant' => $item->productVariant ? $item->productVariant->variantValue->value : null,
+                'discount' => $item->product->discount,
+                'total' => $item->price * $item->quantity - $item->price * $item->quantity * $item->product->discount / 100,
+            ];
+        });
+
+        return response()->json($products);
+    }
+    public function rebuy()
+    {
+        return response()->json('rebuy');
+    }
 }
