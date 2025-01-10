@@ -13,14 +13,15 @@
         </button>
     </div>
 
-    <form class="hidden h-9 w-2/5 items-center border md:flex">
+    <form action="{{ route('search') }}" class="hidden h-9 w-2/5 items-center border md:flex" method="GET">
+        @csrf
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="mx-3 h-4 w-4">
             <path stroke-linecap="round" stroke-linejoin="round"
                 d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
         </svg>
 
-        <input class="hidden w-11/12 outline-none md:block" type="search" placeholder="Tìm kiếm" />
+        <input name='query' class="hidden w-11/12 outline-none md:block" type="search" placeholder="Tìm kiếm" />
 
         <button class="ml-auto h-full w-1/4 bg-amber-400 px-4 hover:bg-yellow-300">
             Tìm kiếm
