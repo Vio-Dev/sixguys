@@ -34,8 +34,58 @@
             '1' => 'Đã thanh toán',
         ];
     @endphp
+
+    @php
+        $vietSubStatusOrders = [
+            'pending' => 'Đợi xác thực',
+            'processing' => 'Đang xử lý',
+            'confirmed' => 'Đã xác thực',
+            'shipping' => 'Đang giao hàng',
+            'completed' => 'Hoàn thành',
+            'cancelled' => 'Đã hủy đơn',
+            'refunded' => 'Hoàn tiền',
+            'failed' => 'Thất bại',
+        ];
+        $vietSubMethodPayment = [
+            'paid' => 'Đã thanh toán',
+            'unpaid' => 'Chưa thanh toán',
+        ];
+    @endphp
     <div>
         <h2 class="text-[24px] font-bold">Danh sách đơn hàng</h2>
+        {{-- thêm lọc theo trang thái, ngày đặt --}}
+
+
+        <div class="flex gap-3">
+            <div class="flex gap-3">
+                <form method="GET">
+                    <label for="status">Trạng thái:</label>
+                    <select name="status" id="status" onchange="this.form.submit()">
+                        <option value="">Tất cả</option>
+                        @foreach ($vietSubStatusOrders as $status => $label)
+                            <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+
+            <div class="flex gap-3">
+                <form method="GET">
+                    <label for="methodPayment">Thanh toán:</label>
+                    <select name="methodPayment" id="methodPayment" onchange="this.form.submit()">
+                        <option value="">Tất cả</option>
+                        @foreach ($vietSubMethodPayment as $status => $label)
+                            <option value="{{ $status }}" {{ request('methodPayment') == $status ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+        </div>
+
         <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -213,8 +263,7 @@
                                     modalDetailOrder.classList.add('hidden');
                                 }
                             </script>
-                            <form action="{{ route('admin.categories.destroy', $order->id) }}" method="POST"
-                                class="ms-3">
+                            <form action="{{ route('admin.don-hang.destroy', $order->id) }}" method="POST" class="ms-3">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" onclick="confirmDelete(this)"
@@ -243,7 +292,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="2" class="px-6 py-4 text-center text-gray-500">Không có đơn hàng nào.</td>
+                        <td colspan="10" class="px-6 py-4 text-center text-gray-500">Không có đơn hàng nào.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -265,8 +314,8 @@
                             <button type="button" onclick="closeModal()"
                                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                 data-modal-hide="default-modal">
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 14 14">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
