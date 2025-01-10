@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Flasher\Prime\FlasherInterface;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.orders.index', ['orders' => $orders]);
     }
 
@@ -73,16 +74,58 @@ class OrderController extends Controller
         $note = $request->input('note');
         $order = Order::find($id);
 
+        $updateAt = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
+        $updateAt->toDateTimeString();
+
         if (!$order) {
             $flasher->addFlash('error', 'Không tìm thấy đơn hàng!', [], 'Thất bại');
             return back();
         }
 
+        if ($order->status === 'completed') {
+            $order->isPaid = true;
+            $order->updated_at = $updateAt;
+        }
+
+        if ($status === "refunded") {
+            $order->isPaid = false;
+            $order->note = "Chuyển trạng thái từ về hoàn tiền chưa thanh toán";
+            $order->status = $status;
+            $order->updated_at = $updateAt;
+            $order->save();
+            $flasher->addFlash('success', 'Cập nhật trạng thái đơn hàng thành công!', [], 'Thành công');
+            return back();
+        }
+
         $order->status = $status;
         $order->note = $note;
+        $order->updated_at = $updateAt;
 
         if ($order->save()) {
             $flasher->addFlash('success', 'Cập nhật trạng thái đơn hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Có lỗi xảy ra!', [], 'Thất bại');
+        }
+
+        return back();
+    }
+    public function updatePayment(Request $request, FlasherInterface $flasher, string $id)
+    {
+
+        $isPaid = $request->input('isPaid');
+        $order = Order::find($id);
+        $updateAt = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
+        $updateAt->toDateTimeString();
+
+        if (!$order) {
+            $flasher->addFlash('error', 'Không tìm thấy đơn hàng!', [], 'Thất bại');
+            return back();
+        }
+
+        $order->isPaid = $isPaid;
+        $order->updated_at = $updateAt;
+        if ($order->save()) {
+            $flasher->addFlash('success', 'Cập nhật trạng thái thanh toán thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Có lỗi xảy ra!', [], 'Thất bại');
         }

@@ -20,36 +20,16 @@ Trang chủ
 
     Thống kê
 </a>
-<div x-data="{ open: false }" class="text-white">
-    <ul>
-        <!-- Dropdown button -->
-        <button @click="open = !open" id="dropCategory"
-            class=" text-white font-medium  text-sm text-center inline-flex gap-1 p-2 w-full items-center hover:underline hover:bg-gray-700"
-            type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32">
-                <path fill="currentColor"
-                    d="M26 30H6a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2h3v2H6v12h20V16h-3v-2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2" />
-                <path fill="currentColor" d="M13 20h6v2h-6zm7.59-11.41L17 12.17V2h-2v10.17l-3.59-3.58L10 10l6 6l6-6z" />
-            </svg>
-            Đơn hàng
-        </button>
-
-        <!-- Dropdown menu -->
-        <div x-show="open" @click.outside="open = false" id="dropdown"
-            class=" divide-gray-100  shadow  dark:bg-gray-700">
-            <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
-                <a href={{ route('admin.don-hang.list') }}
-                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Danh
-                    sách</a>
-                {{-- <a href={{ route('admin.blogs.create') }}
-                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">Tạo
-                    mới</a> --}}
-            </ul>
-        </div>
-    </ul>
-</div>
-
-
+<a href={{ route('admin.don-hang.list') }} class="flex p-2 gap-1 hover:underline hover:bg-gray-700">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+            <path
+                d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73zm1 .27V12" />
+            <path d="m3.3 7l7.703 4.734a2 2 0 0 0 1.994 0L20.7 7M7.5 4.27l9 5.15" />
+        </g>
+    </svg>
+    Đơn hàng
+</a>
 <div x-data="{ open: false }" class="text-white">
     <ul>
         <!-- Dropdown button -->
