@@ -113,6 +113,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
         Route::delete('delete/{id}', [OrderController::class, 'destroyOrder'])->name('destroy');
         Route::put('update/{id}', [OrderController::class, 'update'])->name('update');
         Route::patch('updateStatus/{orderId}', [OrderController::class, 'updateStatus'])->name('updateStatus');
+        Route::patch('updatePayment/{orderId}', [OrderController::class, 'updatePayment'])->name('updatePayment');
     });
     Route::prefix('variants')->name('variants.')->group(function () {
         Route::get('list', [VariantController::class, 'index'])->name('list');

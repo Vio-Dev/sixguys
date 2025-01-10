@@ -29,6 +29,10 @@
             'cod' => 'Thanh toán khi nhận hàng',
             'vnpay' => 'VNPAY',
         ];
+        $isPaidStatus = [
+            '0' => 'Chưa thanh toán',
+            '1' => 'Đã thanh toán',
+        ];
     @endphp
     <div>
         <h2 class="text-[24px] font-bold">Danh sách đơn hàng</h2>
@@ -39,7 +43,9 @@
                     <th scope="col" class="px-6 py-3">Tên khách hàng</th>
                     <th scope="col" class="px-6 py-3">Tổng tiền</th>
                     <th scope="col" class="px-6 py-3">Ngày đặt</th>
+                    <th scope="col" class="px-6 py-3">Cập nhật lúc</th>
                     <th scope="col" class="px-6 py-3">Trạng thái</th>
+                    <th scope="col" class="px-6 py-3">Thanh toán</th>
                     <th scope="col" class="px-6 py-3">Ghi chú</th>
                     <th scope="col" class="px-6 py-3">Phương thức thanh toán</th>
                     <th scope="col" class="px-6 py-3">Hành động</th>
@@ -61,13 +67,19 @@
                         </th>
 
 
+
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $order->order_date }}
+                            {{ format_day($order->order_date) }}
                         </th>
+
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ format_day($order->updated_at) }}
+                        </th>
+
                         <th class="">
                             @if (in_array($order->status, ['completed', 'cancelled', 'refunded', 'failed']))
                                 <span
-                                    class="px-2 inline-flex font-bold leading-5 rounded-full {{ $classOrder[$order->status] }}">
+                                    class="px-2 w-full inline-flex items-center justify-center font-bold leading-5 border {{ $classOrder[$order->status] }}">
                                     {{ $vietSubStatusOrder[$order->status] }}
                                 </span>
                             @else
@@ -119,6 +131,27 @@
                                 </form>
                             @endif
                         </th>
+
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            @if ($order->isPaid == 1)
+                                <span
+                                    class="px-2 inline-flex font-bold leading-5 rounded-full {{ $classOrder[$order->status] }}">
+                                    {{ $isPaidStatus[$order->isPaid] }}
+                                </span>
+                            @else
+                                <form action="{{ route('admin.don-hang.updatePayment', $order->id) }}" method="POST"
+                                    onsubmit="updatePaymentStatus(this,event, {{ $order->id }})">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="isPaid" id="" value="{{ $isPaidStatus[$order->isPaid] }}"
+                                        onchange="this.form.submit()">
+                                        <option value="0" {{ $order->isPaid == 0 ? 'selected' : '' }}>Chưa thanh toán
+                                        </option>
+                                        <option value="1" {{ $order->isPaid == 1 ? 'selected' : '' }}>Đã thanh toán
+                                        </option>
+                                    </select>
+                                </form>
+                            @endif
                         <th>
                             {{ $order->note }}
                         </th>
@@ -215,6 +248,9 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="p-5">
+            {{ $orders->links() }}
+        </div>
         <div id="modalDetailOrder" tabindex="-1" aria-hidden="true"
             class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 " onclick="closeModal()">
             <div class="flex justify-center items-center md:inset-0 h-[calc(100%-1rem)] min-w-[800px]">
