@@ -35,7 +35,7 @@ class postsContoller extends Controller
         $comment->rating = $request->rating;
         $comment->user_id = auth()->user()->id;
         $comment->save();
-        $flasher->addSuccess('Bình luận của bạn đã được gửi');
+        $flasher->addSuccess('Bình luận của bạn đã được gửi',[],'Thành công');
         return back();
     }
     public function postsCommentsDelete(Request $request,FlasherInterface $flasher)
@@ -44,7 +44,7 @@ class postsContoller extends Controller
         $comment = Rating::findOrFail($id);
         $comment->isHidden = true;
         $comment->save();
-        $flasher->addSuccess('Bình luận của bạn đã được xóa');
+        $flasher->addSuccess('Bình luận của bạn đã được xóa',[],'Thành công');
         return back();
     }
 }
