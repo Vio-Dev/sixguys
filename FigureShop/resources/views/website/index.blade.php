@@ -81,7 +81,7 @@
 <swiper-slide>
                         <div class="flex flex-col">
                             <div class="relative flex">
-                                <img class="" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
+                                <img class=" w-[200px] h-[200px]" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
                                 <div
                                     class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100">
                                     <a href={{ route('productDetail', $product->id) }}
@@ -193,7 +193,8 @@
             @forelse ($products->whereIn('category_id', [1, 2])->take(8) as $product)
                     <div class="flex flex-col">
                         <div class="relative flex">
-                            <img class="" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
+                            <img class="w-[300px] h-[300px]" src="{{ asset($product->thumbnail) }}"
+                                alt="{{ $product->name }}" />
                             <div
                                 class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100">
                                 <a href={{ route('productDetail', $product->id) }}
@@ -299,7 +300,8 @@
             @forelse ($products->whereIn('category_id', [5, 6])->take(8) as $product)
                 <div class="flex flex-col">
                     <div class="relative flex">
-                        <img class="" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
+                        <img class="w-[300px] h-[300px]" src="{{ asset($product->thumbnail) }}"
+                            alt="{{ $product->name }}" />
                         <div
                             class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100">
                             <a href={{ route('productDetail', $product->id) }}
@@ -405,7 +407,8 @@
             @forelse ($products->whereIn('category_id', [7,8,9,10,11,12,13,14])->take(8) as $product)
                 <div class="flex flex-col">
                     <div class="relative flex">
-                        <img class="" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
+                        <img class="w-[300px] h-[300px]" src="{{ asset($product->thumbnail) }}"
+                            alt="{{ $product->name }}" />
                         <div
                             class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100">
                             <a href={{ route('productDetail', $product->id) }}
@@ -514,7 +517,7 @@
                         <div class="flex flex-col ">
                             <a href="{{ route('postDetail', ['id' => $item->id]) }}" class="cursor-pointer">
                                 <div class="relative flex">
-                                    <img class="w-full" src="{{ asset($item->thumbnail) }}" />
+                                    <img class="w-[350px] h-[200px]" src="{{ asset($item->thumbnail) }}" />
                                     <div class="absolute right-1 mt-3 flex items-center justify-center bg-amber-400">
                                         <p class="px-2 py-2 text-sm">{{ format_posts_status($item->status) }}</p>
                                     </div>
@@ -522,7 +525,7 @@
 
                                 <div class="mt-2 text-left">
 
-                                    <p class="mt-2 hover:text-violet-900"> {{ $item->name }}</p>
+                                    <p class="mt-2 hover:text-violet-900"> {{ Str::limit($item->name, 100) }}</p>
                                     <p class="font-medium text-violet-900">
                                         Tác giả: {{ $item->user->name }}
 

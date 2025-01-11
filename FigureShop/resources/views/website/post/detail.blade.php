@@ -3,7 +3,7 @@
 @section('title', 'Chi tiết bài viết')
 
 @section('content')
-    <div>
+    <div class="container">
         <section class="flex-grow text-left">
             <div class="mt-6 flex flex-col gap-3">
                 <img class="mx-auto w-[200px]" src="{{ asset($post->thumbnail) }}" alt="{{ $post->name }}" />
@@ -11,9 +11,8 @@
                 <p class=" font-bold text-center">{{ $post->shortDecription }}</p>
             </div>
 
-            <div class="mx-auto my-10 px-5">
+            <div class="my-10 px-5 text-left">
                 {!! $post->description !!}
-
             </div>
             <div>
                 <p>{{ format_posts_status($post->status) }} vào

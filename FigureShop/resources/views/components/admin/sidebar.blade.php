@@ -220,7 +220,7 @@ Trang chủ
         <div x-show="open" @click.outside="open = false" id="dropdown"
             class=" divide-gray-100  shadow  dark:bg-gray-700">
             <ul class="py-2 text-sm text-white-700 dark:text-gray-200" aria-labelledby="dropProduct">
-                <a href=""
+                <a href="{{ route('admin.bin.orders.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
                     Đơn hàng</a>
                 <a href="{{ route('admin.bin.products.list') }}"
