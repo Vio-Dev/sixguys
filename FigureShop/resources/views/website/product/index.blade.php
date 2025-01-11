@@ -131,7 +131,7 @@
                 @forelse ($products as $product)
                     <div class="flex flex-col">
                         <div class="relative flex">
-                            <img class="" src="{{ asset($product->thumbnail) }}" alt="sofa image" />
+                            <img class="w-[300px] h-[300px]" src="{{ asset($product->thumbnail) }}" alt="sofa image" />
                             <div
                                 class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100">
                                 <a href={{ route('productDetail', $product->id) }}
@@ -164,7 +164,7 @@
                         </div>
 
                         <div>
-                            <p class="mt-2">{{ $product->name }}</p>
+                            <p class="mt-2">{{ Str::limit($product->name, 20) }}</p>
                             <p class="font-medium text-violet-900">
                                 {{ format_currency($product->price * (1 - $product->discount / 100)) }}
                                 <span class="text-sm text-gray-500 line-through">
