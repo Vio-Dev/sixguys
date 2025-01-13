@@ -79,7 +79,7 @@
     <!-- /Mobile order table  -->
 
     <!-- Order table  -->
-    <section class="hidden h-[600px] w-full max-w-[1200px] grid-cols-1 gap-3 px-5 pb-10 lg:grid">
+    <section class="hidden w-full max-w-[1200px] grid-cols-1 gap-3 px-5 pb-10 lg:grid">
         <table class="table-fixed">
             <thead class="h-16 bg-neutral-100">
                 <tr>

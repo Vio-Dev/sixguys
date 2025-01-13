@@ -100,7 +100,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 border-b text-gray-700">{{ $product->hasSold }}</td>
-                                <td class="px-6 py-4 border-b text-gray-700">{{ $product->price }}</td>
+                                <td class="px-6 py-4 border-b text-gray-700">{{ format_currency($product->price) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
