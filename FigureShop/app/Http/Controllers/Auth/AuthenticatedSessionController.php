@@ -27,16 +27,24 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+
+
         $request->authenticate();
 
         $request->session()->regenerate();
 
         $user = Auth::user();
 
+        if ($user->status === 'banned') {
+            Auth::guard('web')->logout();
+            return abort(403, 'Tài khoản của bạn đã bị khóa');
+        }
+
         if ($user->role == 'admin') {
             // Chuyển hướng đến trang dành cho admin
             return redirect('/admin');
         }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
