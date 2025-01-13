@@ -33,6 +33,24 @@ class WebsiteController extends Controller
         $allCategoryIds = array_merge($categoryIds, $subCategoryIds);
         $query->whereIn('category_id', $allCategoryIds);
     }
+
+
+        if ($request->has('category')) {
+            $category = Category::where("name", $request->category)->first();
+            if ($category) {
+                $categoryIds = [$category->id];
+                $subCategoryIds = Category::whereIn('parent_id', $categoryIds)->pluck('id')->toArray();
+                $allCategoryIds = array_merge($categoryIds, $subCategoryIds);
+                $query->whereIn('category_id', $allCategoryIds);
+            }
+        }
+
+        if ($request->has('subcategorys')) {
+            $subCategory = Category::where("name", $request->subcategory)->first();
+            if ($subCategory) {
+                $query->where("category_id", $subCategory->id);
+            }
+        }
     if($request->filled('subcategories')){
         $query->whereIn('category_id', $request->subcategories);
     }
@@ -50,9 +68,15 @@ class WebsiteController extends Controller
 
     public function productDetail($id)
     {
-         $comments = Rating::with('user')->where('product_id', $id)->where('isHidden', 0)->get();
+         $comments = Rating::with('user')->where('product_id', $id)->where('isHidden', operator: 0)->get();
+        $count = Rating::with('user')->where('product_id', $id)->where('isHidden', operator: 0)->count();
         $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->with('variants.variantValue.variant')->first();
-        return view('website.product.detail', compact('product', 'comments'));
+        $relatedProducts = Product::with('images', 'category')
+        ->where('status', 'public')
+        ->where('category_id', $product->category_id)
+        ->where('id', '!=', $id)
+        ->get();
+        return view('website.product.detail', compact('product', 'comments','count', 'relatedProducts'));
     }
 
     public function productComment(Request $request ,FlasherInterface $flasher)

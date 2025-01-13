@@ -78,7 +78,7 @@
             <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" slides-per-view="5"
                 space-between="30" free-mode="true">
                 @forelse ($products->where('hasSold', '>=', 1) as $product)
-<swiper-slide>
+                    <swiper-slide>
                         <div class="flex flex-col">
                             <div class="relative flex">
                                 <img class=" w-[200px] h-[200px]" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />

@@ -171,7 +171,7 @@
                                     {{ format_currency($product->price) }}</span>
                             </p>
 
-                            <div class="flex items-center">
+                            {{-- <div class="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                     class="h-4 w-4 text-yellow-400">
                                     <path fill-rule="evenodd"
@@ -207,7 +207,7 @@
                                         clip-rule="evenodd" />
                                 </svg>
                                 <p class="text-sm text-gray-400">(38)</p>
-                            </div>
+                            </div> --}}
                             <form action="{{ route('cart.add') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
