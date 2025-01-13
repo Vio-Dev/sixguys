@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Order;
 use Carbon\Carbon;
 use Flasher\Prime\FlasherInterface;
@@ -25,9 +26,10 @@ class OrderController extends Controller
             $query->where('status', request('status'));
         }
         if (request()->filled('methodPayment')) {
-             if (request('methodPayment') == 'paid') {
+            if (request('methodPayment') == 'paid') {
                 $query->where('isPaid', 1);
-            }if(request('methodPayment') == 'unpaid'){
+            }
+            if (request('methodPayment') == 'unpaid') {
                 $query->where('isPaid', 0);
             }
         }
@@ -109,6 +111,7 @@ class OrderController extends Controller
         if ($status === "refunded") {
             $order->isPaid = false;
             $order->note = "Chuyển trạng thái từ về hoàn tiền chưa thanh toán";
+            $order->isPaid = false;
             $order->status = $status;
             $order->updated_at = $updateAt;
             $order->save();
@@ -160,11 +163,11 @@ class OrderController extends Controller
             return abort(404, 'Không tìm thấy đơn hàng');
         }
 
-      if( $order->update(['isDeleted' => 1])){
+        if ($order->update(['isDeleted' => 1])) {
             $flasher->addFlash('success', 'Xóa đơn hàng thành công!', [], 'Thành công');
         } else {
             $flasher->addFlash('error', 'Có lỗi xảy ra!', [], 'Thất bại');
-      }
+        }
 
         return back();
     }
@@ -234,6 +237,85 @@ class OrderController extends Controller
             $flasher->addFlash('error', 'Đã có lỗi xảy ra!', [], 'Thất bại');
         }
 
+        return back();
+    }
+
+    public function detailOrder(Request $request, $orderId)
+    {
+
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('id', $orderId)->first();
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+        $products = $order->orderDetails->map(function ($item) {
+            return [
+                'id' => $item->product->id,
+                'name' => $item->product->name,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'thumbnail' => $item->product->thumbnail,
+                'variant' => $item->productVariant ? $item->productVariant->variantValue->value : null,
+                'discount' => $item->product->discount,
+                'total' => $item->price * $item->quantity - $item->price * $item->quantity * $item->product->discount / 100,
+            ];
+        });
+
+        return response()->json($products);
+    }
+    public function rebuy($orderId, FlasherInterface $flasher)
+    {
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('id', $orderId)->first();
+        $userId = auth()->id();
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+        foreach ($order->orderDetails as $item) {
+            $product = $item->product;
+            $productVariant = $item->productVariant;
+
+            if ($product->inStock < $item->quantity) {
+                $flasher->addFlash('error', 'Sản phẩm ' . $product->name . ' đã hết hàng!', [], 'Thất bại');
+                return back();
+            }
+
+            if ($productVariant && $productVariant->inStock < $item->quantity) {
+                $flasher->addFlash('error', 'Sản phẩm ' . $product->name . ' đã hết hàng!', [], 'Thất bại');
+                return back();
+            }
+
+            // Add items to the user's cart
+
+            $cart = Cart::where('user_id', $userId)->first();
+
+            if (!$cart) {
+                $cart = Cart::create([
+                    'users_id' => $userId,
+                    'status' => 'active',
+                ]);
+            }
+            $cart->items()->create([
+                'product_id' => $item->product->id,
+                'product_variant_id' => $item->productVariant ? $item->productVariant->id : null,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+            ]);
+
+            // Update product stock
+            $product->inStock -= $item->quantity;
+            $product->hasSold += $item->quantity;
+            $product->save();
+
+            if ($productVariant) {
+                $productVariant->inStock -= $item->quantity;
+                $productVariant->save();
+            }
+        }
+
+        $flasher->addFlash('success', 'Đã thêm lại toàn bộ sản phẩm vào giỏ hàng!', [], 'Thành công');
         return back();
     }
 }
