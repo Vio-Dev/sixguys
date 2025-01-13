@@ -49,3 +49,16 @@ if (!function_exists('format_posts_status')) {
         }
     }
 }
+
+if (!function_exists('format_day')) {
+    /**
+     * Format a date into a human-readable string.
+     *
+     * @param string $date
+     * @return string
+     */
+    function format_day($date)
+    {
+        return date('H:i:s d/m/Y', strtotime($date));
+    }
+}

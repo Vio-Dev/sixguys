@@ -3,7 +3,7 @@
 @section('title', 'bài viết')
 
 @section('content')
-    <div>
+    <div class="mx-auto grid max-w-[1200px] grid-cols-2 gap-3 px-5 pb-10 lg:grid-cols-4">
         @forelse ($renderPosts as $item)
             <div class="p-5 rounded-lg shadow-lg   border-0 border-solid border-indigo-600 bg-slate-50">
                 <div class="flex flex-col ">
@@ -33,5 +33,8 @@
         @empty
             <p>Không có bài viết nào</p>
         @endforelse
+    </div>
+    <div class="mx-auto max-w-[1200px] px-5 pb-10">
+        {{ $renderPosts->links() }}
     </div>
 @endsection

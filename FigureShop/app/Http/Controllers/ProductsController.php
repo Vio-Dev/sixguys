@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Flasher\Prime\FlasherInterface;
 use App\Models\Variant;
 use App\Models\ProductVariant;
+
 class ProductsController extends Controller
 {
     /**
@@ -16,8 +17,8 @@ class ProductsController extends Controller
      */
     public function index()
     {
-     $products = Product::where('isDeleted', 0)
-            ->with( 'variants.variantValue.variant')
+        $products = Product::where('isDeleted', 0)
+            ->with('variants.variantValue.variant')
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
@@ -35,7 +36,7 @@ class ProductsController extends Controller
         $adminVariants = Variant::with('values')->where('isDeleted', 0)->get();
 
 
-        return view('admin.products.create', compact('categories','adminVariants'));
+        return view('admin.products.create', compact('categories', 'adminVariants'));
     }
 
     /**
@@ -119,21 +120,21 @@ class ProductsController extends Controller
         }
 
 
-                if ($request->has('variant_name')) {
-                foreach ($request->variant_name as $index => $variantName) {
-                    if ($variantName) {
-                        ProductVariant::create([
-                            'product_id' => $product->id,
-                            'variant_value_id' => $request->variant_values[$index] ?? null,
-                            'price' => $request->variant_price[$index] ?? null,
-                            'inStock' => $request->variant_inStock[$index] ?? null,
-                            'hasSold' => 0,
-                            'status' => 'public',
-                            'isDeleted' => 0,
-                        ]);
-                    }
+        if ($request->has('variant_name')) {
+            foreach ($request->variant_name as $index => $variantName) {
+                if ($variantName) {
+                    ProductVariant::create([
+                        'product_id' => $product->id,
+                        'variant_value_id' => $request->variant_values[$index] ?? null,
+                        'price' => $request->variant_price[$index] ?? null,
+                        'inStock' => $request->variant_inStock[$index] ?? null,
+                        'hasSold' => 0,
+                        'status' => 'public',
+                        'isDeleted' => 0,
+                    ]);
                 }
             }
+        }
         // Thông báo kết quả
         if ($product->wasRecentlyCreated) {
             $flasher->addFlash('success', 'Sản phẩm đã được thêm thành công!', [], 'Thành công');
@@ -251,33 +252,33 @@ class ProductsController extends Controller
                 }
             }
         }
-          if ($request->has('variant_name')) {
-    // Delete existing variants
-    ProductVariant::where('product_id', $product->id)->delete();
+        if ($request->has('variant_name')) {
+            // Delete existing variants
+            ProductVariant::where('product_id', $product->id)->delete();
 
-    // Create new variants
-    foreach ($request->variant_name as $index => $variantName) {
-        if ($variantName) {
-            ProductVariant::create([
-                'product_id' => $product->id,
-                'variant_value_id' => $request->variant_values[$index] ?? null,
-                'price' => $request->variant_price[$index] ?? null,
-                'inStock' => $request->variant_inStock[$index] ?? null,
-                'hasSold' => 0,
-                'status' => 'public',
-                'isDeleted' => 0,
-            ]);
+            // Create new variants
+            foreach ($request->variant_name as $index => $variantName) {
+                if ($variantName) {
+                    ProductVariant::create([
+                        'product_id' => $product->id,
+                        'variant_value_id' => $request->variant_values[$index] ?? null,
+                        'price' => $request->variant_price[$index] ?? null,
+                        'inStock' => $request->variant_inStock[$index] ?? null,
+                        'hasSold' => 0,
+                        'status' => 'public',
+                        'isDeleted' => 0,
+                    ]);
+                }
+            }
         }
-    }
-}
 
 
         // Thông báo kết quả
-      if ($product) {
-    $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
-} else {
-    $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
-}
+        if ($product) {
+            $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        }
 
 
         return redirect()->route("admin.products.list");

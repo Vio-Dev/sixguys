@@ -23,14 +23,14 @@ class commentController extends Controller
         $comment = Rating::find($request->id);
         $comment->isHidden = true;
         $comment->save();
-        $flasher->addSuccess('Bình luận đã được ẩn');
+        $flasher->addSuccess('Bình luận đã được ẩn',[],'Thành công');
        return back();
     }
     public function deletePost(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
         $comment->delete();
-        $flasher->addSuccess('Bình luận đã được xóa');
+        $flasher->addSuccess('Bình luận đã được xóa',[],'Thành công');
         return back();
     }
  public function product()
@@ -47,14 +47,14 @@ class commentController extends Controller
         $comment = Rating::find($request->id);
         $comment->isHidden = true;
         $comment->save();
-        $flasher->addSuccess('Bình luận đã được ẩn');
+        $flasher->addSuccess('Bình luận đã được ẩn',[],'Thành công');
        return back();
     }
     public function deleteProduct(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
         $comment->delete();
-        $flasher->addSuccess('Bình luận đã được xóa');
+        $flasher->addSuccess('Bình luận đã được xóa',[],'Thành công');
         return back();
     }
 

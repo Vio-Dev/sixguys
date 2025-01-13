@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Product extends Model
 {
     protected $fillable = [
@@ -30,7 +31,10 @@ class Product extends Model
     {
         return $this->hasMany(Media::class);
     }
-
+    public function subCategory()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
