@@ -75,19 +75,19 @@ class CartController extends Controller
         // Cập nhật tồn kho
         $product->decrement('inStock', $quantity);
 
-       if (isset($wishlistId) && !is_null($wishlistId)) {
-    $userId = Auth::id(); // Lấy ID người dùng hiện tại
+        if (isset($wishlistId) && !is_null($wishlistId)) {
+            $userId = Auth::id(); // Lấy ID người dùng hiện tại
 
-    // Lấy hoặc tạo giỏ hàng cho người dùng
-    $wishlist = Wishlist::firstOrCreate([
-        'user_id' => $userId,
-    ]);
+            // Lấy hoặc tạo giỏ hàng cho người dùng
+            $wishlist = Wishlist::firstOrCreate([
+                'user_id' => $userId,
+            ]);
 
-    // Xóa WishlistItem
-    WishlistItem::where('wishlist_id', $wishlist->id)
-        ->where('product_id', $wishlistId)
-        ->delete();
-}
+            // Xóa WishlistItem
+            WishlistItem::where('wishlist_id', $wishlist->id)
+                ->where('product_id', $wishlistId)
+                ->delete();
+        }
 
         return back();
     }
@@ -146,7 +146,6 @@ class CartController extends Controller
             $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
         }
         return back();
-        // dd($request->all());
     }
 
     public function clear() {}

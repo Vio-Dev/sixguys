@@ -208,8 +208,9 @@
                                 </svg>
                                 <p class="text-sm text-gray-400">(38)</p>
                             </div>
-                            <form action="{{ route('cart.add') }}" method="POST">
+                            <form action="{{ route('cart.add') }}" method="POST" onsubmit="addToCart(event, this)">
                                 @csrf
+                                @method('POST')
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <input type="hidden" name="quantity" value="1">
                                 <input type="hidden" name="price"

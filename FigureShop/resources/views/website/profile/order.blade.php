@@ -87,6 +87,7 @@
                     <th>Ngày đặt</th>
                     <th>Tổng cộng</th>
                     <th>Trạng thái</th>
+                    <th>Thanh toán</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -102,6 +103,9 @@
                             <span class="border-2  py-1 px-3 {{ $classOrder[$order->status] }}">
                                 {{ $vietSubStatusOrder[$order->status] }}
                             </span>
+                        </td>
+                        <td class="mx-auto text-center">
+                            {{ $isPaidStatus[$order->isPaid] }}
                         </td>
                         <td class="text-center align-middle">
                             <div x-data="{ modalIsOpen: false }">
@@ -217,14 +221,19 @@
                                         </script>
                                     @endif
                                     @if ($order->status == 'completed')
-                                        <a href="#" title="Mua lại">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24">
-                                                <path fill="currentColor" fill-rule="evenodd"
-                                                    d="M3.25 4A.75.75 0 0 1 4 3.25h2a.75.75 0 0 1 .738.616L8.626 14.25h8.788l1.858-7.432a.75.75 0 0 1 1.455.364l-2 8a.75.75 0 0 1-.727.568H8a.75.75 0 0 1-.738-.616L5.374 4.75H4A.75.75 0 0 1 3.25 4m5 14.25c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5m6.5 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5M13.75 5a.75.75 0 0 0-1.5 0v3.19l-.72-.72a.75.75 0 1 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l2-2a.75.75 0 0 0-1.06-1.06l-.72.72z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </a>
+                                        <form action="{{ route('orders.rebuy', $order->id) }}" method="POST"
+                                            onsubmit="return confirm('Bạn có chắc chắn muốn mua lại đơn hàng này không?')">
+                                            @csrf
+                                            @method('POST')
+                                            <button title="Mua lại" type="submit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="currentColor" fill-rule="evenodd"
+                                                        d="M3.25 4A.75.75 0 0 1 4 3.25h2a.75.75 0 0 1 .738.616L8.626 14.25h8.788l1.858-7.432a.75.75 0 0 1 1.455.364l-2 8a.75.75 0 0 1-.727.568H8a.75.75 0 0 1-.738-.616L5.374 4.75H4A.75.75 0 0 1 3.25 4m5 14.25c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5m6.5 0c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5M13.75 5a.75.75 0 0 0-1.5 0v3.19l-.72-.72a.75.75 0 1 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l2-2a.75.75 0 0 0-1.06-1.06l-.72.72z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </form>
                                     @endif
                                 </div>
 
