@@ -98,4 +98,25 @@ class WebsiteController extends Controller
         return view('website.post.index', compact('renderPosts'));
     }
 
+   public function search(Request $request)
+{
+    $query = $request->query('query'); // Get the 'query' parameter from the request
+
+    if ($query) {
+        // Retrieve products with pagination
+        $products = Product::where('name', 'like', "%$query%")
+            ->where('status', 'public')
+            ->where('isDeleted', 0)
+            ->paginate(10); // Adjust the number of items per page as needed
+
+        return view('website.product.index', compact('products'));
+    }
+
+    // If no query is provided, return an empty paginated result
+    $products = Product::where('id', '<', 0)->paginate(10); // Empty paginated result
+    return view('website.product.index', compact('products'));
+}
+
+
+
 }

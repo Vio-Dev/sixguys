@@ -209,7 +209,33 @@
                             {{ $methodPayment[$order->payment_method] }}
                         </th>
                         <td class="flex items-center px-6 py-4">
-                            <form action="{{ route('admin.don-hang.show', $order->id) }}" method="GET"
+                            <form action="{{ route('admin.bin.orders.update', $order->id) }}" class="mr-2"
+                                method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button onclick="confirmUpdate(this)" type="button"
+                                    class="text-blue-800 hover:underline">Khôi phục</button>
+                            </form>
+                            <script>
+                                function confirmUpdate(button) {
+                                    Swal.fire({
+                                        title: 'Bạn có chắc chắn muốn khôi phục?',
+                                        text: "Hành động này không thể hoàn tác!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Khôi Phục',
+                                        cancelButtonText: 'Hủy'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Nếu người dùng xác nhận, submit form
+                                            button.closest('form').submit();
+                                        }
+                                    });
+                                }
+                            </script>
+                            <form action="{{ route('admin.bin.orders.show', $order->id) }}" method="GET"
                                 onsubmit="viewDetailOrder(event, {{ $order->id }})">
                                 @csrf
                                 @method('GET')
@@ -226,7 +252,7 @@
 
                                     const baseUrl = `{{ route('home') }}`;
 
-                                    var url = `{{ route('admin.don-hang.show', '') }}` + `/` + orderId;
+                                    var url = `{{ route('admin.bin.orders.show', '') }}` + `/` + orderId;
                                     fetch(url)
                                         .then(response => response.text())
                                         .then(data => {
@@ -263,7 +289,8 @@
                                     modalDetailOrder.classList.add('hidden');
                                 }
                             </script>
-                            <form action="{{ route('admin.don-hang.destroy', $order->id) }}" method="POST" class="ms-3">
+                            <form action="{{ route('admin.bin.orders.destroy', $order->id) }}" method="POST"
+                                class="ms-3">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" onclick="confirmDelete(this)"

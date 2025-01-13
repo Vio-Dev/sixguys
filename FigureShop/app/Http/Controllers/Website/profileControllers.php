@@ -12,12 +12,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Flasher\Prime\FlasherInterface;
 
+use App\Models\Wishlist;
+
 class profileControllers extends Controller
 {
     public function index()
     {
 
         $user = Auth::user();
+
+
         return view('website.profile.index', compact('user'));
     }
     public function order()
@@ -45,7 +49,12 @@ class profileControllers extends Controller
     {
 
         $user = Auth::user();
-        return view('website.profile.wishlist', compact('user'));
+        $userId = Auth::id();
+            $Renderwishlist = Wishlist::with(['items.product', 'items.productVariant.variantValue'])
+                ->where('user_id', $userId)
+                ->first();
+
+        return view('website.profile.wishlist', compact('user', 'Renderwishlist'));
     }
     public function logout(Request $request, FlasherInterface $flasher): RedirectResponse
     {

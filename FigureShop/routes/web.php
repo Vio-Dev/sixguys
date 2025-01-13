@@ -15,6 +15,7 @@ use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\WebsiteController;
 use App\Http\Controllers\Website\checkoutController;
 use App\Http\Controllers\Website\postsContoller;
+use App\Http\Controllers\Website\WishlistController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -103,6 +104,12 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
             Route::delete('updateValue/{id}', [BinController::class, 'updateValue'])->name('updateValue');
         });
+         Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('list', [BinController::class, 'orders'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyOrders'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateOrders'])->name('update');
+            Route::get('show/{id}', [OrderController::class, 'show'])->name('show');
+        });
     });
     Route::prefix('don-hang')->name('don-hang.')->group(function () {
         Route::get('list', [OrderController::class, 'index'])->name('list');
@@ -136,6 +143,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
 
 // user routes
 Route::get('/', [WebsiteController::class, 'index'])->name('home');
+Route::get('/search', [WebsiteController::class, 'search'])->name('search');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
 Route::post('/san-pham/{id}', [WebsiteController::class, 'productComment'])->name('productComments');
@@ -146,6 +154,13 @@ Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function (
     Route::post('/add', [CartController::class, 'add'])->name('add');
     Route::put('/update/{id}', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+});
+
+Route::prefix('yeu-thich')->middleware(['auth'])->name('wishlists.')->group(function () {
+    // Route::get('/', [WishlistController::class, 'index'])->name('index');
+    Route::post('/add', [WishlistController::class, 'add'])->name('add');
+    Route::put('/update/{id}', [WishlistController::class, 'update'])->name('update');
+    Route::delete('/remove/{id}', [WishlistController::class, 'remove'])->name('remove');
 });
 
 Route::prefix('thanh-toan')->middleware(['auth'])->name('checkout.')->group(function () {

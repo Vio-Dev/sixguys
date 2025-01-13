@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+     public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

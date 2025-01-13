@@ -14,7 +14,26 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate(10);
+        $query = Order::where('isDeleted', 0);
+
+        if (auth()->user()->role === 'admin') {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            $query->where('users_id', auth()->id())->orderBy('created_at', 'desc');
+        }
+        if (request()->filled('status')) {
+            $query->where('status', request('status'));
+        }
+        if (request()->filled('methodPayment')) {
+             if (request('methodPayment') == 'paid') {
+                $query->where('isPaid', 1);
+            }if(request('methodPayment') == 'unpaid'){
+                $query->where('isPaid', 0);
+            }
+        }
+
+        $orders = $query->paginate(10);
+        // $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.orders.index', ['orders' => $orders]);
     }
 
@@ -133,9 +152,21 @@ class OrderController extends Controller
         return back();
     }
 
-    public function destroy(string $id)
+    public function destroyOrder(string $id, FlasherInterface $flasher)
     {
-        //
+        $order = Order::find($id);
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+      if( $order->update(['isDeleted' => 1])){
+            $flasher->addFlash('success', 'Xóa đơn hàng thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Có lỗi xảy ra!', [], 'Thất bại');
+      }
+
+        return back();
     }
 
     public function confirm($orderId, $userId)
