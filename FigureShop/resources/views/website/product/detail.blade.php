@@ -72,7 +72,7 @@
                                 clip-rule="evenodd" />
                         </svg>
 
-                        <p class="ml-3 text-sm text-gray-400">(150 reviews)</p>
+                        <p class="ml-3 text-sm text-gray-400">({{$count}})</p>
                     </div>
                 </div>
                 {{-- end rating --}}
@@ -203,7 +203,77 @@
         <!-- /product details  -->
 
         <div class="mx-auto mt-10 mb-5 max-w-[1200px] px-5">
-            <p>Sản phẩm liên quan</p>
+            <section >
+                        <p>Sản phẩm liên quan</p>
+            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" slides-per-view="5"
+                space-between="30" free-mode="true">
+                @forelse ($relatedProducts as $product)
+                    <swiper-slide>
+                        <div class="flex flex-col">
+                            <div class="relative flex">
+                                <img class=" w-[200px] h-[200px]" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
+                                <div
+                                    class="absolute flex h-full w-full items-center justify-center gap-3 opacity-0 duration-150 hover:opacity-100">
+                                    <a href={{ route('productDetail', $product->id) }}
+                                        class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-amber-400">
+                                        <span
+                                            class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-amber-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                            </svg>
+                                        </span>
+                                    </a>
+                                   <form action="{{ route('wishlists.add') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <button type="submit"
+                                        class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-amber-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="h-4 w-4">
+                                            <path
+                                                d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                        </svg>
+                                    </button>
+                                </form>
+                                </div>
+
+                                @if ($product->discount > 0)
+<div class="absolute right-1 mt-3 flex items-center justify-center bg-amber-400">
+                                        <p class="px-2 py-2 text-sm">&minus; {{ $product->discount }}&percnt; OFF</p>
+                                    </div>
+@endif
+                            </div>
+
+                            <div>
+                                <p class="mt-2">{{ Str::limit($product->name, 10) }}</p>
+                                <p class="font-medium text-violet-900">
+                                    {{ format_currency($product->price * (1 - $product->discount / 100)) }}
+                                    <span class="text-sm text-gray-500 line-through">
+                                        {{ format_currency($product->price) }}</span>
+                                </p>
+                                <div>
+                                    <form action="{{ route('cart.add') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <input type="hidden" name="price"
+                                            value="{{ $product->price * (1 - $product->discount / 100) }}">
+                                        <button type="submit" class="my-5 h-10 w-full bg-violet-900 text-white">
+                                            Thêm vào giỏ hàng
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </swiper-slide>
+                @empty
+                    <p>Không có sản phẩm nào</p>
+@endforelse
+            </swiper-container>
+        </section>
         </div>
 
         <div class="mx-auto max-w-[1200px] px-5">
