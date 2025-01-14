@@ -74,7 +74,8 @@ class WebsiteController extends Controller
         ->where('isHidden', 0)      // Điều kiện: chỉ lấy những đánh giá không bị ẩn.
         ->get();                    // Thực thi và trả về danh sách kết quả.
 
-        //  $count = Rating::with('user')->where('product_id', $id)->where('isHidden',  0)->count();
+        $count = Rating::with('user')->where('product_id', $id)->where('isHidden', 0)->count();
+
         //  dd($count);
         $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->with('variants.variantValue.variant')->first();
         $relatedProducts = Product::with('images', 'category')
@@ -82,7 +83,7 @@ class WebsiteController extends Controller
         ->where('category_id', $product->category_id)
         ->where('id', '!=', $id)
         ->get();
-        return view('website.product.detail', compact('product', 'comments', 'relatedProducts'));
+        return view('website.product.detail', compact('product', 'comments', 'relatedProducts','count'));
     }
 
     public function productComment(Request $request ,FlasherInterface $flasher)

@@ -96,6 +96,11 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('delete/{id}', [BinController::class, 'destroyProducts'])->name('destroy');
             Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
         });
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('list', [BinController::class, 'users'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyUsers'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateUsers'])->name('update');
+        });
         Route::prefix('variants')->name('variants.')->group(function () {
             Route::get('list', [BinController::class, 'variant'])->name('list');
             Route::delete('delete/{id}', [BinController::class, 'destroyVariants'])->name('destroy');
