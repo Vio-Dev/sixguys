@@ -11,6 +11,7 @@ use App\Models\Variant;
 use Flasher\Prime\FlasherInterface;
 use App\Models\VariantValue;
 use App\Models\order;
+use App\Models\User;
 
 class BinController extends Controller
 {
@@ -272,5 +273,42 @@ class BinController extends Controller
 
         // Chuyển hướng về danh sách danh mục
         return redirect()->route('admin.bin.orders.list');
+    }
+
+
+    public function users()
+    {
+        $users = User::where('isDeleted', 1)
+        ->orderBy('created_at', 'DESC')
+        ->paginate(5);
+        return view('admin.bin.users', compact('users'));
+    }
+    public function destroyUsers(string $id, FlasherInterface $flasher)
+    {
+        // Tìm danh mục theo ID
+        $users = User::findOrFail($id);
+
+        if ($users->delete()) {
+            $flasher->addFlash('success', 'Người dùng xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
+        }
+        return redirect()->route('admin.bin.users.list');
+    }
+
+    public function updateUsers(string $id, FlasherInterface $flasher)
+    {
+        // Tìm danh mục theo ID
+        $users = User::findOrFail($id);
+
+        // Cập nhật isDeleted thành 1
+        if ($users->update(['isDeleted' => 0])) {
+            $flasher->addFlash('success', 'Khôi phục thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi Khôi phục. Vui lòng thử lại', [], 'Thất bại');
+        }
+
+        // Chuyển hướng về danh sách danh mục
+        return redirect()->route('admin.bin.users.list');
     }
 }

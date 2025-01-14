@@ -235,7 +235,9 @@ Trang chủ
                 <a href="{{ route('admin.bin.category.list') }}"
                     class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
                     Danh mục</a>
-
+                    <a href="{{ route('admin.bin.users.list') }}"
+                    class="block pl-9 py-2 hover:bg-gray-700 dark:hover:bg-gray-600 hover:text-dark hover:underline">
+                    Người dùng</a>
 
             </ul>
         </div>
