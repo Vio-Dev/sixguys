@@ -117,7 +117,7 @@ class checkoutController extends Controller
 
             return redirect()->route('ho-so.don-hang');
         } else {
-            return 'Thanh toán online';
+            return view('maintain.commingSoon');
         }
     }
 }
