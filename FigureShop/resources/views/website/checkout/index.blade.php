@@ -154,7 +154,7 @@
 
             <section class="w-full lg:w-1/4 my-12">
                 <div class="border bg-white shadow-md p-6">
-                    <h2 class="text-lg font-bold mb-4">TÓM TẮT ĐƠN HÀNG</h2>
+                    <h2 class="text-lg font-medium mb-4">TÓM TẮT ĐƠN HÀNG</h2>
                     <div class="flex justify-between mb-4">
                         <p>TỘNG PHỤ</p>
                         <p>{{ format_currency($grandTotal) }}</p>
@@ -163,11 +163,11 @@
                         <p>VẬN CHUYỂN</p>
                         <p>Free</p>
                     </div>
-                    <div class="flex justify-between font-bold text-lg mb-4">
+                    <div class="flex justify-between font-medium text-[18px] mb-4">
                         <p>TỘNG CỘNG</p>
                         <p>{{ format_currency($grandTotal) }}</p>
                     </div>
-                    <div class="flex justify-between item-center mt-4 w-full">
+                    {{-- <div class="flex justify-between item-center mt-4 w-full">
                         <form action="" class="w-full">
                             <label for="coupon" class="block text-sm font-medium text-gray-700 mb-2">Mã giảm giá</label>
                             <div class="flex w-full">
@@ -182,7 +182,7 @@
                         <div>
 
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </section>
 

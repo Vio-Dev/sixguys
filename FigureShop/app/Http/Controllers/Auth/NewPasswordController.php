@@ -65,10 +65,11 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         if ($status == Password::PASSWORD_RESET) {
-            $flasher->addSuccess('Mật khẩu đã được đặt lại thành công.');
+            $flasher->addFlash('success', 'Mật khẩu đã được đặt lại thành công!', [], 'Thành công');
+
             return redirect()->route('login')->with('status', __($status));
         } else {
-            $flasher->addError('Đặt lại mật khẩu thất bại.');
+            $flasher->addFlash('error', 'Đặt lại mật khẩu thất bại', [], 'Thất bại');
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => __($status)]);
         }
