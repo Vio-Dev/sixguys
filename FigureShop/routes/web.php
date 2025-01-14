@@ -187,6 +187,9 @@ Route::get('/fail', function () {
     return view('website.order.confirm-fail');
 })->name('failed');
 
+Route::get('/comming-soon', function () {
+    return view('maintain.commingSoon');
+})->name('comming-soon');
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');

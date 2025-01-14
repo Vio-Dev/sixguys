@@ -8,7 +8,7 @@
     <title>@yield('title')</title>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.tiny.cloud/1/k7su4gsafhoo1mjqxogzmm8a9m059w6sr5a0kmz84veyy14j/tinymce/7/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/rw1556z5vgoik9fmr5u44kck2kqrsou9fmbylvglsyjovwur/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
 </head>
 
