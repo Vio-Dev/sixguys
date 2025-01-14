@@ -19,8 +19,6 @@ class postsContoller extends Controller
     {
         $post = Post::with('user')->find($id);
          $comments = Rating::with('user')->where('post_id', $id)->where('isHidden', 0)->get();
-
-
         return view('website.post.detail',compact('post','comments'));
     }
     public function postComments(Request $request, FlasherInterface $flasher)
@@ -28,6 +26,7 @@ class postsContoller extends Controller
         $request->validate([
             'comment' => 'required',
             'post_id' => 'required',
+            'rating' => 'required',
         ]);
         $comment = new Rating();
         $comment->comment = $request->comment;
