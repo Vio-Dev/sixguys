@@ -146,7 +146,7 @@ Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/search', [WebsiteController::class, 'search'])->name('search');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
-Route::post('/san-pham/{id}', [WebsiteController::class, 'productComment'])->name('productComments');
+Route::post('/san-pham/{id}', [WebsiteController::class, 'productComment'])->middleware(['auth'])->name('productComments');
 Route::delete('/san-pham/{id}', [WebsiteController::class, 'productDelete'])->name('productDelete');
 
 Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
@@ -193,8 +193,8 @@ Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () 
 });
 Route::get('/bai-viet', [WebsiteController::class, 'blog'])->name('blogs');
 Route::get('/bai-viet/{id}', [postsContoller::class, 'show'])->name('postDetail');
-Route::post('bai-viet/{id}', [postsContoller::class, 'postComments'])->name('postsComments');
-Route::delete('bai-viet/{id}', [postsContoller::class, 'postsCommentsDelete'])->name('postsCommentsDelete');
+Route::post('bai-viet/{id}', [postsContoller::class, 'postComments'])->middleware(['auth'])->name('postsComments');
+Route::delete('bai-viet/{id}', [postsContoller::class, 'postsCommentsDelete'])->middleware(['auth'])->name('postsCommentsDelete');
 
 Route::get('/mail', function () {
     return view('mail.invoice');

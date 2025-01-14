@@ -68,15 +68,21 @@ class WebsiteController extends Controller
 
     public function productDetail($id)
     {
-         $comments = Rating::with('user')->where('product_id', $id)->where('isHidden', operator: 0)->get();
-        $count = Rating::with('user')->where('product_id', $id)->where('isHidden', operator: 0)->count();
+        // dd($id);
+        $comments = Rating::with('user') // Gọi mối quan hệ với bảng `users`.
+        ->where('product_id', $id)  // Điều kiện: chỉ lấy những đánh giá có `product_id` = $id.
+        ->where('isHidden', 0)      // Điều kiện: chỉ lấy những đánh giá không bị ẩn.
+        ->get();                    // Thực thi và trả về danh sách kết quả.
+
+        //  $count = Rating::with('user')->where('product_id', $id)->where('isHidden',  0)->count();
+        //  dd($count);
         $product = Product::with('images', 'category')->where('status', 'public')->where('id', $id)->with('variants.variantValue.variant')->first();
         $relatedProducts = Product::with('images', 'category')
         ->where('status', 'public')
         ->where('category_id', $product->category_id)
         ->where('id', '!=', $id)
         ->get();
-        return view('website.product.detail', compact('product', 'comments','count', 'relatedProducts'));
+        return view('website.product.detail', compact('product', 'comments', 'relatedProducts'));
     }
 
     public function productComment(Request $request ,FlasherInterface $flasher)
@@ -85,15 +91,16 @@ class WebsiteController extends Controller
         $request->validate([
             'comment' => 'required',
             'product_id' => 'required',
+            "rating" => 'required',
         ]);
-
+        // dd($request->all());
         $comments = new Rating();
         $comments->comment = $request->comment;
         $comments->product_id = $request->product_id;
         $comments->rating = $request->rating;
         $comments->user_id = auth()->user()->id;
         $comments->save();
-        $flasher->addSuccess('Bình luận của bạn đã được gửi');
+        $flasher->addSuccess('Bình luận của bạn đã được gửi',[],'Thành công');
         return back();
     }
     public function productDelete(Request $request ,FlasherInterface $flasher)
@@ -101,7 +108,7 @@ class WebsiteController extends Controller
         $comment = Rating::find($request->id);
         $comment->isHidden = 1;
         $comment->save();
-        $flasher->addSuccess('Bình luận của bạn đã được xóa');
+        $flasher->addSuccess('Bình luận của bạn đã được xóa',[],'Thành công');
         return back();
     }
 
