@@ -28,7 +28,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18v18H3V3zm6 6h6M9 9v6M15 9v6" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-semibold mt-4">$45.2K</h2>
+                <h2 class="text-2xl font-semibold mt-4">{{ number_format($totalRevenue, 0, ',', '.') }}</h2>
                 <p class="text-gray-500">Tổng lợi nhuận</p>
 
             </div>
@@ -86,18 +86,30 @@
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border-b">#</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border-b">Tên sản phẩm</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border-b">Số lượng bán</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 border-b">Giá</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($bestSelling as $index => $product)
                             <tr class="{{ $index % 2 === 0 ? 'bg-gray-50' : 'bg-white' }}">
                                 <td class="px-6 py-4 border-b text-gray-700">{{ $index + 1 }}</td>
-                                <td class="px-6 py-4 border-b text-gray-700">{{ $product->product_name }}</td>
-                                <td class="px-6 py-4 border-b text-gray-700">{{ $product->total_sold }}</td>
+                                <td class="px-6 py-4 border-b text-gray-700 flex gap-2 items-center">
+                                    <img class="w-16" src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" />
+                                    <div>
+                                        {{ $product->name }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 border-b text-gray-700">{{ $product->hasSold }}</td>
+                                <td class="px-6 py-4 border-b text-gray-700">{{ format_currency($product->price) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
+                <div class="p-5">
+                    {{ $bestSelling->links() }}
+                </div>
+
             </div>
         </div>
     </div>
@@ -107,7 +119,6 @@
         const weeklyData = @json($weekly);
         const monthlyData = @json($monthly);
         const yearlyData = @json($yearly);
-
         // Biểu đồ ban đầu với dữ liệu theo tuần
         const ctx = document.getElementById('mainChart').getContext('2d');
         const chart = new Chart(ctx, {

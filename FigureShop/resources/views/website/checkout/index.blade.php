@@ -3,25 +3,21 @@
 @section('title', 'Giỏ hàng')
 
 @section('content')
-
-
-    <form action="" method="POST">
-        @csrf
-        @php
-            $grandTotal = 0;
-        @endphp
-        @foreach ($cart->items as $index => $item)
-            @php
+    @php
+        $grandTotal = 0;
+        if ($cart && $cart->items->count() > 0) {
+            foreach ($cart->items as $index => $item) {
                 $itemTotal = $item->quantity * $item->product->price * (1 - $item->product->discount / 100);
                 $grandTotal += $itemTotal;
-            @endphp
-        @endforeach
-
+            }
+        }
+    @endphp
+    <form action="" method="POST">
+        @csrf
         <div class="my-10 flex flex-col lg:flex-row gap-10 px-4">
             <div class="w-full lg:w-3/4">
                 <div class="flex justify-between items-center">
                     <h2 class="text-lg font-bold">Thông tin giao hàng</h2>
-
                     <a class="flex items-center gap-2" href="{{ route('cart.index') }}"
                         class="text-primary-600 hover:underline">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
@@ -31,7 +27,6 @@
                         </svg>
                         Quay lại giỏ hàng
                     </a>
-
                 </div>
                 <div class="bg-white shadow-md p-6 mt-4">
                     <form action="{{ route('checkout.store') }}" method="POST">
@@ -143,14 +138,6 @@
                                 class="mt-1 focus focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
                         </div>
                         <div>
-                            @foreach ($cart->items as $index => $item)
-                                <input type="hidden" name="products[{{ $index }}][product_id]"
-                                    value="{{ $item->product->id }}">
-                                <input type="hidden" name="products[{{ $index }}][quantity]"
-                                    value="{{ $item->quantity }}">
-                                <input type="hidden" name="products[{{ $index }}][price]"
-                                    value="{{ $item->product->price }}">
-                            @endforeach
                             <input type="hidden" name="grand_total" value="{{ $grandTotal }}">
 
                         </div>
@@ -167,7 +154,7 @@
 
             <section class="w-full lg:w-1/4 my-12">
                 <div class="border bg-white shadow-md p-6">
-                    <h2 class="text-lg font-bold mb-4">TÓM TẮT ĐƠN HÀNG</h2>
+                    <h2 class="text-lg font-medium mb-4">TÓM TẮT ĐƠN HÀNG</h2>
                     <div class="flex justify-between mb-4">
                         <p>TỘNG PHỤ</p>
                         <p>{{ format_currency($grandTotal) }}</p>
@@ -176,16 +163,16 @@
                         <p>VẬN CHUYỂN</p>
                         <p>Free</p>
                     </div>
-                    <div class="flex justify-between font-bold text-lg mb-4">
+                    <div class="flex justify-between font-medium text-[18px] mb-4">
                         <p>TỘNG CỘNG</p>
                         <p>{{ format_currency($grandTotal) }}</p>
                     </div>
-                    <div class="flex justify-between item-center mt-4">
-
-                        <form action="">
+                    {{-- <div class="flex justify-between item-center mt-4 w-full">
+                        <form action="" class="w-full">
                             <label for="coupon" class="block text-sm font-medium text-gray-700 mb-2">Mã giảm giá</label>
-                            <div class="flex">
-                                <input type="text">
+                            <div class="flex w-full">
+                                <input type="text" class="w-3/4 border border-gray-300 p-2 rounded-l-md"
+                                    id="coupon" placeholder="Nhập mã giảm giá">
                                 <button class=" bg-purple-900 text-white p-2 text-center hover:bg-purple-800">
                                     Áp dụng
                                 </button>
@@ -195,7 +182,7 @@
                         <div>
 
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </section>
 

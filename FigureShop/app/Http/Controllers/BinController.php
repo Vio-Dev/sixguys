@@ -10,6 +10,8 @@ use App\Models\Media;
 use App\Models\Variant;
 use Flasher\Prime\FlasherInterface;
 use App\Models\VariantValue;
+use App\Models\order;
+use App\Models\User;
 
 class BinController extends Controller
 {
@@ -192,5 +194,121 @@ class BinController extends Controller
         }
 
         return redirect()->route('admin.bin.variants.list');
+    }
+
+
+
+     public function orders()
+    {
+        $query = Order::where('isDeleted', 1);
+
+        if (auth()->user()->role === 'admin') {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            $query->where('users_id', auth()->id())->orderBy('created_at', 'desc');
+        }
+        if (request()->filled('status')) {
+            $query->where('status', request('status'));
+        }
+        if (request()->filled('methodPayment')) {
+             if (request('methodPayment') == 'paid') {
+                $query->where('isPaid', 1);
+            }if(request('methodPayment') == 'unpaid'){
+                $query->where('isPaid', 0);
+            }
+        }
+
+        $orders = $query->paginate(10);
+        // $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('users_id', auth()->id())->orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.bin.orders', ['orders' => $orders]);
+    }
+    public function show(string $id)
+    {
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant'])->where('id', $id)->first();
+
+        if (!$order) {
+            return abort(404, 'Không tìm thấy đơn hàng');
+        }
+
+        $products = $order->orderDetails->map(function ($item) {
+            return [
+                'id' => $item->product->id,
+                'name' => $item->product->name,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'thumbnail' => $item->product->thumbnail,
+                'variant' => $item->productVariant ? $item->productVariant->variantValue->value : null,
+                'discount' => $item->product->discount,
+                'total' => $item->price * $item->quantity - $item->price * $item->quantity * $item->product->discount / 100,
+            ];
+        });
+
+        return response()->json($products);
+    }
+    public function destroyOrders(string $id, FlasherInterface $flasher)
+    {
+        // Tìm danh mục theo ID
+        $orders = Order::findOrFail($id);
+
+        // xóa danh mục
+        if ($orders->delete()) {
+            $flasher->addFlash('success', 'Đơn hàng đã xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
+        }
+        return redirect()->route('admin.bin.orders.list');
+    }
+
+    public function updateOrders(string $id, FlasherInterface $flasher)
+    {
+        // Tìm danh mục theo ID
+        $orders = Order::findOrFail($id);
+
+        // Cập nhật isDeleted thành 1
+        if ($orders->update(['isDeleted' => 0])) {
+            $flasher->addFlash('success', 'Khôi phục thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi Khôi phục. Vui lòng thử lại', [], 'Thất bại');
+        }
+
+        // Chuyển hướng về danh sách danh mục
+        return redirect()->route('admin.bin.orders.list');
+    }
+
+
+    public function users()
+    {
+        $users = User::where('isDeleted', 1)
+        ->orderBy('created_at', 'DESC')
+        ->paginate(5);
+        return view('admin.bin.users', compact('users'));
+    }
+    public function destroyUsers(string $id, FlasherInterface $flasher)
+    {
+        // Tìm danh mục theo ID
+        $users = User::findOrFail($id);
+
+        if ($users->delete()) {
+            $flasher->addFlash('success', 'Người dùng xóa thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi xóa. Vui lòng thử lại', [], 'Thất bại');
+        }
+        return redirect()->route('admin.bin.users.list');
+    }
+
+    public function updateUsers(string $id, FlasherInterface $flasher)
+    {
+        // Tìm danh mục theo ID
+        $users = User::findOrFail($id);
+
+        // Cập nhật isDeleted thành 1
+        if ($users->update(['isDeleted' => 0])) {
+            $flasher->addFlash('success', 'Khôi phục thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi Khôi phục. Vui lòng thử lại', [], 'Thất bại');
+        }
+
+        // Chuyển hướng về danh sách danh mục
+        return redirect()->route('admin.bin.users.list');
     }
 }

@@ -42,10 +42,23 @@ if (!function_exists('format_posts_status')) {
         switch ($status) {
             case 'published':
                 return 'Đã xuất bản';
-            case draft:
+            case 'draft':
                 return 'bản nháp';
             default:
                 return 'Unknown';
         }
+    }
+}
+
+if (!function_exists('format_day')) {
+    /**
+     * Format a date into a human-readable string.
+     *
+     * @param string $date
+     * @return string
+     */
+    function format_day($date)
+    {
+        return date('H:i:s d/m/Y', strtotime($date));
     }
 }

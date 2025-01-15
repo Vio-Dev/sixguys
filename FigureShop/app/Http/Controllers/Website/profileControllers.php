@@ -7,29 +7,54 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Flasher\Prime\FlasherInterface;
+
+use App\Models\Wishlist;
+
 class profileControllers extends Controller
 {
-   public function index()
+    public function index()
     {
 
         $user = Auth::user();
+
+
         return view('website.profile.index', compact('user'));
     }
     public function order()
     {
 
         $user = Auth::user();
-        return view('website.profile.order', compact('user'));
+        $userId = Auth::id();
+
+        $orders = Order::with(['orderDetails.product', 'orderDetails.productVariant',])
+            ->where('users_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('website.profile.order', compact('user', 'orders'));
+    }
+    public function orderDetail(Request $request)
+    {
+        $order = Order::with(['orderDetails.product', 'orderDetails.productVariant',])
+            ->where('id', $request->id)
+            ->first();
+
+        return response()->json($order);
     }
     public function wishlist()
     {
 
         $user = Auth::user();
-        return view('website.profile.wishlist', compact('user'));
+        $userId = Auth::id();
+            $Renderwishlist = Wishlist::with(['items.product', 'items.productVariant.variantValue'])
+                ->where('user_id', $userId)
+                ->first();
 
+        return view('website.profile.wishlist', compact('user', 'Renderwishlist'));
     }
     public function logout(Request $request, FlasherInterface $flasher): RedirectResponse
     {
