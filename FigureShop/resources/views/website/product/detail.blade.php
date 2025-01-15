@@ -73,7 +73,9 @@
                                 clip-rule="evenodd" />
                         </svg>
 
-                        {{-- <p class="ml-3 text-sm text-gray-400">({{$count}})</p> --}}
+                        <p class="ml-3 text-sm  font-bold">({{$count}})</p>
+
+
                     </div>
                 </div>
                 {{-- end rating --}}

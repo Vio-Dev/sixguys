@@ -39,10 +39,9 @@
                 </div>
                 <div>
                     <label for="name" class="block font-medium">Vai trò</label>
-                    <select name="role" id="role" value = "{{ $user->role }}"
-                        class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
-                        <option value="0">Admin</option>
-                        <option value="1">User</option>
+                    <select name="role" id="role" class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md" value="{{ $user->role }}">
+                        <option value="admin" {{ $user->role ==='admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
                     </select>
                     @error('role')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
