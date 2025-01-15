@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use Flasher\Laravel\Http\Request;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'email', 'exists:users,email'],
             'password' => ['required', 'string'],
         ];
     }
@@ -43,9 +44,15 @@ class LoginRequest extends FormRequest
             'email.required' => 'Bạn hãy nhập địa chỉ email.',
             'email.email' => 'Địa chỉ email bạn nhập không hợp lệ.',
             'password.required' => 'Bạn hãy nhập mật khẩu.',
+            'email.exists' => 'Tài khoản hoặc mật khẩu không chính xác.',
         ];
     }
 
+    /**
+     * Get the validation messages for failed authentication.
+     *
+     * @return array<string, string>
+     */
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -59,7 +66,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'Tài khoản hoặc mật khẩu không chính xác.',
             ]);
         }
 

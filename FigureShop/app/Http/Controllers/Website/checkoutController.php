@@ -54,6 +54,8 @@ class checkoutController extends Controller
 
         $input = $request->all();
 
+        $email = $input['email'];
+
         $userId = Auth::id(); // Lấy ID người dùng hiện tại
 
         $cart = Cart::with(['items.product', 'items.productVariant.variantValue'])
@@ -109,13 +111,13 @@ class checkoutController extends Controller
                 $query->where('user_id', $userId)->where('status', 'active');
             })->delete();
 
-            Mail::to($user->email)->send(new OrderConfirmationMail($order));
+            Mail::to($email)->send(new OrderConfirmationMail($order));
+            $flasher->addFlash('success', 'Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng trong ít phút.', [], 'Thành công');
 
-            $flasher->addSuccess('Đặt hàng thành công! Bạn sẽ nhận được email xác nhận đơn hàng trong ít phút.');
 
             return redirect()->route('ho-so.don-hang');
         } else {
-            return 'Thanh toán online';
+            return view('maintain.commingSoon');
         }
     }
 }

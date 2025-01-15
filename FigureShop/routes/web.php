@@ -15,6 +15,7 @@ use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\WebsiteController;
 use App\Http\Controllers\Website\checkoutController;
 use App\Http\Controllers\Website\postsContoller;
+use App\Http\Controllers\Website\WishlistController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +96,11 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::delete('delete/{id}', [BinController::class, 'destroyProducts'])->name('destroy');
             Route::delete('update/{id}', [BinController::class, 'updateProducts'])->name('update');
         });
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('list', [BinController::class, 'users'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyUsers'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateUsers'])->name('update');
+        });
         Route::prefix('variants')->name('variants.')->group(function () {
             Route::get('list', [BinController::class, 'variant'])->name('list');
             Route::delete('delete/{id}', [BinController::class, 'destroyVariants'])->name('destroy');
@@ -102,6 +108,12 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
             Route::post('list', [BinController::class, 'search'])->name('search');
             Route::delete('deleteValue/{id}', [VariantController::class, 'destroyValue'])->name('destroyValue');
             Route::delete('updateValue/{id}', [BinController::class, 'updateValue'])->name('updateValue');
+        });
+        Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('list', [BinController::class, 'orders'])->name('list');
+            Route::delete('delete/{id}', [BinController::class, 'destroyOrders'])->name('destroy');
+            Route::delete('update/{id}', [BinController::class, 'updateOrders'])->name('update');
+            Route::get('show/{id}', [OrderController::class, 'show'])->name('show');
         });
     });
     Route::prefix('don-hang')->name('don-hang.')->group(function () {
@@ -112,6 +124,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
         Route::delete('delete/{id}', [OrderController::class, 'destroyOrder'])->name('destroy');
         Route::put('update/{id}', [OrderController::class, 'update'])->name('update');
         Route::patch('updateStatus/{orderId}', [OrderController::class, 'updateStatus'])->name('updateStatus');
+        Route::patch('updatePayment/{orderId}', [OrderController::class, 'updatePayment'])->name('updatePayment');
     });
     Route::prefix('variants')->name('variants.')->group(function () {
         Route::get('list', [VariantController::class, 'index'])->name('list');
@@ -135,9 +148,10 @@ Route::prefix('admin')->middleware(['auth', 'checkRole'])->name('admin.')->group
 
 // user routes
 Route::get('/', [WebsiteController::class, 'index'])->name('home');
+Route::get('/search', [WebsiteController::class, 'search'])->name('search');
 Route::get('/san-pham', [WebsiteController::class, 'product'])->name('products');
 Route::get('/san-pham/{id}', [WebsiteController::class, 'productDetail'])->name('productDetail');
-Route::post('/san-pham/{id}', [WebsiteController::class, 'productComment'])->name('productComments');
+Route::post('/san-pham/{id}', [WebsiteController::class, 'productComment'])->middleware(['auth'])->name('productComments');
 Route::delete('/san-pham/{id}', [WebsiteController::class, 'productDelete'])->name('productDelete');
 
 Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function () {
@@ -147,12 +161,21 @@ Route::prefix('gio-hang')->middleware(['auth'])->name('cart.')->group(function (
     Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
 });
 
+Route::prefix('yeu-thich')->middleware(['auth'])->name('wishlists.')->group(function () {
+    // Route::get('/', [WishlistController::class, 'index'])->name('index');
+    Route::post('/add', [WishlistController::class, 'add'])->name('add');
+    Route::put('/update/{id}', [WishlistController::class, 'update'])->name('update');
+    Route::delete('/remove/{id}', [WishlistController::class, 'remove'])->name('remove');
+});
+
 Route::prefix('thanh-toan')->middleware(['auth'])->name('checkout.')->group(function () {
     Route::get('/', [checkoutController::class, 'index'])->name('index');
     Route::post('/', [checkoutController::class, 'store'])->name('store');
 });
 
 Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('detailOrder/{orderId}', [OrderController::class, 'detailOrder'])->name('detailOrder')->middleware('auth');
+    Route::post('rebuy/{orderId}', [OrderController::class, 'rebuy'])->name('rebuy');
     Route::get('confirm/{order}/{user}', [OrderController::class, 'confirm'])->name('confirm');
     Route::post('cancel/{orderId}', [OrderController::class, 'cancel'])->name('cancel');
 });
@@ -164,6 +187,9 @@ Route::get('/fail', function () {
     return view('website.order.confirm-fail');
 })->name('failed');
 
+Route::get('/comming-soon', function () {
+    return view('maintain.commingSoon');
+})->name('comming-soon');
 
 Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () {
     Route::get('/', [ProfileControllers::class, 'index'])->name('ho-so');
@@ -175,8 +201,8 @@ Route::prefix('ho-so')->middleware(['auth'])->name('ho-so.')->group(function () 
 });
 Route::get('/bai-viet', [WebsiteController::class, 'blog'])->name('blogs');
 Route::get('/bai-viet/{id}', [postsContoller::class, 'show'])->name('postDetail');
-Route::post('bai-viet/{id}', [postsContoller::class, 'postComments'])->name('postsComments');
-Route::delete('bai-viet/{id}', [postsContoller::class, 'postsCommentsDelete'])->name('postsCommentsDelete');
+Route::post('bai-viet/{id}', [postsContoller::class, 'postComments'])->middleware(['auth'])->name('postsComments');
+Route::delete('bai-viet/{id}', [postsContoller::class, 'postsCommentsDelete'])->middleware(['auth'])->name('postsCommentsDelete');
 
 Route::get('/mail', function () {
     return view('mail.invoice');

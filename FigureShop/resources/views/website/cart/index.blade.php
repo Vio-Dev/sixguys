@@ -99,7 +99,7 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         // Nếu người dùng xác nhận, submit form
-                                                        // button.closest('form').submit();
+                                                        button.closest('form').submit();
                                                     }
                                                 });
                                             }
