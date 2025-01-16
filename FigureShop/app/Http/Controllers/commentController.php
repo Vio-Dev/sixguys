@@ -12,50 +12,50 @@ class commentController extends Controller
     public function post()
     {
         $comments = Rating::with(['user', 'post'])
-         ->whereNotNull('post_id')
-        ->orderBy('created_at', 'DESC')
+            ->whereNotNull('post_id')
+            ->orderBy('created_at', 'DESC')
             ->paginate(10);
-       return view('admin.comment.posts',compact('comments'));
+        return view('admin.comment.posts', compact('comments'));
     }
 
-    public function updatePost( Request $request, FlasherInterface $flasher)
+    public function updatePost(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
         $comment->isHidden = true;
         $comment->save();
-        $flasher->addSuccess('Bình luận đã được ẩn',[],'Thành công');
-       return back();
+        $flasher->addFlash('success', 'Bình luận đã được ẩn!', [], 'Thành công');
+        return back();
     }
     public function deletePost(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
         $comment->delete();
-        $flasher->addSuccess('Bình luận đã được xóa',[],'Thành công');
+        $flasher->addFlash('success', 'Bình luận đã được xóa!', [], 'Thành công');
         return back();
     }
- public function product()
+    public function product()
     {
         $comments = Rating::with(['user', 'product'])
-         ->whereNotNull('product_id')
-        ->orderBy('created_at', 'DESC')
+            ->whereNotNull('product_id')
+            ->orderBy('created_at', 'DESC')
             ->paginate(10);
-       return view('admin.comment.products',compact('comments'));
+        return view('admin.comment.products', compact('comments'));
     }
 
-     public function updateProduct( Request $request, FlasherInterface $flasher)
+    public function updateProduct(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
         $comment->isHidden = true;
         $comment->save();
-        $flasher->addSuccess('Bình luận đã được ẩn',[],'Thành công');
-       return back();
+        $flasher->addFlash('success', 'Bình luận đã được ẩn!', [], 'Thành công');
+
+        return back();
     }
     public function deleteProduct(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
         $comment->delete();
-        $flasher->addSuccess('Bình luận đã được xóa',[],'Thành công');
+        $flasher->addFlash('success', 'Bình luận đã được xóa!', [], 'Thành công');
         return back();
     }
-
 }

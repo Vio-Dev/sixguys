@@ -48,7 +48,7 @@ class ProductsController extends Controller
         $request->validate(
             [
                 'name' => "required|string|max:100",
-                'inStock' => "required|numeric|min:1|max:99999999.99",
+                'inStock' => "required|numeric|min:0|max:99999999.99",
                 'unit' => "required|string|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
                 'description' => "required|string|min:1",
@@ -79,7 +79,16 @@ class ProductsController extends Controller
         );
 
         // Lấy dữ liệu input
+
+        
         $input = $request->except(['images', 'thumbnail']);
+        // $inStock = $input->inStock;
+        // $inStock = $request->inStock;
+        // if ($inStock < 0)
+        // {
+        //     $flasher->addFlash('error', 'Đã xảy ra lỗi khi thêm sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        //     return back();
+        // }
         // Xử lý đường dẫn thư mục lưu file
         $productFolder = public_path('uploads/products');
         if (!file_exists($productFolder)) {
