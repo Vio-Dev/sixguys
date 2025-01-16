@@ -49,7 +49,7 @@ class ProductsController extends Controller
             [
                 'name' => "required|string|max:100",
                 'inStock' => "required|numeric|min:0|max:99999999.99",
-                'unit' => "required|string|min:1|max:20",
+                'unit' => "required|alpha|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
                 'description' => "required|string|min:1",
                 'shortDescription' => "required|string|min:1|max:1000",
@@ -64,6 +64,7 @@ class ProductsController extends Controller
                 'max' => ':attribute không vượt quá :max',
                 'mimes' => ':attribute phải có đuôi .jpeg, .png, .jpg, .gif',
                 'numeric' => ':attribute phải là một số',
+                'alpha' => ':attribute phải là chữ',
             ],
             [
                 'name' => 'Tên sản phẩm',
@@ -187,13 +188,13 @@ class ProductsController extends Controller
         $request->validate(
             [
                 'name' => "required|string|max:100",
-                'inStock' => "required|numeric|min:1|max:99999999.99",
-                'unit' => "required|string|min:1|max:20",
+                'inStock' => "required|numeric|min:0|max:99999999.99",
+                'unit' => "required|alpha|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
                 'description' => "required|string|min:1",
                 'shortDescription' => "required|string|min:1|max:1000",
-                'thumbnail' => "nullable|image|mimes:jpeg,png,jpg,gif",
-                'images' => "nullable|array|max:20000",
+                'thumbnail' => "required|image|mimes:jpeg,png,jpg,gif",
+                'images' => "required|array|max:20000",
                 'images.*' => "image|mimes:jpeg,png,jpg,gif",
                 'discount' => "numeric|min:0|max:100",
             ],
@@ -203,6 +204,7 @@ class ProductsController extends Controller
                 'max' => ':attribute không vượt quá :max',
                 'mimes' => ':attribute phải có đuôi .jpeg, .png, .jpg, .gif',
                 'numeric' => ':attribute phải là một số',
+                'alpha' => ':attribute phải là chữ',
             ],
             [
                 'name' => 'Tên sản phẩm',
