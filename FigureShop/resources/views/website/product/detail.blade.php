@@ -321,7 +321,7 @@
                         <p>{{ $comment->created_at->format('d/m/Y') }}</p>
                         <div>
                             <!-- Xóa bình luận -->
-                            <form method="POST" action="{{ route('postsCommentsDelete', ['id' => $comment->id]) }}">
+                            <form method="POST" action="{{ route('productDelete', ['id' => $comment->id]) }}">
                                 @csrf
                                 @method('DELETE')
                                 <input type="text" name="post_id" value="{{ $comment->id }}" hidden>
