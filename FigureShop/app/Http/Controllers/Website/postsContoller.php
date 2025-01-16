@@ -42,9 +42,16 @@ class postsContoller extends Controller
     {
         $id = $request->post_id;
         $comment = Rating::findOrFail($id);
-        $comment->isHidden = true;
-        $comment->save();
-        $flasher->addFlash('success', 'Bình luận của bạn đã được xóa!', [], 'Thành công');
+        $user = auth()->user();
+
+        if ($comment->user_id === $user->id) {
+            $comment->isHidden = true;
+            $comment->save();
+            $flasher->addFlash('success', 'Bình luận của bạn đã được xóa!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Bạn không có quyền xóa bình luận này', [], 'Lỗi');
+        }
+
         return back();
     }
 }
