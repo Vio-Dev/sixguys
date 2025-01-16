@@ -46,6 +46,8 @@ class CartController extends Controller
         $product = Product::find($productId);
         if (!$product || $product->inStock < $quantity) {
             $flasher->addFlash('error', 'Số lượng hàng vượt quá mức. Vui long liên hệ admin', [], 'Thất bại');
+            return back();
+
         }
 
         // Thêm hoặc cập nhật CartItem
@@ -67,7 +69,9 @@ class CartController extends Controller
         }
 
         if ($cartItem->save()) {
+
             $flasher->addFlash('success', 'Thêm vào giỏ hàng thành công!', [], 'Thành công');
+        
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
         }
