@@ -52,7 +52,7 @@
                         <label for="inStock" class="block font-medium">Số lượng</label>
                         <input type="text" name="inStock" id="inStock" value="{{ $product->inStock }}"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
-                        @error('unit')
+                        @error('inStock')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -115,6 +115,9 @@
                         <div id="postImagesPreview" class="flex gap-2 mt-2"></div>
                         <img id="defaultthumbnail" src="{{ asset($product->thumbnail) }}" alt="Default Image"
                             class="w-20 h-20 object-cover rounded-md border border-gray-300">
+                        @error('thumbnail')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="imagesInput" class="block font-medium">Ảnh sản phẩm</label>
@@ -127,7 +130,9 @@
                                     class="w-20 h-20 object-cover rounded-md border border-gray-300">
                             @endforeach
                         </div>
-
+                        @error('images')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
