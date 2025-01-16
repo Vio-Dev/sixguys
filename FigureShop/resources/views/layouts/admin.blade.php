@@ -8,8 +8,11 @@
     <title>@yield('title')</title>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.tiny.cloud/1/rw1556z5vgoik9fmr5u44kck2kqrsou9fmbylvglsyjovwur/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    {{-- <script src="https://cdn.tiny.cloud/1/rw1556z5vgoik9fmr5u44kck2kqrsou9fmbylvglsyjovwur/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script> --}}
+        {{-- <script src="https://cdn.tiny.cloud/1/i3zcoplmtybg6m7q8q45j4fpaohg29psrhl9r22ab9nep4d0/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> --}}
+        <script src="https://cdn.tiny.cloud/1/tytpcmmhztft1a9j32gwlm8apegwhijx1q0csiigaouzdges/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
 </head>
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50 flex flex-col h-screen">
