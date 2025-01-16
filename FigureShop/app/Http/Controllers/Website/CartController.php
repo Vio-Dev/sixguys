@@ -9,6 +9,8 @@ use App\Models\Product;
 use Flasher\Prime\FlasherInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Wishlist;
+use App\Models\WishlistItem;
 
 class CartController extends Controller
 {
@@ -30,6 +32,7 @@ class CartController extends Controller
         $variantId = $request->input('variant_id');
         $quantity = $request->input('quantity');
         $productPrice = $request->input('price');
+        $wishlistId = $request->input('wishlist_id');
 
         $userId = Auth::id(); // Lấy ID người dùng hiện tại
 
@@ -43,6 +46,8 @@ class CartController extends Controller
         $product = Product::find($productId);
         if (!$product || $product->inStock < $quantity) {
             $flasher->addFlash('error', 'Số lượng hàng vượt quá mức. Vui long liên hệ admin', [], 'Thất bại');
+            return back();
+
         }
 
         // Thêm hoặc cập nhật CartItem
@@ -64,13 +69,29 @@ class CartController extends Controller
         }
 
         if ($cartItem->save()) {
+
             $flasher->addFlash('success', 'Thêm vào giỏ hàng thành công!', [], 'Thành công');
+        
         } else {
             $flasher->addFlash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.', [], 'Thất bại');
         }
 
         // Cập nhật tồn kho
         $product->decrement('inStock', $quantity);
+
+        if (isset($wishlistId) && !is_null($wishlistId)) {
+            $userId = Auth::id(); // Lấy ID người dùng hiện tại
+
+            // Lấy hoặc tạo giỏ hàng cho người dùng
+            $wishlist = Wishlist::firstOrCreate([
+                'user_id' => $userId,
+            ]);
+
+            // Xóa WishlistItem
+            WishlistItem::where('wishlist_id', $wishlist->id)
+                ->where('product_id', $wishlistId)
+                ->delete();
+        }
 
         return back();
     }

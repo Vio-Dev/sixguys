@@ -19,10 +19,10 @@
                 href={{ route('products') }}>Sản phẩm</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
                 href={{ route('blogs') }}>Bài đăng</a>
-            <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline" href="about-us.html">Về
+            <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline" href="#">Về
                 chúng tôi</a>
             <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
-                href="contact-us.html">Liên hệ</a>
+                href="#">Liên hệ</a>
             @if (Auth::check() && Auth::user()->role == 'admin')
                 <a class="font-light text-white duration-100 hover:text-yellow-400 hover:underline"
                     href={{ route('admin.dashboard') }}>Admin</a>
@@ -100,21 +100,20 @@
             <div class="flex w-full justify-between">
                 <div class="flex gap-6">
                     @foreach ($renderCategories as $category)
-                        <div class="mx-5">
-                            <a href="{{ route('products') }}"
-                                class="font-medium text-gray-500">{{ $category->name }}</a>
-                            <ul class="text-sm leading-8">
-                                @foreach ($renderSubCategories->where('parent_id', $category->id) as $subCategory)
-                                    <li class="hover:text-amber-400">
-                                        <a
-                                            href="{{ route('products', ['category' => $category->slug, 'subCategory' => $subCategory->slug]) }}">
-                                            {{ $subCategory->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endforeach
+    <div class="mx-5">
+        <a href="{{ route('products', ['category' => $category->name]) }}"
+            class="font-medium text-gray-500">{{ $category->name }}</a>
+        <ul class="text-sm leading-8">
+            @foreach ($renderSubCategories->where('parent_id', $category->id) as $subCategory)
+                <li class="hover:text-amber-400">
+                    <a href="{{ route('products', ['category' => $category->name, 'subcategorys' => $subCategory->name]) }}">
+                        {{ $subCategory->name }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+@endforeach
                 </div>
             </div>
         </div>

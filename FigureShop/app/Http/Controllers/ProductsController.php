@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Flasher\Prime\FlasherInterface;
 use App\Models\Variant;
 use App\Models\ProductVariant;
+
 class ProductsController extends Controller
 {
     /**
@@ -16,8 +17,8 @@ class ProductsController extends Controller
      */
     public function index()
     {
-     $products = Product::where('isDeleted', 0)
-            ->with( 'variants.variantValue.variant')
+        $products = Product::where('isDeleted', 0)
+            ->with('variants.variantValue.variant')
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
@@ -35,7 +36,7 @@ class ProductsController extends Controller
         $adminVariants = Variant::with('values')->where('isDeleted', 0)->get();
 
 
-        return view('admin.products.create', compact('categories','adminVariants'));
+        return view('admin.products.create', compact('categories', 'adminVariants'));
     }
 
     /**
@@ -47,8 +48,8 @@ class ProductsController extends Controller
         $request->validate(
             [
                 'name' => "required|string|max:100",
-                'inStock' => "required|numeric|min:1|max:99999999.99",
-                'unit' => "required|string|min:1|max:20",
+                'inStock' => "required|numeric|min:0|max:99999999.99",
+                'unit' => "required|alpha|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
                 'description' => "required|string|min:1",
                 'shortDescription' => "required|string|min:1|max:1000",
@@ -63,6 +64,7 @@ class ProductsController extends Controller
                 'max' => ':attribute không vượt quá :max',
                 'mimes' => ':attribute phải có đuôi .jpeg, .png, .jpg, .gif',
                 'numeric' => ':attribute phải là một số',
+                'alpha' => ':attribute phải là chữ',
             ],
             [
                 'name' => 'Tên sản phẩm',
@@ -78,7 +80,16 @@ class ProductsController extends Controller
         );
 
         // Lấy dữ liệu input
+
+        
         $input = $request->except(['images', 'thumbnail']);
+        // $inStock = $input->inStock;
+        // $inStock = $request->inStock;
+        // if ($inStock < 0)
+        // {
+        //     $flasher->addFlash('error', 'Đã xảy ra lỗi khi thêm sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        //     return back();
+        // }
         // Xử lý đường dẫn thư mục lưu file
         $productFolder = public_path('uploads/products');
         if (!file_exists($productFolder)) {
@@ -119,21 +130,21 @@ class ProductsController extends Controller
         }
 
 
-                if ($request->has('variant_name')) {
-                foreach ($request->variant_name as $index => $variantName) {
-                    if ($variantName) {
-                        ProductVariant::create([
-                            'product_id' => $product->id,
-                            'variant_value_id' => $request->variant_values[$index] ?? null,
-                            'price' => $request->variant_price[$index] ?? null,
-                            'inStock' => $request->variant_inStock[$index] ?? null,
-                            'hasSold' => 0,
-                            'status' => 'public',
-                            'isDeleted' => 0,
-                        ]);
-                    }
+        if ($request->has('variant_name')) {
+            foreach ($request->variant_name as $index => $variantName) {
+                if ($variantName) {
+                    ProductVariant::create([
+                        'product_id' => $product->id,
+                        'variant_value_id' => $request->variant_values[$index] ?? null,
+                        'price' => $request->variant_price[$index] ?? null,
+                        'inStock' => $request->variant_inStock[$index] ?? null,
+                        'hasSold' => 0,
+                        'status' => 'public',
+                        'isDeleted' => 0,
+                    ]);
                 }
             }
+        }
         // Thông báo kết quả
         if ($product->wasRecentlyCreated) {
             $flasher->addFlash('success', 'Sản phẩm đã được thêm thành công!', [], 'Thành công');
@@ -177,13 +188,13 @@ class ProductsController extends Controller
         $request->validate(
             [
                 'name' => "required|string|max:100",
-                'inStock' => "required|numeric|min:1|max:99999999.99",
-                'unit' => "required|string|min:1|max:20",
+                'inStock' => "required|numeric|min:0|max:99999999.99",
+                'unit' => "required|alpha|min:1|max:20",
                 'price' => "required|numeric|min:1|max:99999999.99",
                 'description' => "required|string|min:1",
                 'shortDescription' => "required|string|min:1|max:1000",
-                'thumbnail' => "nullable|image|mimes:jpeg,png,jpg,gif",
-                'images' => "nullable|array|max:20000",
+                'thumbnail' => "required|image|mimes:jpeg,png,jpg,gif",
+                'images' => "required|array|max:20000",
                 'images.*' => "image|mimes:jpeg,png,jpg,gif",
                 'discount' => "numeric|min:0|max:100",
             ],
@@ -193,6 +204,7 @@ class ProductsController extends Controller
                 'max' => ':attribute không vượt quá :max',
                 'mimes' => ':attribute phải có đuôi .jpeg, .png, .jpg, .gif',
                 'numeric' => ':attribute phải là một số',
+                'alpha' => ':attribute phải là chữ',
             ],
             [
                 'name' => 'Tên sản phẩm',
@@ -251,33 +263,33 @@ class ProductsController extends Controller
                 }
             }
         }
-          if ($request->has('variant_name')) {
-    // Delete existing variants
-    ProductVariant::where('product_id', $product->id)->delete();
+        if ($request->has('variant_name')) {
+            // Delete existing variants
+            ProductVariant::where('product_id', $product->id)->delete();
 
-    // Create new variants
-    foreach ($request->variant_name as $index => $variantName) {
-        if ($variantName) {
-            ProductVariant::create([
-                'product_id' => $product->id,
-                'variant_value_id' => $request->variant_values[$index] ?? null,
-                'price' => $request->variant_price[$index] ?? null,
-                'inStock' => $request->variant_inStock[$index] ?? null,
-                'hasSold' => 0,
-                'status' => 'public',
-                'isDeleted' => 0,
-            ]);
+            // Create new variants
+            foreach ($request->variant_name as $index => $variantName) {
+                if ($variantName) {
+                    ProductVariant::create([
+                        'product_id' => $product->id,
+                        'variant_value_id' => $request->variant_values[$index] ?? null,
+                        'price' => $request->variant_price[$index] ?? null,
+                        'inStock' => $request->variant_inStock[$index] ?? null,
+                        'hasSold' => 0,
+                        'status' => 'public',
+                        'isDeleted' => 0,
+                    ]);
+                }
+            }
         }
-    }
-}
 
 
         // Thông báo kết quả
-      if ($product) {
-    $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
-} else {
-    $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
-}
+        if ($product) {
+            $flasher->addFlash('success', 'Sản phẩm đã được cập nhật thành công!', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        }
 
 
         return redirect()->route("admin.products.list");

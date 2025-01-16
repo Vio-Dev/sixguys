@@ -15,7 +15,8 @@ class Order extends Model
         'status',
         'payment_method',
         'note',
-        'isDeleted'
+        'isDeleted',
+        'isPaid'
     ];
 
     // Define the relationship with the User model
