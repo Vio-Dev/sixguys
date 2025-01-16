@@ -110,9 +110,17 @@ class WebsiteController extends Controller
     public function productDelete(Request $request, FlasherInterface $flasher)
     {
         $comment = Rating::find($request->id);
-        $comment->isHidden = 1;
-        $comment->save();
-        $flasher->addFlash('success', 'Bình luận của bạn đã được xóa!', [], 'Thành công');
+
+        $user = auth()->user();
+
+        if ($comment && $comment->user_id === $user->id) {
+            $comment->isHidden = 1;
+            $comment->save();
+            $flasher->addFlash('success', 'Bình luận đã được xóa', [], 'Thành công');
+        } else {
+            $flasher->addFlash('error', 'Bạn không có quyền xóa bình luận này', [], 'Lỗi');
+        }
+
         return back();
     }
 
