@@ -30,7 +30,15 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
+    {   // if the user has type email@ can not register
+        if (strpos($request->email, '@') === false) {
+            return redirect()->back()->with('error', 'Email không hợp lệ.');
+        }
+        // if the user has type email@gmail can not register
+        if (strpos($request->email, 'gmail') !== false) {
+            return redirect()->back()->with('error', 'Email không hợp lệ.');
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
