@@ -52,7 +52,7 @@
                         <label for="inStock" class="block font-medium">Số lượng</label>
                         <input type="text" name="inStock" id="inStock"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
-                        @error('unit')
+                        @error('inStock')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -113,12 +113,18 @@
                         <input type="file" name="thumbnail" id="thumbnail" onchange="previewPostImages()"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                         <div id="postImagesPreview" class="flex gap-2 mt-2"></div>
+                        @error('thumbnail')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="name" class="block font-medium">Ảnh sản phẩm</label>
                         <input type="file" name="images[]" id="image" multiple onchange="previewProductsImages()"
                             class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                         <div id="ProductsImage" class="flex gap-2 mt-2"></div>
+                        @error('images')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                 </div>

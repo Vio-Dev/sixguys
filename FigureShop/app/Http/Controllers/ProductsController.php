@@ -79,7 +79,16 @@ class ProductsController extends Controller
         );
 
         // Lấy dữ liệu input
+
+        
         $input = $request->except(['images', 'thumbnail']);
+        // $inStock = $input->inStock;
+        // $inStock = $request->inStock;
+        // if ($inStock < 0)
+        // {
+        //     $flasher->addFlash('error', 'Đã xảy ra lỗi khi thêm sản phẩm. Vui lòng thử lại.', [], 'Thất bại');
+        //     return back();
+        // }
         // Xử lý đường dẫn thư mục lưu file
         $productFolder = public_path('uploads/products');
         if (!file_exists($productFolder)) {
